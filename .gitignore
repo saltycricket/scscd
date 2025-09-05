@@ -1,0 +1,7 @@
+.vs 
+*.suo 
+**/x64/Release 
+*.idb 
+*.pdb 
+*.lib 
+*~

@@ -1,0 +1,236 @@
+; All values are case insensitive and white space will be trimmed.
+;
+; A FormID can be assigned to more than one Occupation. If it is,
+; the actual match will be chosen randomly at runtime. The FormID
+; can belong to a Class, Faction or NPC.
+;
+; EditorID is informational only; the mod ignores it.
+; You can safely pass a full 8-digit FormID, but only the rightmost
+; 6 digits (3 digits for light plugins) will be respected. This is
+; because the first 2 digits vary at runtime depending on load order.
+; Therefore SCSCD will determine the correct digits values at load time.
+;
+; Possible occupations include:
+;
+;   CITIZEN
+;   CULTIST
+;   DRIFTER
+;   FARMER
+;   GUARD
+;   RAIDER
+;   SCIENTIST
+;   SOLDIER
+;   SPY
+;   VAULTDWELLER
+;   CAPTIVE
+;   DOCTOR
+;
+; Although you can assign any class, faction or NPC to any occupation
+; and you can assign them to more than one, some rules of thumb for
+; non-humans (treat non-feral ghouls as humans):
+;
+;   aliens - soldier
+;   dogs - drifter
+;   children - citizen
+;   supermutants - soldier
+;   feral ghoul - drifter
+;
+Occupation,FormID  ,EditorID
+; Classes
+soldier   ,001722B4,BoSOfficerClass
+soldier   ,001722B5,BoSProctorClass
+soldier   ,00076A07,BoSScribeClass
+soldier   ,00076A06,BoSSoldierClass
+soldier   ,000CA9D3,BoSSquireClass
+farmer    ,0002333A,Child
+citizen   ,0001326B,Citizen
+drifter   ,001CD0A9,GenericCombatant
+soldier   ,0020F487,CourserClass
+drifter   ,00123E16,FeralGhoulClass
+soldier   ,000B23DE,Minuteman
+raider    ,0005F970,raiderClass
+soldier   ,000424ED,SupermutantClass
+citizen   ,0005F96D,viciousDogClass
+; Factions
+soldier   ,001F6113,AlienFaction
+raider    ,00020753,Arena_Fight_Faction
+raider    ,0004E644,Arena_Rank_Faction
+drifter   ,00091895,BoS100FeralGhoulFaction
+soldier   ,0015267E,BoSBarracksScribesFaction
+soldier   ,0016CC7B,BoSBridgeLancersFaction
+soldier   ,000A93D8,BoSDeckScribesFaction
+scientist ,00153569,BoSEngineeringScribeConvFaction
+soldier   ,0019EAFC,BoSGantryScribesFaction
+soldier   ,001479C1,BoSGenericNPCFaction
+scientist ,001479C1,BoSGenericNPCFaction
+doctor    ,001479C1,BoSGenericNPCFaction
+scientist ,00152BFB,BoSLabScribeFaction
+soldier   ,001526A9,BoSMessOfficerFaction
+soldier   ,00056925,BoSPrimeScribesFaction
+soldier   ,00152AEC,BoSPrydwenSpecialCombatFaction
+scientist ,0015356A,BoSScienceScribeConvFaction
+soldier   ,0015356B,BoSSoldierConvFaction
+soldier   ,0014EB44,BoSSquireFaction
+captive   ,00058610,BoundCaptiveFaction
+soldier   ,0005DE41,BrootherhoodofSteelFaction
+soldier   ,000EF225,BunkerHillBoSFaction
+captive   ,0012544B,BunkerHillFF03PrisonerFaction
+citizen   ,0005FD58,BunkerHillGenericNPCFaction
+scientist ,000EF224,BunkerHillInstituteFaction
+spy       ,000EF226,BunkerHillRRFaction
+drifter   ,000C3C55,CambridgeDrifterFaction
+captive   ,0003E0C8,CaptiveFaction
+drifter   ,00130B7B,CaravanFaction
+guard     ,00130FAC,CaravanGuardFaction
+drifter   ,001328B9,CaravanLeaderFaction
+drifter   ,0024A157,CC_PetDogFaction
+cultist   ,0002FB84,ChildrenOfAtomFaction
+cultist   ,00052507,ChildrenOfAtomFriendFaction
+citizen   ,00062030,CovenantFaction
+citizen   ,000D4D9C,CovenantFactionGenericNPCs
+citizen   ,000890C0,CovenantFactionMurphies
+guard     ,00074794,CovenantHQSecurityFaction
+raider    ,000AC57B,CZRaiderFaction
+raider    ,00247303,CZ_CombatantFaction
+raider    ,00117D52,CZ_Faction
+soldier   ,0017D883,DiamondCityBoSEnvoyFaction
+soldier   ,0017D88A,DiamondCityMinutemenEnvoyFaction
+spy       ,0017D88F,DiamondCityRailroadEnvoyFaction
+spy       ,0017D880,DiamondCitySynthEnvoyFaction
+cultist   ,00092013,DmndAllFaithsChapelFaction
+citizen   ,00021D8C,DmndBarPatronsFaction
+drifter   ,00021D8C,DmndBarPatronsFaction
+farmer    ,0002CB15,DmndFarmerFaction
+drifter   ,0002CB14,DmndFisherFaction
+citizen   ,00005818,DmndGenericNPCFaction
+drifter   ,00005818,DmndGenericNPCFaction
+spy       ,00005818,DmndGenericNPCFaction
+citizen   ,00005816,DmndNoodlePatronFaction
+drifter   ,00005816,DmndNoodlePatronFaction
+spy       ,00005816,DmndNoodlePatronFaction
+citizen   ,00056614,DmndSchoolChildrenFaction
+citizen   ,00058262,DmndShoppersFaction
+drifter   ,00058262,DmndShoppersFaction
+spy       ,00058262,DmndShoppersFaction
+citizen   ,00059AAB,DmndWallAudienceFaction
+drifter   ,00059AAB,DmndWallAudienceFaction
+spy       ,00059AAB,DmndWallAudienceFaction
+cultist   ,000C518D,DN019CultistFaction
+cultist   ,0019DEF1,DN019CultistLeaderFaction
+raider    ,0007E1BC,RaiderFaction
+drifter   ,000AC5F7,ScavengerAttackFaction
+raider    ,001AC2B2,DN035_EasyCityDownsRaiderFaction
+scientist ,000F9341,DN047ChemLabWorkerFaction
+raider    ,00048641,DN054AtomCatFaction
+raider    ,0002CB62,DN058RaiderFaction
+drifter   ,0008CCED,DN072_GlowingOneFaction
+captive   ,00056DE6,DN078TunnelWorkerFaction
+raider    ,000F17C1,DN101_RaiderFaction
+soldier   ,000AF8D9,DN102_FrenziedGunnerFaction
+raider    ,0002AAB5,DN121_SaugusBossRoomFaction
+soldier   ,0004B36B,DN123_NessMercenaryFaction
+raider    ,0012758C,DN123_SkylanesRaiderFaction
+spy       ,0003C5A6,DN130_TempRailroadFaction
+scientist ,0022D9EE,DN136_ScientistFaction
+scientist ,0022D9EF,DN136_ScientistFaction02
+scientist ,0024800B,DN136_ScientistFaction03
+scientist ,00249966,DN136_ScientistFaction04
+scientist ,00249967,DN136_ScientistFaction05
+cultist   ,00144047,DN166AtomFaction
+drifter   ,001C4030,DogFaction
+drifter   ,0006E269,DogmeatFaction
+drifter   ,00106A03,DrumlinChemDealerFaction
+citizen   ,001069FD,DrumlinDinerFaction
+farmer    ,00155253,Farm01Faction
+farmer    ,00156A11,Farm02Faction
+farmer    ,00190AE6,Farm02FactionBed
+farmer    ,00156A1A,Farm03Faction
+farmer    ,00156A1B,Farm04Faction
+farmer    ,00156A1F,Farm05Faction
+farmer    ,00156A26,Farm06Faction
+citizen   ,0018B88A,FarmerGenericChild
+farmer    ,0006B4D4,FarmFactionAbernathy
+farmer    ,0003F229,FarmFactionFinch
+farmer    ,0003F228,FarmFactionGraygarden
+farmer    ,0003F227,FarmFactionSlog
+farmer    ,0003F22A,FarmFactionWarwick
+drifter   ,00077C6C,FeralGhoulFaction
+citizen   ,000035DE,GenericNPCFaction
+drifter   ,000035DE,GenericNPCFaction
+farmer    ,000035DE,GenericNPCFaction
+spy       ,000035DE,GenericNPCFaction
+citizen   ,00028FD6,GhoulFaction
+drifter   ,00028FD6,GhoulFaction
+farmer    ,00028FD6,GhoulFaction
+spy       ,00028FD6,GhoulFaction
+citizen   ,000361D2,GhoulNonFeralFaction
+drifter   ,000361D2,GhoulNonFeralFaction
+farmer    ,000361D2,GhoulNonFeralFaction
+spy       ,000361D2,GhoulNonFeralFaction
+cultist   ,00134270,GlowingSeaChildrenFaction
+citizen   ,00023325,GoodneighborGenericNPCFaction
+drifter   ,00023325,GoodneighborGenericNPCFaction
+spy       ,00023325,GoodneighborGenericNPCFaction
+guard     ,000E1ACC,GoodneighborGuardFaction
+drifter   ,001A0421,GoodneighborMemoryDenMiscPodOwnerFaction
+citizen   ,001A0421,GoodneighborMemoryDenMiscPodOwnerFaction
+spy       ,001A0421,GoodneighborMemoryDenMiscPodOwnerFaction
+citizen   ,00050729,GoodneighborNPCShoppersFaction
+spy       ,00050729,GoodneighborNPCShoppersFaction
+drifter   ,00050729,GoodneighborNPCShoppersFaction
+guard     ,000A179C,GuardFaction
+soldier   ,00058303,GunnerFaction
+guard     ,000E73C6,Inst301BossGuardFaction
+spy       ,000E73CB,Inst301CourserFaction
+guard     ,000E73CC,Inst301GuardEnemyFaction
+soldier   ,00175F2C,Inst307_BrotherhoodofSteelScoutFaction
+soldier   ,0017BB92,Inst307_BrotherhoodofSteelScoutVertibirdFaction
+scientist ,0005E558,InstituteFaction
+scientist ,001C4E5C,InstituteMaintenanceFaction
+scientist ,001F6B20,InstituteMaintenanceSynthFaction
+captive   ,00167FB7,InstituteRefugeeFaction
+drifter   ,00167FB7,InstituteRefugeeFaction
+soldier   ,0022FEB3,Min02_MinutemenFaction
+soldier   ,00068043,MinutemenFaction
+drifter   ,0008C9DA,MS11ScavengersNPCFaction
+drifter   ,00096EA2,NPC11Scavengers
+guard     ,0004B28F,ParsonsGuardFaction
+raider    ,000D356D,RaiderEnemyFaction
+raider    ,0001CBED,RaiderFaction
+spy       ,000994F6,RailroadFaction
+spy       ,00061BE6,RailroadGenericNPCFaction
+spy       ,0003D02A,RailroadGenericSynthFaction
+drifter   ,0003D02A,RailroadGenericSynthFaction
+guard     ,000A93D1,RailroadOvertAgentFaction
+spy       ,001E742F,RebelSynthFaction
+drifter   ,001E742F,RebelSynthFaction
+guard     ,00002F65,SecurityDiamondCity
+citizen   ,0001995B,SettlementBunkerHill
+citizen   ,0001D567,SettlementConcordArea
+citizen   ,00002CB3,SettlementDiamondCity
+citizen   ,0024842A,SettlementFactionEgretToursMarina
+citizen   ,000228A9,SettlementGoodneighbor
+citizen   ,000483AF,SettlementSpokesmanFaction
+vaultdweller,000581B4,SettlementVault81
+soldier   ,00058305,SuperMutantFaction
+spy       ,00083B31,SynthFaction
+drifter   ,0015CD38,TheaterDrifter_FactionDondo
+drifter   ,0015DE8B,TheaterDrifter_FactionSlim
+raider    ,0013101D,TheForgedFaction
+drifter   ,000FA7F1,TheSlogFieldWorkers
+farmer    ,000FA7F0,TheSlogPoolWorkers
+citizen   ,001AC5A7,Vault81ChildrenFaction
+vaultdweller,00111F78,Vault81CitizenFaction
+vaultdweller,0004F4A4,Vault81GuardFaction
+guard     ,0004F4A4,Vault81GuardFaction
+doctor    ,001338E7,Vault81MedicineFaction
+citizen   ,00130D9D,Vault81RepairShopFaction
+drifter   ,0001D15B,ViciousDogFaction
+
+; Specific NPC base forms can be added here if needed.
+doctor    ,00002CD6,DocCrocker
+doctor    ,0009A680,DoctorAmari
+doctor    ,00045ACD,DoctorCarrington
+doctor    ,00002EF8,DoctorDuff
+doctor    ,00020B8E,DoctorSun
+doctor    ,0012FCCB,DocWeathers

@@ -1,0 +1,7 @@
+Occupation   , Form ID; Form ID; Form ID
+111111111111 , 09000FA2
+; boots variant cannot be worn without skirt
+111111011010 , 090035B3;09000FA1
+; but skirt can be worn without boots, may clip with regular boots, but thats probably ok.
+111111011010 , 09000FA1
+111111011010 , 09000F9F

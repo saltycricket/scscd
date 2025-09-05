@@ -1,0 +1,160 @@
+#pragma once
+
+#include <cstdint>
+#include <functional>
+
+#include "scscd.h"
+#include <RE/Fallout.h>
+#include <F4SE/API.h>
+#include <F4SE/Interfaces.h>
+
+namespace Serialization {
+    static constexpr std::uint32_t kTag = 'SEEN';
+    static constexpr std::uint32_t kVersion = 2;
+}
+
+inline bool IsLoadedActor(RE::TESObjectREFR* ref)
+{
+    if (!ref) return false;
+    // Type check: actors are ACHR / FormType::ActorCharacter in FO4 headers
+    if (!ref->Is(RE::ENUM_FORM_ID::kACHR)) return false;
+
+    // Loaded in memory and 3D present are both nice to filter:
+    if (!ref->Get3D()) return false;            // ensures currently loaded (has 3D)
+    // You can add more checks here (e.g., in same worldspace, distance to player, etc.)
+
+    return true;
+}
+
+static bool isEquipped(RE::Actor* actor, RE::TESObjectARMO* armo) {
+    auto  mask = armo->bipedModelData.bipedObjectSlots;
+    RE::BGSEquipIndex idx;
+    for (uint32_t i = 0; i < 64; i++) {
+        if (armo->FillsBipedSlot(i)) {
+            idx.index = i;
+            break;
+        }
+    }
+    RE::BGSObjectInstance inst(nullptr, nullptr);
+    const auto* filled = actor->GetEquippedItem(&inst, idx);
+
+    /* Apparently this doesn't work as off 20250903 and object is always NULL. It leads to a redundant equip but that should be harmless (if a little less efficient). */
+    //logger::info(std::format("isEquipped {:#010x} ~= {:#010x}", armo->GetFormID(), inst.object ? inst.object->GetFormID() : 0));
+    return (filled && inst.object == armo);
+}
+
+class ActorLoadWatcher final : public RE::BSTEventSink<RE::BGSActorCellEvent>, RE::BSTEventSink<RE::TESObjectLoadedEvent>
+{
+public:
+    static ArmorIndex* ARMORS;
+    static ArmorIndex::SamplerConfig* ARMORS_CONFIG;
+    bool _registered{ false };
+
+    static void configure(ArmorIndex* index, ArmorIndex::SamplerConfig* config) {
+        ARMORS = index;
+        ARMORS_CONFIG = config;
+    }
+
+    static ActorLoadWatcher* GetSingleton()
+    {
+        static ActorLoadWatcher instance;
+        return std::addressof(instance);
+    }
+
+    static void F4SEAPI serialize(const F4SE::SerializationInterface* intfc);
+
+    static void F4SEAPI deserialize(const F4SE::SerializationInterface* intfc);
+
+    static void F4SEAPI revert(const F4SE::SerializationInterface* /*unused*/) {
+        GetSingleton()->seenSet.clear();
+    }
+
+    void Register();
+
+    static void watchForSettingsChanges() {
+        F4SE::GetTaskInterface()->AddTaskPermanent(new SettingsChangeWatcherTask());
+    }
+
+private:
+    std::unordered_map<uint32_t, std::vector<uint32_t>> seenSet;
+    static const int SETTINGS_POLL_FREQUENCY_MS = 5000; // poll every 30 seconds
+
+    struct SettingsChangeWatcherTask : F4SE::ITaskDelegate
+    {
+        std::chrono::steady_clock::time_point last_poll_at;
+
+        SettingsChangeWatcherTask() {
+            this->last_poll_at = std::chrono::steady_clock::now();
+        }
+
+        void Run() override {
+            auto t = std::chrono::steady_clock::now();
+            auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(t - this->last_poll_at).count();
+            if (elapsed > SETTINGS_POLL_FREQUENCY_MS) {
+                if (ARMORS_CONFIG && ARMORS_CONFIG->haveSettingsChanged()) {
+                    logger::debug("reloading settings");
+                    ARMORS_CONFIG->reload();
+                }
+                this->last_poll_at = t;
+            }
+        }
+    };
+
+    struct DeferFramesTask : F4SE::ITaskDelegate
+    {
+        int frames{ 0 };
+        std::function<void()> fn;
+
+        DeferFramesTask(int f, std::function<void()> ff) { frames = f; fn = ff; }
+
+        void Run() override
+        {
+            if (frames-- > 0) {
+                F4SE::GetTaskInterface()->AddTask(new DeferFramesTask(frames, std::move(fn)));   // run again next frame
+            }
+            else {
+                if (fn) fn();
+            }
+        }
+    };
+
+    static void NextFrames(std::function<void()> fn, int frames = 1)
+    {
+        auto* t = new DeferFramesTask(frames, std::move(fn));
+        F4SE::GetTaskInterface()->AddTask(t);
+    }
+    static void OnActorLoaded(RE::Actor* actor);
+    static void equipWardrobe(RE::Actor* actor, std::vector<RE::TESObjectARMO*> wardrobe, bool isRetry = false, int attemptsRemaining = 3);
+
+    void OnActorLoadedSoon(std::uint32_t actorRefID, int frames = 2)
+    {
+        NextFrames([actorRefID] {
+            if (auto* form = RE::TESForm::GetFormByID(actorRefID)) {
+                if (auto* ref = form->As<RE::TESObjectREFR>()) {
+                    if (auto* actor = ref->As<RE::Actor>()) {
+                        OnActorLoaded(actor);
+                    }
+                }
+            }
+        }, frames);
+    }
+
+    RE::BSEventNotifyControl ProcessEvent(
+        const RE::TESObjectLoadedEvent& a_event,
+        RE::BSTEventSource<RE::TESObjectLoadedEvent>* /*a_source*/) override
+    {
+        const uint32_t id = a_event.formID;
+        OnActorLoadedSoon(id, /*frames=*/2);
+        return RE::BSEventNotifyControl::kContinue;
+    }
+
+    RE::BSEventNotifyControl ProcessEvent(
+        const RE::BGSActorCellEvent& a_event,
+        RE::BSTEventSource<RE::BGSActorCellEvent>* /*a_source*/) override
+    {
+        const uint32_t id = a_event.actor->GetFormID();
+        OnActorLoadedSoon(id, /*frames=*/2);
+
+        return RE::BSEventNotifyControl::kContinue;
+    }
+};

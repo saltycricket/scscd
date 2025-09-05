@@ -1,0 +1,5 @@
+vcpkg_installed
+x64
+*.*_
+*.*~
+*.swp
