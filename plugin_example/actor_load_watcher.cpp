@@ -14,12 +14,15 @@ void F4SEAPI ActorLoadWatcher::serialize(const F4SE::SerializationInterface* int
 
     const std::uint32_t count = static_cast<std::uint32_t>(GetSingleton()->seenSet.size());
     if (!intfc->WriteRecordData(&count, sizeof(count))) return;
-    for (std::pair<uint32_t, std::vector<uint32_t>> pair : GetSingleton()->seenSet) {
+    for (std::pair<uint32_t, std::vector<PersistenceEntry>> pair : GetSingleton()->seenSet) {
         uint32_t actorID = pair.first;
         size_t size = pair.second.size();
         (void)intfc->WriteRecordData(&actorID, sizeof(std::uint32_t));
         (void)intfc->WriteRecordData(&size, sizeof(std::size_t));
-        (void)intfc->WriteRecordData(pair.second.data(), (uint32_t)(sizeof(std::uint32_t) * size));
+        for (PersistenceEntry& entry : pair.second) {
+            (void)intfc->WriteRecordData(&entry.armorFormID, sizeof(uint32_t));
+            (void)intfc->WriteRecordData(&entry.omodFormID, sizeof(uint32_t));
+        }
     }
 
     logger::info(std::format("Serialized {} seen-refs.", count));
@@ -49,6 +52,13 @@ void F4SEAPI ActorLoadWatcher::deserialize(const F4SE::SerializationInterface* i
             continue;
         }
 
+        // migration
+        bool deserializeOmodData = true;
+        if (version == 2 && Serialization::kVersion == 3) {
+            version = 3;
+            deserializeOmodData = false;
+        }
+
         if (version != Serialization::kVersion) {
             logger::warn(std::format("record version mismatch (expected {}, got {})", Serialization::kVersion, version));
             // skip record
@@ -70,22 +80,61 @@ void F4SEAPI ActorLoadWatcher::deserialize(const F4SE::SerializationInterface* i
         for (uint32_t i = 0; i < count; i++) {
             uint32_t actorID;
             size_t numArmors;
-            uint32_t* armorIDs = NULL;
+            bool invalidated = false; // if true, the we will 'forget' about the whole actor.
+            //uint32_t* armorIDs = NULL;
             (void)intfc->ReadRecordData(&actorID, sizeof(uint32_t));
             (void)intfc->ReadRecordData(&numArmors, sizeof(size_t));
-            logger::debug(std::format(" ... {} armors", numArmors));
-            armorIDs = new uint32_t[numArmors];
-            (void)intfc->ReadRecordData(armorIDs, (uint32_t)(sizeof(uint32_t) * numArmors));
             std::optional<uint32_t> resolvedActorID = intfc->ResolveFormID(actorID);
-            if (resolvedActorID.has_value()) {
-                for (size_t idx = 0; idx < numArmors; idx++) {
-                    std::optional<uint32_t> resolvedArmorID = intfc->ResolveFormID(armorIDs[idx]);
-                    if (resolvedArmorID.has_value())
-                        GetSingleton()->seenSet[resolvedActorID.value()].push_back(resolvedArmorID.value());
+            logger::debug(std::format(" ... {} armors", numArmors));
+            for (uint32_t armorIdx = 0; armorIdx < numArmors; armorIdx++) {
+                uint32_t armorID, omodID = 0;
+                // read
+                (void)intfc->ReadRecordData(&armorID, sizeof(uint32_t));
+                // if omod data is present, read it; else it defaults to 0 (no omod)
+                // which is what it was before
+                if (deserializeOmodData) (void)intfc->ReadRecordData(&omodID, sizeof(uint32_t));
+                // parse
+                std::optional<uint32_t> resolvedArmorID = intfc->ResolveFormID(armorID);
+                if (resolvedActorID.has_value() && resolvedArmorID.has_value()) {
+                    uint32_t actorFormID = resolvedActorID.value();
+                    if (omodID != 0) {
+                        std::optional<uint32_t> resolvedOmodID = intfc->ResolveFormID(omodID);
+                        if (resolvedOmodID.has_value()) omodID = resolvedOmodID.value();
+                    }
+                    PersistenceEntry pe{ resolvedArmorID.value(), omodID };
+                    RE::TESForm* form = RE::TESForm::GetFormByID(pe.armorFormID);
+                    if (!form || form->GetFormType() != RE::ENUM_FORM_ID::kARMO) {
+                        logger::warn(std::format("  could not deserialize seen-set entry: is not an armo (did plugins change?). This wardrobe is invalidated."));
+                        invalidated = true;
+                    }
+                    else {
+                        if (pe.omodFormID != 0) {
+                            form = RE::TESForm::GetFormByID(pe.armorFormID);
+                            if (!form || form->GetFormType() != RE::ENUM_FORM_ID::kOMOD) {
+                                // wardrobe is not invalidated here because re-equip doesn't actually use the omod.
+                                // but if we need omod for any reason, it will show as 'no omod' for this armor.
+                                logger::warn(std::format("  could not deserialize omod entry; we can recover this wardrobe if it's not already invalidated, but omod data will be lost"));
+                                pe.omodFormID = 0;
+                            }
+                        }
+                        logger::debug(std::format("  deserialized seen-set persistence entry into actor={:#010x}, armor={:#010x}, omod={:#010x}", actorFormID, pe.armorFormID, pe.omodFormID));
+                        GetSingleton()->seenSet[actorFormID].push_back(pe);
+                    }
+                }
+                else {
+                    logger::warn(std::format("  could not resolve deserialized actor={:#010x}, armor={:#010x}, omod={:#010x} (did plugin order change?)", actorID, armorID, omodID));
                 }
             }
-            delete[] armorIDs;
-            logger::debug(std::format("deserialized actor {:#010x} set into {} armors", actorID, numArmors));
+            if (invalidated) {
+                if (resolvedActorID.has_value()) {
+                    uint32_t actorFormID = resolvedActorID.value();
+                    GetSingleton()->seenSet.erase(actorFormID);
+                }
+                logger::warn(std::format("invalidated actor (failed to deserialize)"));
+            }
+            else {
+                logger::debug(std::format("deserialized actor {:#010x} set into {} armors", actorID, numArmors));
+            }
         }
 
         logger::debug(std::format("Deserialized {} entries", count));
@@ -113,11 +162,16 @@ void ActorLoadWatcher::Register()
 void ActorLoadWatcher::OnActorLoaded(RE::Actor* actor)
 {
     if (!actor) return;
-    std::unordered_map<uint32_t, std::vector<uint32_t>>& seenSet = GetSingleton()->seenSet;
+    std::unordered_map<uint32_t, std::vector<PersistenceEntry>>& seenSet = GetSingleton()->seenSet;
     uint32_t actorFormID = actor->GetFormID();
     const char* actorFullName = actor->GetDisplayFullName();
     RE::TESNPC* npc = actor->GetNPC();
     uint32_t npcFormID = npc ? npc->GetFormID() : 0;
+
+    if (npc == NULL) {
+        logger::warn(std::format("nothing to do: NPC is NULL for actor {:#010x}", actorFormID));
+        return;
+    }
 
     if (seenSet.contains(actorFormID)) {
         logger::debug(std::format("actor is already in seen-set: {:#010x} name={} (npc: {:#010x})", actorFormID, actorFullName, npcFormID));
@@ -125,10 +179,20 @@ void ActorLoadWatcher::OnActorLoaded(RE::Actor* actor)
         // Note we don't check their inventory here. The theory is if the player
         // removed an item it should stay gone; attempting to equip the missing
         // item SHOULD fail silently, producing expected behavior.
-        std::vector<RE::TESObjectARMO*> armors;
-        for (uint32_t formID : seenSet[actorFormID])
-            armors.push_back(RE::TESForm::GetFormByID(formID)->As<RE::TESObjectARMO>());
-        equipWardrobe(actor, armors, true);
+        std::vector<WardrobeEntry> armors;
+        for (PersistenceEntry& pe : seenSet[actorFormID]) {
+            RE::TESForm* form = RE::TESForm::GetFormByID(pe.armorFormID);
+            if (form && form->GetFormType() == RE::ENUM_FORM_ID::kARMO) {
+                WardrobeEntry we{
+                    form->As<RE::TESObjectARMO>(),
+                    pe.omodFormID == 0 ? NULL : RE::TESForm::GetFormByID(pe.omodFormID)->As<RE::BGSMod::Attachment::Mod>()
+                };
+                uint32_t omodFormID = we.omod ? we.omod->GetFormID() : 0;
+                logger::debug(std::format("Seen-set actor={:#010x} persistence entry has been materialized into armor={:#010x}, mod={:#010x}", actor->GetFormID(), we.armor->GetFormID(), omodFormID));
+                armors.push_back(we);
+            }
+        }
+        equipWardrobe(actor, armors);
         return;
     }
     logger::debug(std::format("actor loaded: {:#010x} name={} (npc: {:#010x})", actorFormID, actorFullName, npcFormID));
@@ -142,13 +206,16 @@ void ActorLoadWatcher::OnActorLoaded(RE::Actor* actor)
     // on the off chance it has anything in it (that shouldn't happen though)
     seenSet[actorFormID].clear();
 
-    if (rand() % 100 > ARMORS_CONFIG->changeOutfitChance) {
+    const uint32_t changeOutfitChance = (actor->GetSex() == RE::SEX::kFemale)
+                                      ? ARMORS_CONFIG->changeOutfitChanceF
+                                      : ARMORS_CONFIG->changeOutfitChanceM;
+    if ((uint32_t) (rand() % 100) > changeOutfitChance) {
         logger::debug("randomly skipping this actor");
         return;
     }
 
-    std::vector<RE::TESObjectARMO*> wardrobe = ARMORS->sample(actor, *ARMORS_CONFIG);
-    if (wardrobe.size() == 0) {
+    std::vector<RE::TESObjectARMO*> sample = ARMORS->sample(actor, *ARMORS_CONFIG);
+    if (sample.size() == 0) {
         // At this point if any valid wardrobe existed it should have been found (no RNG).
         // So, if no wardrobe was found, some error occurred - probably a lack of clothing
         // mods to suit this actor. Let's delete the actor from the seen-set, so that it
@@ -158,50 +225,91 @@ void ActorLoadWatcher::OnActorLoaded(RE::Actor* actor)
         return;
     }
 
-    /* See the wall of text in armor_equip_random.h for why this isn't in use. */
-    //EquipOMOD::Options opts;
-    //opts.maxAttachmentsPerArmor = 2;
-    //opts.favorMaterialSwaps = true;
-    //opts.enforceStyle = true;
-    //opts.actorLevel = actor ? actor->GetLevel() : 1;
-    //EquipOMOD::Service svc(opts);
-    //std::size_t done = svc.EquipArmorsWithRandomMods(actor, wardrobe);
+    // Sample omods for each armor entry.
+    std::vector<WardrobeEntry> wardrobe;
+    RE::BGSMod::Attachment::Mod* lastMod = NULL;
+    for (RE::TESObjectARMO* armor : sample) {
+        RE::BGSMod::Attachment::Mod* mod = ActorLoadWatcher::ARMORS->sampleOmod(armor, ActorLoadWatcher::ARMORS_CONFIG->proximityBias, lastMod, ActorLoadWatcher::ARMORS_CONFIG->allowNSFWChoices);
+        lastMod = mod;
+        wardrobe.push_back(WardrobeEntry{ armor, mod });
+        seenSet[actorFormID].push_back(PersistenceEntry{ armor->GetFormID(), mod ? mod->GetFormID() : 0 });
+    }
 
-    /* Fallback from above - attach un-modded armors. */
     npc->defOutfit = nullptr;
     npc->sleepOutfit = nullptr;
     // Force reevaluation: unequip everything that came from outfit, then equip armors
     // I considered unequipping every slot, but in vanilla only the body slot is really
     // used for outfits.
     actor->UnequipArmorFromSlot(RE::BIPED_OBJECT::kBody, false);
-    // Add all items to actor's inventory. It would be tempting to add & equip in the
-    // same pass and this USUALLY works but sometimes NPCs are coming up naked so we
-    // need to separate equip from add, so that we can retry the equip later if it fails
-    // without adding a second copy.
-    if (auto* mgr = RE::ActorEquipManager::GetSingleton()) {
-        for (RE::TESObjectARMO* armor : wardrobe) {
-            seenSet[actorFormID].push_back(armor->GetFormID());
-            actor->AddObjectToContainer(
-                armor,
-                /*extras list*/ nullptr,
-                /*count*/ 1,
-                /*fromContainer*/ nullptr,
-                RE::ITEM_REMOVE_REASON::kNone
-            );
-        }
-    }
     equipWardrobe(actor, wardrobe);
     logger::info(std::format("processed actor {:#010x} name={} (npc: {:#010x}); {} armors equipped", actorFormID, actorFullName, npcFormID, wardrobe.size()));
 }
 
-void ActorLoadWatcher::equipWardrobe(RE::Actor* actor, std::vector<RE::TESObjectARMO*> wardrobe, bool isRetry, int attemptsRemaining) {
+void equipArmorOmodPair(RE::Actor* actor, WardrobeEntry &wardrobe, bool applyNow) {
+    if (auto* mgr = RE::ActorEquipManager::GetSingleton()) {
+        RE::TESObjectARMO* armor = wardrobe.armor;
+        RE::BGSMod::Attachment::Mod* mod = wardrobe.omod;
+        if (mod != NULL) {
+            logger::trace("  adding armor with omod to actor's inventory");
+            RE::BSTSmartPointer<RE::TBO_InstanceData> instData;
+
+            auto* instExtra = new RE::BGSObjectInstanceExtra();      // default ctor is available
+            instExtra->AddMod(*mod, /*attachIndex*/ 1, /*rank*/ 0, /*removeInvalidMods*/true);
+            armor->ApplyMods(instData, instExtra);
+
+            auto* xInst = new RE::ExtraInstanceData(armor, instData);
+            auto xlist = RE::BSTSmartPointer<RE::ExtraDataList>(new RE::ExtraDataList());
+            xlist->AddExtra(xInst);
+            xlist->AddExtra(instExtra);
+
+            actor->AddObjectToContainer(armor, xlist, 1, nullptr, RE::ITEM_REMOVE_REASON::kNone);
+            RE::BGSObjectInstance inst(armor, nullptr);// or instData.get()?
+            mgr->EquipObject(actor, inst, /*stackID*/0, /*number*/1, /*slot*/nullptr, /*queueEquip*/true, /*force*/true, /*playSound*/false,
+                /*applyNow*/applyNow, /*locked*/true);
+            logger::info(std::format("equipped armor {:#010x} to actor {:#010x} with omod {:#010x}", armor->GetFormID(), actor->GetFormID(), mod->GetFormID()));
+        }
+        else {
+            RE::BGSObjectInstance inst(armor, nullptr);
+            logger::trace("  adding base armor to actor's inventory");
+            actor->AddObjectToContainer(
+                armor,
+                nullptr,
+                /*count*/ 1,
+                /*fromContainer*/ nullptr,
+                RE::ITEM_REMOVE_REASON::kNone
+            );
+            (void)mgr->EquipObject(
+                actor, inst,
+                /*stackID*/0,
+                /*number*/1,
+                /*slot*/nullptr,     // usually nullptr
+                /*queueEquip*/false,      // synchronous, so our stack 'extra' has already produced instData
+                /*forceEquip*/true,
+                /*playSounds*/false,
+                /*applyNow*/applyNow,  // trigger a single biped rebuild on the last piece
+                /*locked*/true);
+            logger::info(std::format("equipped armor {:#010x} to actor {:#010x}", armor->GetFormID(), actor->GetFormID()));
+        }
+    }
+    else {
+        logger::warn("No equip mgr! This shouldn't happen... but there's nothing I can do about it.");
+    }
+}
+
+void ActorLoadWatcher::equipWardrobe(RE::Actor* actor, std::vector<WardrobeEntry> wardrobe, bool isRetry, int attemptsRemaining) {
+    logger::trace(std::format("equipWardrobe isRetry={} attemptsRemaining={}", isRetry, attemptsRemaining));
+
     // If isRetry is true, we need to query the actor and see which item(s) failed to equip. Otherwise
     // we continue on.
+    // Note: matswap is implemented here. Since we have to check if an item is equipped AND we need the
+    // item to be equipped to generate instance data, we can do both things at once; and in fact, we can
+    // only proceed with matswap if we can confirm the item was indeed equipped.
     if (isRetry) {
-        std::vector<RE::TESObjectARMO*> retry;
-        for (RE::TESObjectARMO* armo : wardrobe) {
-            if (!isEquipped(actor, armo)) {
-                retry.push_back(armo);
+        std::vector<WardrobeEntry> retry;
+        for (auto& entry : wardrobe) {
+            if (!isEquipped(actor, entry.armor)) {
+                logger::trace(std::format("isEquipped was false for {:#010x}", entry.armor->GetFormID()));
+                retry.push_back(entry);
             }
         }
         wardrobe = retry;
@@ -213,40 +321,58 @@ void ActorLoadWatcher::equipWardrobe(RE::Actor* actor, std::vector<RE::TESObject
     }
 
     if (attemptsRemaining == 0) {
-        // this is actually expected due to isEquipped() always failing.
-        // Uncomment warning if we can get isEquipped() to work properly.
-        // Net result of isEquipped() not working is that we will always attempt 3 times (default attemptsRemaining count),
-        // even if it worked; but as we're equipping an already-equipped armor 3x over 60 frames, it should be harmless,
-        // as that duration will pass long before anyone interacts with the NPC to experience equip issues.
-        //logger::warn(std::format("no more attempts remaining to equip actor {:#010x}; giving up with {} armors remaining", actor->GetFormID(), wardrobe.size()));
+        logger::warn(std::format("no more attempts remaining to equip actor {:#010x}; giving up with {} armors remaining", actor->GetFormID(), wardrobe.size()));
         return;
     }
 
+    auto* mgr = RE::ActorEquipManager::GetSingleton();
+    if (!mgr) {
+        logger::error("no equipment manager! cannot continue");
+        return;
+    }
+
+    if (!actor->inventoryList) {
+        // assume if there's no inventoryList the actor isn't fully initialized yet.
+        // We'll catch them in the next onLoad (seenSet will help us out).
+        logger::debug("actor has no inventoryList; aborting until next actor load event");
+        return;
+    }
+
+    // Header for ForEachStack implies that we need a read lock for the operations below. Not sure the best way to do that but
+    // GetAllForms() returns us one.
+    const auto& [map, lock] = RE::TESForm::GetAllForms();
+    RE::BSAutoReadLock l{ lock };
+
     size_t done = 0;
-    if (auto* mgr = RE::ActorEquipManager::GetSingleton()) {
-        for (size_t i = 0; i < wardrobe.size(); ++i) {
-            RE::TESObjectARMO* armor = wardrobe[i];
-            RE::BGSObjectInstance inst(armor, nullptr);
-            (void)mgr->EquipObject(
-                actor, inst,
-                /*stackID*/0,
-                /*number*/1,
-                /*slot*/nullptr,     // usually nullptr
-                /*queueEquip*/false,      // synchronous, so our stack 'extra' has already produced instData
-                /*forceEquip*/true,
-                /*playSounds*/false,
-                /*applyNow*/i == wardrobe.size() - 1,  // trigger a single biped rebuild on the last piece
-                /*locked*/true);
-            logger::debug(std::format("equipped armor {:#010x} to actor {:#010x}", armor->GetFormID(), actor->GetFormID()));
-            done++;
-        }
-        logger::debug(std::format("{} armors equipped to actor {:#010x}", done, actor->GetFormID()));
-        // wait 2 frames and then verify success, re-equipping as needed
-        NextFrames([actor, wardrobe, attemptsRemaining]() {
-            equipWardrobe(actor, wardrobe, /*isRetry=*/true, attemptsRemaining - 1);
-            }, 30);
+    for (size_t i = 0; i < wardrobe.size(); ++i) {
+        bool foundExisting = false;
+        bool applyNow = i == wardrobe.size() - 1;
+        actor->inventoryList->ForEachStack(
+            [&](RE::BGSInventoryItem& item) {
+                return item.object == wardrobe[i].armor; // restrict to this base form
+            },
+            [&](RE::BGSInventoryItem& item, RE::BGSInventoryItem::Stack& stack) {
+                foundExisting = true; // if we're here, a match was found
+                if (stack.IsEquipped())
+                    return false; // already equipped, nothing to do; stop iterating
+                RE::BGSObjectInstance inst(wardrobe[i].armor, nullptr);
+                (void)mgr->EquipObject(
+                    actor, inst,
+                    /*stackID*/0, /*number*/1, /*slot*/nullptr, /*queueEquip*/false, /*forceEquip*/true,
+                    /*playSounds*/false, /*applyNow*/applyNow,  // trigger a single biped rebuild on the last piece
+                    /*locked*/true);
+                return false; // equip done, nothing more to do; stop iterating
+            }
+        );
+        // Only if the base armor doesn't already exist (this is usually the case),
+        // generate a new one with selected omod.
+        if (!foundExisting)
+            equipArmorOmodPair(actor, wardrobe[i], applyNow);
+        done++;
     }
-    else {
-        logger::warn("No equip mgr! This shouldn't happen... but there's nothing I can do about it.");
-    }
+    logger::debug(std::format("{} armors equipped to actor {:#010x}", done, actor->GetFormID()));
+    // wait 2 frames and then verify success, re-equipping as needed
+    NextFrames("equip wardrobe confirm/retry", [actor, wardrobe, attemptsRemaining]() {
+        ActorLoadWatcher::equipWardrobe(actor, wardrobe, /*isRetry=*/true, attemptsRemaining - 1);
+    }, 30);
 }

@@ -180,6 +180,51 @@ std::vector<RE::TESObjectARMO*> ArmorIndex::sample(RE::Actor* a, SamplerConfig& 
 	std::vector<RE::TESObjectARMO*> wardrobe;
 	logger::debug("SCSCD: constructing wardrobe sample");
 	uint32_t takenSlots = 0; // all slots available
+
+	/* Conservative equipping: the actor may have been spawned with all kinds of leveled list
+	   equipment, armor overrides, etc. There's also a chance we might conflict with some other mod which
+	   altered the actor's outfit package. So, check which items are equipped by default. In
+	   vanilla ONLY slot 33 (bit 3) should be set; this is the Body outfit. Anything else is an
+	   armor, weapon, or someone else's mod. Initialize takenSlots to represent the current
+	   outfit, MINUS the body slot that we intend to replace. The result is the set of available
+	   slots that aren't fitted with some leveled item that the actor should be using. */
+	if (a && a->inventoryList) {
+		// Header for ForEachStack implies that we need a read lock for the operations below. Not sure the best way to do that but
+		// GetAllForms() returns us one.
+		const auto& [map, lock] = RE::TESForm::GetAllForms();
+		RE::BSAutoReadLock l{ lock };
+		a->inventoryList->ForEachStack(
+			[&](RE::BGSInventoryItem& item) { return true; }, // iterate over everything
+			[&](RE::BGSInventoryItem& item, RE::BGSInventoryItem::Stack& stack) {
+				if (stack.IsEquipped()) {
+					// equipped item, fill its slot
+					// Unfortunately I don't know a better way to safely check if the BoundObject
+					// is also a BipedObject, except to use an explicit whitelist. But it seems
+					// armor is the only type that has biped slots, with weapon slots being
+					// hard coded(?) and not relevant here as those slots aren't referenced by
+					// this mod(?).
+					switch (item.object->GetFormType()) {
+						case RE::ENUM_FORM_ID::kARMO: {
+							// explicitly skip over any armor that occupies slot 33 (bit index 3).
+							// We plan to replace this item as should be the vanilla outfit. However,
+							// since it often fills more than just slot 33, we need to be careful to
+							// skip it entirely rather than setting it here and reverting it later.
+							// Otherwise we'll set bits on other slots that it occupies, creating
+							// gaps in the final outfit as those slots wouldn't be considered for
+							// outfitting.
+							uint32_t armoSlots = item.object->As<RE::TESObjectARMO>()->bipedModelData.bipedObjectSlots;
+							if (!(armoSlots & (1 << 3))) {
+								takenSlots = takenSlots | armoSlots;
+							}
+							break;
+						}
+					}
+				}
+				return true; // keep iterating
+			}
+		);
+	}
+
 	// Assume male if not otherwise specified. These are monsters etc that
 	// are pretty androgynous.
 	uint32_t sex = a->GetSex() == RE::SEX::kFemale ? FEMALE : MALE;
@@ -319,4 +364,90 @@ std::vector<RE::TESObjectARMO*> ArmorIndex::sample(RE::Actor* a, SamplerConfig& 
 		}
 	}
 	return wardrobe;
+}
+
+bool ArmorIndex::registerMatswaps(std::vector<RE::TESObjectARMO*>& armors, std::vector<RE::BGSMaterialSwap*>& matswaps, bool nsfw) {
+	logger::trace("> ArmorIndex::registerMatswaps");
+	for (RE::TESObjectARMO* armor : armors) {
+		uint32_t armorID = armor->GetFormID();
+		for (RE::BGSMaterialSwap* swap : matswaps) {
+			uint32_t matswapID = swap->GetFormID();
+			std::unordered_set<uint32_t>& index = (nsfw ? nsfwArmorMatswaps[armorID] : sfwArmorMatswaps[armorID]);
+			// don't register a matswap more than once, else we'll end up weighting that
+			// matswap more than the others. (Guessing usually would not be what is intended.)
+			if (!index.contains(matswapID)) {
+				index.insert(matswapID);
+				matswapProximityIndex.add(matswapID, swap->GetFormEditorID());
+			}
+		}
+	}
+	logger::trace("< ArmorIndex::registerMatswaps");
+	return true;
+}
+
+RE::BGSMaterialSwap* ArmorIndex::sampleMatswap(RE::TESObjectARMO* armor, float proximityBias, RE::BGSMaterialSwap* other, bool allowNSFW) {
+	logger::trace("> ArmorIndex::sampleMatswap");
+	uint32_t armorFormID = armor->GetFormID();
+	uint32_t otherFormID = other ? other->GetFormID() : 0xFFFFFFFF;
+	std::vector<uint32_t> candidates;
+	for (uint32_t candidate : sfwArmorMatswaps[armorFormID])
+		candidates.push_back(candidate);
+	if (allowNSFW) {
+		for (uint32_t candidate : nsfwArmorMatswaps[armorFormID])
+			candidates.push_back(candidate);
+	}
+	uint32_t sampledID = matswapProximityIndex.sampleBiased(otherFormID, candidates, proximityBias);
+	RE::TESForm* form = RE::TESForm::GetFormByID(sampledID);
+	if (form == NULL) {
+		logger::trace("< ArmorIndex::sampleMatswap NULL");
+		return NULL;
+	}
+	else {
+		logger::trace("< ArmorIndex::sampleMatswap found");
+		return form->As<RE::BGSMaterialSwap>();
+	}
+}
+
+
+
+bool ArmorIndex::registerOmods(std::vector<RE::TESObjectARMO*>& armors, std::vector<RE::BGSMod::Attachment::Mod*>& omods, bool nsfw) {
+	logger::trace("> ArmorIndex::registerOmods");
+	for (RE::TESObjectARMO* armor : armors) {
+		uint32_t armorID = armor->GetFormID();
+		for (RE::BGSMod::Attachment::Mod* omod : omods) {
+			uint32_t omodID = omod->GetFormID();
+			std::unordered_set<uint32_t>& index = (nsfw ? nsfwArmorOmods[armorID] : sfwArmorOmods[armorID]);
+			// don't register an omod more than once, else we'll end up weighting that
+			// omod more than the others. (Guessing usually would not be what is intended.)
+			if (!index.contains(omodID)) {
+				index.insert(omodID);
+				omodProximityIndex.add(omodID, omod->GetFormEditorID());
+			}
+		}
+	}
+	logger::trace("< ArmorIndex::registerMatswaps");
+	return true;
+}
+
+RE::BGSMod::Attachment::Mod* ArmorIndex::sampleOmod(RE::TESObjectARMO* armor, float proximityBias, RE::BGSMod::Attachment::Mod* other, bool allowNSFW) {
+	logger::trace("> ArmorIndex::sampleOmod");
+	uint32_t armorFormID = armor->GetFormID();
+	uint32_t otherFormID = other ? other->GetFormID() : 0xFFFFFFFF;
+	std::vector<uint32_t> candidates;
+	for (uint32_t candidate : sfwArmorOmods[armorFormID])
+		candidates.push_back(candidate);
+	if (allowNSFW) {
+		for (uint32_t candidate : nsfwArmorOmods[armorFormID])
+			candidates.push_back(candidate);
+	}
+	uint32_t sampledID = omodProximityIndex.sampleBiased(otherFormID, candidates, proximityBias);
+	RE::TESForm* form = RE::TESForm::GetFormByID(sampledID);
+	if (form == NULL) {
+		logger::trace("< ArmorIndex::sampleOmod NULL");
+		return NULL;
+	}
+	else {
+		logger::trace("< ArmorIndex::sampleOmod found");
+		return form->As<RE::BGSMod::Attachment::Mod>();
+	}
 }

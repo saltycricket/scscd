@@ -1,0 +1,14 @@
+Sex , Occupation           , Form ID; Form ID; Form ID , MinLevel
+# These are in vanilla and are valid for the purposes of this mod; if one
+# has "Crimsomrider's 1950s Feminine Outfits.esp" installed, then this acts
+# as compatibility with that mod since it replaces the female vanilla matswaps.
+11  , 11110010011011010001 , 00151E30
+11  , 11110010011011010001 , 00151E34
+11  , 11110010011011010001 , 001BDDF8
+11  , 11110010011011010001 , 001BDDF9
+11  , 11110010011011010001 , 001BDDFA
+11  , 11110010011011010001 , 001BDDFB
+11  , 11110010011011010001 , 001BDE04
+11  , 11110010011011010001 , 001BDE05
+11  , 11110010011011010001 , 001BDE06
+11  , 11110010011011010001 , 001BDE07

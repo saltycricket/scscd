@@ -46,13 +46,8 @@ void init_logger()
 
     spdlog::set_default_logger(std::move(log));
 
-#ifdef _DEBUG
-    spdlog::set_level(spdlog::level::trace);
-    spdlog::flush_on(spdlog::level::trace);
-#else
     spdlog::set_level(spdlog::level::info);
     spdlog::flush_on(spdlog::level::warn);
-#endif
 
     // flush log every 60 seconds
     std::chrono::milliseconds interval{ 60000 };

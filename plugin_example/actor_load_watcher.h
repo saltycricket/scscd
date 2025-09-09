@@ -10,8 +10,17 @@
 
 namespace Serialization {
     static constexpr std::uint32_t kTag = 'SEEN';
-    static constexpr std::uint32_t kVersion = 2;
+    static constexpr std::uint32_t kVersion = 3;
 }
+
+struct WardrobeEntry {
+    RE::TESObjectARMO* armor{ NULL };
+    RE::BGSMod::Attachment::Mod* omod{ NULL };
+};
+
+struct PersistenceEntry {
+    uint32_t armorFormID, omodFormID;
+};
 
 inline bool IsLoadedActor(RE::TESObjectREFR* ref)
 {
@@ -26,21 +35,48 @@ inline bool IsLoadedActor(RE::TESObjectREFR* ref)
     return true;
 }
 
-static bool isEquipped(RE::Actor* actor, RE::TESObjectARMO* armo) {
-    auto  mask = armo->bipedModelData.bipedObjectSlots;
-    RE::BGSEquipIndex idx;
-    for (uint32_t i = 0; i < 64; i++) {
-        if (armo->FillsBipedSlot(i)) {
-            idx.index = i;
-            break;
-        }
+static bool isEquipped(RE::Actor* actor, RE::TESObjectARMO* armor) {
+    logger::trace("> isEquipped");
+    if (!actor || !armor) {
+        logger::trace("< isEquipped armor or actor is null");
+        return false;
     }
-    RE::BGSObjectInstance inst(nullptr, nullptr);
-    const auto* filled = actor->GetEquippedItem(&inst, idx);
 
-    /* Apparently this doesn't work as off 20250903 and object is always NULL. It leads to a redundant equip but that should be harmless (if a little less efficient). */
-    //logger::info(std::format("isEquipped {:#010x} ~= {:#010x}", armo->GetFormID(), inst.object ? inst.object->GetFormID() : 0));
-    return (filled && inst.object == armo);
+    auto inv = actor->inventoryList;
+    if (!inv) {
+        logger::trace("< isEquipped inventoryList is null");
+        return false;
+    }
+
+    bool isEquipped = false;
+    inv->ForEachStack(
+        [&](RE::BGSInventoryItem& item) {
+            return item.object == armor; // restrict to this base form
+        },
+        [&](RE::BGSInventoryItem& /*item*/, RE::BGSInventoryItem::Stack& stack) {
+            isEquipped = stack.IsEquipped();
+            return false;
+        }
+    );
+
+    logger::trace(std::format("< isEquipped result={}", isEquipped));
+    return isEquipped;
+
+
+    //auto  mask = armo->bipedModelData.bipedObjectSlots;
+    //RE::BGSEquipIndex idx;
+    //for (uint32_t i = 0; i < 64; i++) {
+    //    if (armo->FillsBipedSlot(i)) {
+    //        idx.index = i;
+    //        break;
+    //    }
+    //}
+    //RE::BGSObjectInstance inst(nullptr, nullptr);
+    //const auto* filled = actor->GetEquippedItem(&inst, idx);
+
+    ///* Apparently this doesn't work as off 20250903 and object is always NULL. It leads to a redundant equip but that should be harmless (if a little less efficient). */
+    ////logger::info(std::format("isEquipped {:#010x} ~= {:#010x}", armo->GetFormID(), inst.object ? inst.object->GetFormID() : 0));
+    //return (filled && inst.object == armo);
 }
 
 class ActorLoadWatcher final : public RE::BSTEventSink<RE::BGSActorCellEvent>, RE::BSTEventSink<RE::TESObjectLoadedEvent>
@@ -76,7 +112,7 @@ public:
     }
 
 private:
-    std::unordered_map<uint32_t, std::vector<uint32_t>> seenSet;
+    std::unordered_map<uint32_t, std::vector<PersistenceEntry>> seenSet;
     static const int SETTINGS_POLL_FREQUENCY_MS = 5000; // poll every 30 seconds
 
     struct SettingsChangeWatcherTask : F4SE::ITaskDelegate
@@ -104,31 +140,48 @@ private:
     {
         int frames{ 0 };
         std::function<void()> fn;
+        std::string desc;
 
-        DeferFramesTask(int f, std::function<void()> ff) { frames = f; fn = ff; }
+        DeferFramesTask(int f, std::string desc, std::function<void()> ff) { frames = f; this->desc = desc;  fn = ff; }
 
         void Run() override
         {
             if (frames-- > 0) {
-                F4SE::GetTaskInterface()->AddTask(new DeferFramesTask(frames, std::move(fn)));   // run again next frame
+                F4SE::GetTaskInterface()->AddTask(new DeferFramesTask(frames, desc, std::move(fn)));   // run again next frame
             }
             else {
-                if (fn) fn();
+                if (fn) {
+                    //logger::trace(std::format("calling deferred fn: {}", desc));
+                    fn();
+                }
             }
         }
     };
 
-    static void NextFrames(std::function<void()> fn, int frames = 1)
+    static void NextFrames(std::string desc, std::function<void()> fn, int frames = 1)
     {
-        auto* t = new DeferFramesTask(frames, std::move(fn));
+        auto* t = new DeferFramesTask(frames, desc, std::move(fn));
         F4SE::GetTaskInterface()->AddTask(t);
     }
-    static void OnActorLoaded(RE::Actor* actor);
-    static void equipWardrobe(RE::Actor* actor, std::vector<RE::TESObjectARMO*> wardrobe, bool isRetry = false, int attemptsRemaining = 3);
 
-    void OnActorLoadedSoon(std::uint32_t actorRefID, int frames = 2)
+    static void OnActorLoaded(RE::Actor* actor);
+    //static void equipWardrobe(RE::Actor* actor,
+    //    std::vector<RE::TESObjectARMO*> wardrobe);
+    static void equipWardrobe(RE::Actor* actor,
+                              std::vector<WardrobeEntry> wardrobe,
+                              bool isRetry = false,
+                              int attemptsRemaining = 3);
+
+    void OnActorLoadedSoon(std::uint32_t actorRefID, int frames = 0)
     {
-        NextFrames([actorRefID] {
+        if (frames == 0) {
+            // default = stagger randomly over the next several frames.
+            // We may see quite a lot of loads especially when a game is
+            // restored, so ammortize performance costs over time.
+            const int ammortize_frame_count = 5;
+            frames = (rand() % ammortize_frame_count) + 1;
+        }
+        NextFrames("process actor loaded", [actorRefID] {
             if (auto* form = RE::TESForm::GetFormByID(actorRefID)) {
                 if (auto* ref = form->As<RE::TESObjectREFR>()) {
                     if (auto* actor = ref->As<RE::Actor>()) {
@@ -144,7 +197,7 @@ private:
         RE::BSTEventSource<RE::TESObjectLoadedEvent>* /*a_source*/) override
     {
         const uint32_t id = a_event.formID;
-        OnActorLoadedSoon(id, /*frames=*/2);
+        OnActorLoadedSoon(id);
         return RE::BSEventNotifyControl::kContinue;
     }
 
@@ -153,7 +206,7 @@ private:
         RE::BSTEventSource<RE::BGSActorCellEvent>* /*a_source*/) override
     {
         const uint32_t id = a_event.actor->GetFormID();
-        OnActorLoadedSoon(id, /*frames=*/2);
+        OnActorLoadedSoon(id);
 
         return RE::BSEventNotifyControl::kContinue;
     }

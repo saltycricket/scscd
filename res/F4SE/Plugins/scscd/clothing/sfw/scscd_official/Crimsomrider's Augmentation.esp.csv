@@ -1,0 +1,14 @@
+Sex , Occupation           , Form ID; Form ID; Form ID , MinLevel
+# these were made for nick valentine but think they should be valid for any
+# male synth. Will have to remove these if i'm wrong.
+01  , 10010000000000000000 , FE0BD803
+01  , 10010000000000000000 , FE0BD846
+01  , 10010000000000000000 , FE0BD845
+# and these were made for female synth PC's but since PC is human they can be
+# used by any human. Scope to institute and maybe high level raiders might
+# look cool. It's not clear to me if these can be used on male characters
+# so only female for now.
+10  , 10010000000000000000 , FE0BD840 # no raiders
+10  , 10010000000000000000 , FE0BD80C # no raiders
+10  , 00000010000000000000 , FE0BD840 , 50 # high level raiders
+10  , 00000010000000000000 , FE0BD80C , 50 # high raiders

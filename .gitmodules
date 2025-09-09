@@ -1,9 +1,3 @@
-[submodule "dep/f4se"]
-	path = dep/f4se
-	url = https://github.com/ianpatt/f4se
-[submodule "dep/common"]
-	path = dep/common
-	url = https://github.com/ianpatt/common
 [submodule "dep/vcpkg"]
 	path = dep/vcpkg
 	url = https://github.com/microsoft/vcpkg

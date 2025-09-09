@@ -159,6 +159,12 @@ extern "C" __declspec(dllexport) bool F4SEPlugin_Load(const F4SE::LoadInterface*
 				// Register tuples at CSV files :
 				scan_tuples_csv(DataPath("F4SE\\Plugins\\scscd\\clothing\\nsfw"), true, ARMORS);
 				scan_tuples_csv(DataPath("F4SE\\Plugins\\scscd\\clothing\\sfw"), false, ARMORS);
+				// Register matswaps :
+				//scan_matswaps_csv(DataPath("F4SE\\Plugins\\scscd\\matswaps\\nsfw"), true, ARMORS);
+				//scan_matswaps_csv(DataPath("F4SE\\Plugins\\scscd\\matswaps\\sfw"), false, ARMORS);
+				// Register omods :
+				scan_omods_csv(DataPath("F4SE\\Plugins\\scscd\\omods\\nsfw"), true, ARMORS);
+				scan_omods_csv(DataPath("F4SE\\Plugins\\scscd\\omods\\sfw"), false, ARMORS);
 				ActorLoadWatcher::watchForSettingsChanges();
 			}
 			// Register listener here so we can pre-empt any actors which are loaded

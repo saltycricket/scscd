@@ -9,6 +9,8 @@
 #include "edid_similarity.h"
 #include <filesystem>
 
+void applyMatSwap(RE::Actor* actor, RE::TESObjectARMO* armor, RE::BGSMaterialSwap* swap);
+
 // Utility: check if a biped slot (30-61) is set in the mask returned by GetFilledSlots()
 static bool HasSlot(std::uint32_t filledMask, int slotIndex)
 {
@@ -72,6 +74,21 @@ class ArmorIndex {
 	// assumption that they are probably meant to be used together).
 	EdidIndex proximityIndex;
 
+	// Full set of available matswaps.
+	// We index them by [armor ID, matswap candidates]. We also maintain a
+	// second EdidIndex - this one for matswaps, not armors.
+	// When sampling occurs, we use the proximityBias from the sampler config
+	// to choose a matswap that is similar to other chosen matswaps. Hopefully,
+	// this will encourage 'color' coordination and won't (usually) produce a
+	// rando-rainbow outfit.
+	std::unordered_map<uint32_t, std::unordered_set<uint32_t>> sfwArmorMatswaps;
+	std::unordered_map<uint32_t, std::unordered_set<uint32_t>> nsfwArmorMatswaps;
+	EdidIndex matswapProximityIndex;
+
+	std::unordered_map<uint32_t, std::unordered_set<uint32_t>> sfwArmorOmods;
+	std::unordered_map<uint32_t, std::unordered_set<uint32_t>> nsfwArmorOmods;
+	EdidIndex omodProximityIndex;
+
 	typedef struct {
 		// vector of tuple IDs for any given slot that can be sampled by the
 		// proximity index. These must be segregated by slot (32 slots total)
@@ -114,28 +131,6 @@ class ArmorIndex {
 	void put(Tuple& t);
 
 public:
-	OccupationIndex* occupations;
-
-	ArmorIndex(OccupationIndex *occupations)
-	{
-		this->occupations = occupations;
-	}
-
-	/*
-	 * Registers a set of Armors with a bitmap of compatible Occupations.
-	 * The armors will be indexed as a group, and returned as a group if they are
-	 * sampled later on. Thus if you want to register 2 separate armors, call
-	 * registerTuple twice with two one-item vectors. Otherwise they'll be treated
-	 * as a single registered entity.
-	 * 
-	 * Compatible races are queried from the armors directly. If any armor defines
-	 * a race that is not compatible with any other armor in the list, that race
-	 * won't be registered.
-	 * 
-	 * Compatible sexes are queried the same way and follow the same rules as races.
-	 */
-	bool registerTuple(uint8_t minLevel, bool nsfw, uint32_t sexes, uint32_t occupations, std::vector<RE::TESObjectARMO*> armors);
-
 	class SamplerConfig {
 	public:
 		/*
@@ -147,7 +142,8 @@ public:
 		 * can't be produced based on other rules or not enough clothings,
 		 * NPCs can still end up with an unaltered outfit.
 		 */
-		uint8_t changeOutfitChance{ 0 };
+		uint8_t changeOutfitChanceM{ 0 };
+		uint8_t changeOutfitChanceF{ 0 };
 
 		/*
 		 * Integer percentage value between [0, 100].
@@ -206,6 +202,48 @@ public:
 		//void setChangeOutfitChance(uint8_t);
 		//void setSkipSlotChance(uint8_t slot, uint8_t chance);
 	};
+
+	OccupationIndex* occupations;
+
+	ArmorIndex(OccupationIndex *occupations)
+	{
+		this->occupations = occupations;
+	}
+	
+	/*
+	 * Registers a set of matswaps to a set of armors. Later, any one armor can be
+	 * used to retrieve a random matswap.
+	 * 
+	 * Returns true on success.
+	 */
+	bool registerMatswaps(std::vector<RE::TESObjectARMO*>& armors, std::vector<RE::BGSMaterialSwap*>& matswaps, bool isNSFW);
+	bool registerOmods(std::vector<RE::TESObjectARMO*>& armors, std::vector<RE::BGSMod::Attachment::Mod*>& omods, bool isNSFW);
+
+	/*
+	 * Samples available matswaps for the given armor, returning one of them.
+	 * You can provide 'other' to indicate a previous matswap selection. If you
+	 * do, a similar one will be found using proximityBias. If 'other' is NULL,
+	 * a matswap will be returned completely at random.
+	 */
+	RE::BGSMaterialSwap* sampleMatswap(RE::TESObjectARMO* armor, float proximityBias, RE::BGSMaterialSwap* other, bool allowNSFW);
+	RE::BGSMod::Attachment::Mod* sampleOmod(RE::TESObjectARMO* armor, float proximityBias, RE::BGSMod::Attachment::Mod* other, bool allowNSFW);
+
+	/*
+	 * Registers a set of Armors with a bitmap of compatible Occupations.
+	 * The armors will be indexed as a group, and returned as a group if they are
+	 * sampled later on. Thus if you want to register 2 separate armors, call
+	 * registerTuple twice with two one-item vectors. Otherwise they'll be treated
+	 * as a single registered entity.
+	 * 
+	 * Compatible races are queried from the armors directly. If any armor defines
+	 * a race that is not compatible with any other armor in the list, that race
+	 * won't be registered.
+	 * 
+	 * Compatible sexes are queried the same way and follow the same rules as races.
+	 * 
+	 * Returns true on success.
+	 */
+	bool registerTuple(uint8_t minLevel, bool nsfw, uint32_t sexes, uint32_t occupations, std::vector<RE::TESObjectARMO*> armors);
 
 	/*
 	 * Samples the index for the given actor by looking up its race, sex and occupation.
