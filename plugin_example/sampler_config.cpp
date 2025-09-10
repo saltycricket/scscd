@@ -2,6 +2,7 @@
 #include <SimpleIni.h>
 #include <windows.h>
 #include <iostream>
+#include <filesystem>
 
 static std::time_t ini_mtime(std::filesystem::path &inipath) {
     auto ftime = fs::last_write_time(inipath);
@@ -13,11 +14,12 @@ static std::time_t ini_mtime(std::filesystem::path &inipath) {
 }
 
 static bool ini_newer_than(std::filesystem::path& inipath, std::time_t t) {
-    return (ini_mtime(inipath) > t);
+    return (std::filesystem::exists(inipath) && ini_mtime(inipath) > t);
 }
 
 bool ArmorIndex::SamplerConfig::haveSettingsChanged() {
-    return ini_newer_than(inipath, iniModTime);
+    return ini_newer_than(inipath, iniModTime) ||
+           ini_newer_than(defaultPath, iniModTime);
 }
 
 static float LoadFromIni(CSimpleIniA& ini, std::string fieldName, float defaultValue) {
@@ -80,8 +82,15 @@ static void WriteToIni(std::filesystem::path inipath, std::string fieldName, boo
     logger::info(std::format("Saved modified config for {} (changed to boolean {})", fieldName, std::to_string(v)));
 }
 
-void ArmorIndex::SamplerConfig::load(std::filesystem::path inipath) {
+void ArmorIndex::SamplerConfig::load(std::filesystem::path inipath, std::filesystem::path defaultPath) {
     this->inipath = inipath;
+    this->defaultPath = defaultPath;
+    if (!std::filesystem::exists(inipath)) {
+        // if inipath doesn't exist, temporarily use defaultPath.
+        // Later if we detect that inipath is created, it will switch
+        // over automatically.
+        inipath = defaultPath;
+    }
     CSimpleIniA ini;
     ini.SetUnicode(true);
     ini.LoadFile(inipath.c_str());

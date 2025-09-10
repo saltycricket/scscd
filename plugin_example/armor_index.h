@@ -188,13 +188,13 @@ public:
 		 */
 		float proximityBias{ 2.0 };
 
-		std::filesystem::path inipath;
+		std::filesystem::path inipath, defaultPath;
 		std::time_t iniModTime{ 0 };
 
 		SamplerConfig() {}
 
-		void load(std::filesystem::path filename);
-		void reload() { load(this->inipath); }
+		void load(std::filesystem::path filename, std::filesystem::path defaultSettingsFilename);
+		void reload() { load(this->inipath, this->defaultPath); }
 		bool haveSettingsChanged();
 		//void setAllowNSFW(bool);
 		//void setAllowNudity(bool);

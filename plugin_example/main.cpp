@@ -151,7 +151,7 @@ extern "C" __declspec(dllexport) bool F4SEPlugin_Load(const F4SE::LoadInterface*
 		case F4SE::MessagingInterface::kGameDataReady:
 			logger::trace("message is kGameDataReady");
 			if ((bool)msg->data) { // false before data, true after data
-				SAMPLER_CONFIG.load(DataPath("MCM\\Settings\\SC_Smart_Clothing_Distributor.ini"));
+				SAMPLER_CONFIG.load(DataPath("MCM\\Settings\\SC_Smart_Clothing_Distributor.ini"), DataPath("MCM\\Config\\SC_Smart_Clothing_Distributor\\settings.ini"));
 				OmodIndex::Instance().BuildFromAllForms();
 				logger::info("SCSCD scanning CSV files");
 				// Register occupations at CSV files :
