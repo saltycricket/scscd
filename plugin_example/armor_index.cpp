@@ -188,7 +188,7 @@ std::vector<RE::TESObjectARMO*> ArmorIndex::sample(RE::Actor* a, SamplerConfig& 
 	   armor, weapon, or someone else's mod. Initialize takenSlots to represent the current
 	   outfit, MINUS the body slot that we intend to replace. The result is the set of available
 	   slots that aren't fitted with some leveled item that the actor should be using. */
-	if (a && a->inventoryList) {
+	if (a && a->inventoryList && !config.replaceArmor /* (if replaceArmor is true, move forward with an empty bitmap.) */) {
 		// Header for ForEachStack implies that we need a read lock for the operations below. Not sure the best way to do that but
 		// GetAllForms() returns us one.
 		const auto& [map, lock] = RE::TESForm::GetAllForms();
@@ -216,6 +216,7 @@ std::vector<RE::TESObjectARMO*> ArmorIndex::sample(RE::Actor* a, SamplerConfig& 
 							if (!(armoSlots & (1 << 3))) {
 								takenSlots = takenSlots | armoSlots;
 							}
+							logger::info(std::format("seen actor {:#010x} wearing armo {:#010x} has armoSlots {:#010x}, taken is now {:#010x}", a->GetFormID(), item.object->GetFormID(), armoSlots, takenSlots));
 							break;
 						}
 					}

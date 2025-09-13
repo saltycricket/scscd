@@ -108,6 +108,7 @@ void ArmorIndex::SamplerConfig::load(std::filesystem::path inipath, std::filesys
     proximityBias = LoadFromIni(ini, "fProximityBias", 2.0f);
     allowNSFWChoices = LoadFromIni(ini, "bAllowNSFW", false);
     allowNudity = LoadFromIni(ini, "bAllowNudity", false);
+    replaceArmor = LoadFromIni(ini, "bReplaceArmor", false);
     skipSlotChance[slot2bit(30)] = LoadFromIni(ini, "iSlotSkipChance30", 75); // Slot 30 - Hair Top[vanilla hair, rarely used by clothing mods]
     skipSlotChance[slot2bit(31)] = LoadFromIni(ini, "iSlotSkipChance31", 75); // Slot 31 - Hair Long[vanilla hair, rarely used by clothing mods]
     skipSlotChance[slot2bit(32)] = LoadFromIni(ini, "iSlotSkipChance32", 100); // Slot 32 - FaceGen Head[avoid:engine reserved]

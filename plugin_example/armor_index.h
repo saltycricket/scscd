@@ -177,6 +177,17 @@ public:
 		bool allowNudity{ false };
 
 		/*
+		 * If true, SCSCD may replace an actor's armor with clothing
+		 * items (depending on the skip chances defined below). This
+		 * could affect game balance, because the actor may have been
+		 * intended to use a leveled item defensively. The item will
+		 * not be removed from the actor's inventory, but the actor will
+		 * be forced to equip a sampled clothing item instead. If false,
+		 * no armor will ever be replaced by Outfitter.
+		 */
+		bool replaceArmor{ false };
+
+		/*
 		 * Amount by which to bias searches towards matching armor pieces.
 		 * If zero, items will be chosen completely at random. Other
 		 * values:
