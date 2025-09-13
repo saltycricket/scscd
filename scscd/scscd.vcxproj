@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{547171CB-F934-40B9-B788-3C520FE66363}</ProjectGuid>
-    <RootNamespace>plugin_example</RootNamespace>
+    <RootNamespace>scscd</RootNamespace>
     <SccProjectName>
     </SccProjectName>
     <SccAuxPath>
@@ -110,7 +110,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(SolutionDir)\dep\CommonLibF4\CommonLibF4\include;$(SolutionDir)\..\common;$(SolutionDir);$(SolutionDir)\..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PLUGIN_EXAMPLE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SCSCD_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -132,7 +132,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(SolutionDir)\dep\CommonLibF4\include;$(SolutionDir)\dep\CommonLibF4\lib\commonlib-shared\include;$(SolutionDir);$(SolutionDir)\..;%(AdditionalIncludeDirectories);%LOCALAPPDATA%\.xmake\packages\s\spdlog\v1.15.3\6425784fcb5c43dea6fd2000c451e041\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NOMINMAX;WIN32_LEAN_AND_MEAN;NOGDI;WIN32;_WINDOWS;BOOST_STL_INTERFACES_DISABLE_CONCEPTS;WINVER=0x0601;_WIN32_WINNT=0x0601;SPDLOG_COMPILED_LIB;SPDLOG_WCHAR_TO_UTF8_SUPPORT;SPDLOG_USE_STD_FORMAT;_DEBUG;_WINDOWS;_USRDLL;PLUGIN_EXAMPLE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;WIN32_LEAN_AND_MEAN;NOGDI;WIN32;_WINDOWS;BOOST_STL_INTERFACES_DISABLE_CONCEPTS;WINVER=0x0601;_WIN32_WINNT=0x0601;SPDLOG_COMPILED_LIB;SPDLOG_WCHAR_TO_UTF8_SUPPORT;SPDLOG_USE_STD_FORMAT;_DEBUG;_WINDOWS;_USRDLL;SCSCD_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>
@@ -164,7 +164,7 @@
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <AdditionalIncludeDirectories>$(SolutionDir)\dep\CommonLibF4\CommonLibF4\include;$(SolutionDir)\..\common;$(SolutionDir);$(SolutionDir)\..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;PLUGIN_EXAMPLE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SCSCD_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>
@@ -188,7 +188,7 @@
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <AdditionalIncludeDirectories>$(SolutionDir)\dep\CommonLibF4\include;$(SolutionDir)\dep\CommonLibF4\lib\commonlib-shared\include;$(SolutionDir);$(SolutionDir)\..;%(AdditionalIncludeDirectories);%LOCALAPPDATA%\.xmake\packages\s\spdlog\v1.15.3\6425784fcb5c43dea6fd2000c451e041\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NOMINMAX;WIN32_LEAN_AND_MEAN;NOGDI;WIN32;_WINDOWS;BOOST_STL_INTERFACES_DISABLE_CONCEPTS;WINVER=0x0601;_WIN32_WINNT=0x0601;SPDLOG_COMPILED_LIB;SPDLOG_WCHAR_TO_UTF8_SUPPORT;SPDLOG_USE_STD_FORMAT;NDEBUG;_WINDOWS;_USRDLL;PLUGIN_EXAMPLE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;WIN32_LEAN_AND_MEAN;NOGDI;WIN32;_WINDOWS;BOOST_STL_INTERFACES_DISABLE_CONCEPTS;WINVER=0x0601;_WIN32_WINNT=0x0601;SPDLOG_COMPILED_LIB;SPDLOG_WCHAR_TO_UTF8_SUPPORT;SPDLOG_USE_STD_FORMAT;NDEBUG;_WINDOWS;_USRDLL;SCSCD_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>
