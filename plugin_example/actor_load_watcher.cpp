@@ -173,6 +173,12 @@ void ActorLoadWatcher::OnActorLoaded(RE::Actor* actor)
         return;
     }
 
+    if (npc->GetFormID() == 0xA7D34 /* player spouse male */
+        || npc->GetFormID() == 0xA7D35 /* player spouse femaile */) {
+        logger::debug("not processing player spouses at game start");
+        return;
+    }
+
     if (seenSet.contains(actorFormID)) {
         logger::debug(std::format("actor is already in seen-set: {:#010x} name={} (npc: {:#010x})", actorFormID, actorFullName, npcFormID));
         // re-equip the actor's wardrobe, as they tend to disrobe between loads.
