@@ -4,6 +4,7 @@ void scan_tuples_csv(std::filesystem::path basedir, bool nsfw, ArmorIndex& index
     logger::info("Loading tuples from " + basedir.string());
     std::vector<std::string> filenames = scandir(basedir, ".csv");
     for (std::string filename : filenames) {
+        uint32_t count = 0;
         std::filesystem::path fullpath = basedir / filename;
         logger::debug("Parsing tuples file " + fullpath.string());
         std::ifstream file(fullpath);
@@ -19,7 +20,7 @@ void scan_tuples_csv(std::filesystem::path basedir, bool nsfw, ArmorIndex& index
         // check if relevant plugin is loaded or not
         if (!FindTESFileByName(plugin_file)) {
             logger::debug(std::format("plugin {} not loaded; skipping", plugin_file));
-            return;
+            continue;
         }
         while (std::getline(file, line)) {
             lineno += 1;
@@ -89,6 +90,8 @@ void scan_tuples_csv(std::filesystem::path basedir, bool nsfw, ArmorIndex& index
                 + std::format(" for occupation map {:#10x}", occupations)
                 + CSV_LINENO);
             index.registerTuple(level, nsfw, sexes, occupations, armors);
+            count += 1;
         }
+        logger::info(std::format("Registered {} sets from file {}", count, filename));
     }
 }

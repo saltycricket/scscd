@@ -19,8 +19,9 @@ void scan_occupations_csv(std::filesystem::path basedir, OccupationIndex& index)
         // check if relevant plugin is loaded or not
         if (!FindTESFileByName(plugin_file)) {
             logger::debug(std::format("plugin {} not loaded; skipping", plugin_file));
-            return;
+            continue;
         }
+        uint32_t count = 0;
         while (std::getline(file, line)) {
             lineno += 1;
             // strip comments
@@ -92,6 +93,8 @@ void scan_occupations_csv(std::filesystem::path basedir, OccupationIndex& index)
                 logger::error("! occupation registration of most recent form failed!");
                 continue;
             }
+            count += 1;
         }
+        logger::info(std::format("Registered {} occupations from file {}", count, filename));
     }
 }

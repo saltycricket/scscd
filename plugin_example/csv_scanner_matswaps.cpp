@@ -19,8 +19,9 @@ void scan_matswaps_csv(std::filesystem::path basedir, bool nsfw, ArmorIndex& ind
         // check if relevant plugin is loaded or not
         if (!FindTESFileByName(plugin_file)) {
             logger::debug(std::format("plugin {} not loaded; skipping", plugin_file));
-            return;
+            continue;
         }
+        uint32_t count = 0;
         while (std::getline(file, line)) {
             lineno += 1;
             // strip comments
@@ -65,6 +66,8 @@ void scan_matswaps_csv(std::filesystem::path basedir, bool nsfw, ArmorIndex& ind
 
             logger::debug(std::format("{}: registering a set of {} {} matswaps to a set of {} armors", filename, matswaps.size(), nsfw ? "NSFW" : "SFW", armors.size()) + CSV_LINENO);
             index.registerMatswaps(armors, matswaps, nsfw);
+            count += 1;
         }
+        logger::info(std::format("Registered {} matswaps from file {}", count, filename));
     }
 }
