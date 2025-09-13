@@ -1,1 +1,4 @@
 scscd.dll 
+scscd.exp
+scscd.lib
+scscd.pdb

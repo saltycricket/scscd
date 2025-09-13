@@ -6,10 +6,6 @@
   "pluginRequirements": [],
   "content": [
     {
-      "type": "spacer",
-      "numLines": 8
-    },
-    {
       "text": "<p align='center'><font size='48'><b>Wasteland Outfitter</b></p></font>",
       "type": "text",
       "html": true
