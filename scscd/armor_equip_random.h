@@ -6,7 +6,7 @@
 #include <cstdint>
 #include <unordered_set>
 
-#include "RE/Fallout.h"
+#include "_fallout.h"
 #include "omod_index.h"
 
 /* *******************************************************************************

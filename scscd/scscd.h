@@ -5,7 +5,7 @@
 // When the plugin version changes, we'll rebuild the index automatically.
 #define SCSCD_VERSION 0
 
-#include "RE/Fallout.h"
+#include "_fallout.h"
 #include "tuple.h"
 #include "logger.h"
 #include "race.h"

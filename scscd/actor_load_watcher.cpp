@@ -153,7 +153,14 @@ void ActorLoadWatcher::Register()
     }
     logger::trace("> ActorLoadWatcher#Register()");
     // object loaded doesn't appear to fire for newly spawned/attached actors
-    if (auto* src = RE::TESObjectLoadedEvent::GetEventSource()) {
+    auto* src =
+#ifdef F4OG
+        RE::ObjectLoadedEventSource::GetSingleton()
+#else // NG
+        RE::TESObjectLoadedEvent::GetEventSource()
+#endif
+        ;
+    if (src) {
         src->RegisterSink(this);
         _registered = true;
     }
@@ -164,7 +171,7 @@ void ActorLoadWatcher::OnActorLoaded(RE::Actor* actor)
     if (!actor) return;
     std::unordered_map<uint32_t, std::vector<PersistenceEntry>>& seenSet = GetSingleton()->seenSet;
     uint32_t actorFormID = actor->GetFormID();
-    const char* actorFullName = actor->GetDisplayFullName();
+    const char* actorFullName = GetDisplayFullName(actor);
     RE::TESNPC* npc = actor->GetNPC();
     uint32_t npcFormID = npc ? npc->GetFormID() : 0;
 
@@ -182,9 +189,9 @@ void ActorLoadWatcher::OnActorLoaded(RE::Actor* actor)
     if (seenSet.contains(actorFormID)) {
         logger::debug(std::format("actor is already in seen-set: {:#010x} name={} (npc: {:#010x})", actorFormID, actorFullName, npcFormID));
         // re-equip the actor's wardrobe, as they tend to disrobe between loads.
-        // Note we don't check their inventory here. The theory is if the player
-        // removed an item it should stay gone; attempting to equip the missing
-        // item SHOULD fail silently, producing expected behavior.
+        // Note that if any item is not in their inventory, we assume the player
+        // removed it on purpose, and abort the whole operation or else we'd risk
+        // overriding the player's choice.
         std::vector<WardrobeEntry> armors;
         for (PersistenceEntry& pe : seenSet[actorFormID]) {
             RE::TESForm* form = RE::TESForm::GetFormByID(pe.armorFormID);
@@ -198,6 +205,28 @@ void ActorLoadWatcher::OnActorLoaded(RE::Actor* actor)
                 armors.push_back(we);
             }
         }
+        // check that all wardrobe items appear in the npc's inventory.
+        for (size_t i = 0; i < armors.size(); ++i) {
+            bool itemMissing = true;
+            actor->inventoryList->ForEachStack(
+                [&](RE::BGSInventoryItem& item) {
+                    // We purposely don't check the omods in case that information was damaged after game restore (e.g.
+                    // plugins changed).
+                    return item.object == armors[i].armor;
+                },
+                [&](RE::BGSInventoryItem& item, RE::BGSInventoryItem::Stack& stack) {
+                    // if we're in this callback at all, the item was found. We can
+                    // both stop iterating and flag that the item is not missing.
+                    itemMissing = false;
+                    return false;
+                }
+            );
+            if (itemMissing) {
+                logger::warn(std::format("armor item {:#010x} was missing, assuming the player does not want us to equip this actor", armors[i].armor->GetFormID()));
+                return;
+            }
+        }
+                    
         equipWardrobe(actor, armors);
         return;
     }
@@ -212,7 +241,7 @@ void ActorLoadWatcher::OnActorLoaded(RE::Actor* actor)
     // on the off chance it has anything in it (that shouldn't happen though)
     seenSet[actorFormID].clear();
 
-    const uint32_t changeOutfitChance = (actor->GetSex() == RE::SEX::kFemale)
+    const uint32_t changeOutfitChance = actorIsFemale(actor)
                                       ? ARMORS_CONFIG->changeOutfitChanceF
                                       : ARMORS_CONFIG->changeOutfitChanceM;
     if ((uint32_t) (rand() % 100) > changeOutfitChance) {
@@ -246,7 +275,11 @@ void ActorLoadWatcher::OnActorLoaded(RE::Actor* actor)
     // Force reevaluation: unequip everything that came from outfit, then equip armors
     // I considered unequipping every slot, but in vanilla only the body slot is really
     // used for outfits.
+#ifdef F4OG
+    actor->UnequipArmorFromSlot(static_cast<RE::BIPED_OBJECT>(3), false);
+#else // NG
     actor->UnequipArmorFromSlot(RE::BIPED_OBJECT::kBody, false);
+#endif
     equipWardrobe(actor, wardrobe);
     logger::info(std::format("processed actor {:#010x} name={} (npc: {:#010x}); {} armors equipped", actorFormID, actorFullName, npcFormID, wardrobe.size()));
 }

@@ -1,0 +1,1 @@
+python bin\rtti_scan.py -I scscd -I dep\commonlibf4\include -I dep\commonlibf4\lib\commonlib-shared\include --follow-angle -o report\rtti_report.csv -u report\rtti_unique.txt -v scscd\_fallout.h

@@ -4,7 +4,6 @@
 #include <functional>
 
 #include "scscd.h"
-#include <RE/Fallout.h>
 #include <F4SE/API.h>
 #include <F4SE/Interfaces.h>
 
@@ -79,7 +78,7 @@ static bool isEquipped(RE::Actor* actor, RE::TESObjectARMO* armor) {
     //return (filled && inst.object == armo);
 }
 
-class ActorLoadWatcher final : public RE::BSTEventSink<RE::BGSActorCellEvent>, RE::BSTEventSink<RE::TESObjectLoadedEvent>
+class ActorLoadWatcher final : public /*RE::BSTEventSink<RE::BGSActorCellEvent>, */ RE::BSTEventSink<RE::TESObjectLoadedEvent>
 {
 public:
     static ArmorIndex* ARMORS;
@@ -108,7 +107,11 @@ public:
     void Register();
 
     static void watchForSettingsChanges() {
+#ifdef F4OG
+        F4SE::GetTaskInterface()->AddTask(new SettingsChangeWatcherTask());
+#else // NG
         F4SE::GetTaskInterface()->AddTaskPermanent(new SettingsChangeWatcherTask());
+#endif
     }
 
 private:
@@ -123,6 +126,9 @@ private:
             this->last_poll_at = std::chrono::steady_clock::now();
         }
 
+        SettingsChangeWatcherTask(std::chrono::steady_clock::time_point t) : last_poll_at(t) {
+        }
+
         void Run() override {
             auto t = std::chrono::steady_clock::now();
             auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(t - this->last_poll_at).count();
@@ -133,6 +139,9 @@ private:
                 }
                 this->last_poll_at = t;
             }
+#ifdef F4OG
+            F4SE::GetTaskInterface()->AddTask(new SettingsChangeWatcherTask(last_poll_at));
+#endif
         }
     };
 
@@ -196,18 +205,25 @@ private:
         const RE::TESObjectLoadedEvent& a_event,
         RE::BSTEventSource<RE::TESObjectLoadedEvent>* /*a_source*/) override
     {
-        const uint32_t id = a_event.formID;
+        const uint32_t id =
+#ifdef F4OG
+            a_event.formId
+#else
+            a_event.formID
+#endif
+            ;
+
         OnActorLoadedSoon(id);
         return RE::BSEventNotifyControl::kContinue;
     }
 
-    RE::BSEventNotifyControl ProcessEvent(
-        const RE::BGSActorCellEvent& a_event,
-        RE::BSTEventSource<RE::BGSActorCellEvent>* /*a_source*/) override
-    {
-        const uint32_t id = a_event.actor->GetFormID();
-        OnActorLoadedSoon(id);
+    //RE::BSEventNotifyControl ProcessEvent(
+    //    const RE::BGSActorCellEvent& a_event,
+    //    RE::BSTEventSource<RE::BGSActorCellEvent>* /*a_source*/) override
+    //{
+    //    const uint32_t id = a_event.actor->GetFormID();
+    //    OnActorLoadedSoon(id);
 
-        return RE::BSEventNotifyControl::kContinue;
-    }
+    //    return RE::BSEventNotifyControl::kContinue;
+    //}
 };

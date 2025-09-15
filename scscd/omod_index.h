@@ -2,7 +2,7 @@
 #include <vector>
 #include <unordered_map>
 #include <span>
-#include "RE/Fallout.h"
+#include "_fallout.h"
 #include "logger.h"
 
 class OmodIndex

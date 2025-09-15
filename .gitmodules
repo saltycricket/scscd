@@ -4,3 +4,6 @@
 [submodule "dep/commonlibf4"]
 	path = dep/commonlibf4
 	url = https://github.com/libxse/commonlibf4
+[submodule "dep/commonlibf4-og"]
+	path = dep/commonlibf4-og
+	url = https://github.com/libxse/commonlibf4

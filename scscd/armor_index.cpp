@@ -137,7 +137,7 @@ void ArmorIndex::put(Tuple &t) {
 
 	logger::trace(std::format("ArmorIndex::put t={}", t.inspect()));
 	for (uint32_t formID : t.armors) {
-		RE::TESObjectARMO* armo = static_cast<RE::TESObjectARMO*>(RE::TESForm::GetFormByNumericID(formID));
+		RE::TESObjectARMO* armo = static_cast<RE::TESObjectARMO*>(RE::TESForm::GetFormByID(formID));
 		if (!armo) continue;
 		for (RE::TESRace* race : t.possibleRaces()) {
 			for (uint32_t sex : t.possibleSexes()) {
@@ -216,7 +216,7 @@ std::vector<RE::TESObjectARMO*> ArmorIndex::sample(RE::Actor* a, SamplerConfig& 
 							if (!(armoSlots & (1 << 3))) {
 								takenSlots = takenSlots | armoSlots;
 							}
-							logger::info(std::format("seen actor {:#010x} wearing armo {:#010x} has armoSlots {:#010x}, taken is now {:#010x}", a->GetFormID(), item.object->GetFormID(), armoSlots, takenSlots));
+							logger::debug(std::format("seen actor {:#010x} wearing armo {:#010x} has armoSlots {:#010x}, taken is now {:#010x}", a->GetFormID(), item.object->GetFormID(), armoSlots, takenSlots));
 							break;
 						}
 					}
@@ -228,7 +228,7 @@ std::vector<RE::TESObjectARMO*> ArmorIndex::sample(RE::Actor* a, SamplerConfig& 
 
 	// Assume male if not otherwise specified. These are monsters etc that
 	// are pretty androgynous.
-	uint32_t sex = a->GetSex() == RE::SEX::kFemale ? FEMALE : MALE;
+	uint32_t sex = actorIsFemale(a) ? FEMALE : MALE;
 	logger::debug(std::format("SCSCD: > actor sex is {}", sex == FEMALE ? "female" : "male"));
 	
 	logger::debug("SCSCD: > getting actor occupation");

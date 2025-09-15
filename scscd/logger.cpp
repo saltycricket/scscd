@@ -1,15 +1,11 @@
 #include "scscd.h"
 
-//Logger::Logger() {
-//    auto path = F4SE::log::log_directory();
-//    if (!path) {
-//        throw std::runtime_error("Failed to find standard logging directory");
-//    }
-//    *path /= "scscd.log";
-//
-//}
-//
-
+#ifdef F4OG
+#include "F4SE/Logger.h"
+#include <spdlog/sinks/basic_file_sink.h>
+#include <spdlog/sinks/msvc_sink.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
+#else // NG
 #include "F4SE/API.h"
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/msvc_sink.h>
@@ -17,9 +13,17 @@
 #include "REX/W32/OLE32.h"
 #include "REX/W32/SHELL32.h"
 #include "F4SE/Interfaces.h"
+#endif // F4NG
 
 void init_logger()
 {
+#ifdef F4OG
+    std::optional<std::filesystem::path> maybePath = F4SE::log::log_directory();
+    if (!maybePath.has_value())
+        return; // nothing can be done
+    std::filesystem::path path = maybePath.value();
+    path /= std::format("My Games/Fallout4/F4SE/SC Smart Clothing Distributor.log");
+#else // NG
     wchar_t* knownBuffer{ nullptr };
     const auto                                                     knownResult = REX::W32::SHGetKnownFolderPath(REX::W32::FOLDERID_Documents, REX::W32::KF_FLAG_DEFAULT, nullptr, std::addressof(knownBuffer));
     std::unique_ptr<wchar_t[], decltype(&REX::W32::CoTaskMemFree)> knownPath(knownBuffer, REX::W32::CoTaskMemFree);
@@ -29,7 +33,8 @@ void init_logger()
     }
 
     std::filesystem::path path = knownPath.get();
-    path /= std::format("My Games/{}/F4SE/{}.log", F4SE::GetSaveFolderName(), F4SE::GetPluginName());
+    path /= std::format("My Games/{}/F4SE/SC Smart Clothing Distributor.log", F4SE::GetSaveFolderName()/*, F4SE::GetPluginName()*/);
+#endif // F4NG
 
     // File sink (writes to Documents\My Games\Fallout4\F4SE\MyPlugin.log)
     auto fileSink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(path.string(), true);

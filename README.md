@@ -14,22 +14,36 @@ Please see https://www.nexusmods.com/fallout4/mods/89573 for details.
 
 First you must update submodules:
 
-  git submodule init --recursive
-  git submodule update --recursive
+    git submodule init --recursive
+    git submodule update --recursive
 
 Then you must install xmake **in Windows powershell**:
-    > irm https://xmake.io/psget.text | iex
+
+    irm https://xmake.io/psget.text | iex
 
 Then you must install vcpkg, which is in dep/vcpkg or at: https://github.com/microsoft/vcpkg
-  > bootstrap-vcpkg.bat
-  > vcpkg integrate install
+
+    bootstrap-vcpkg.bat
+    vcpkg integrate install
 
 After installing vcpkg you must install the project dependencies from this project root:
-    > vcpkg install
+
+    vcpkg install
 
 Next you must build CommonLibF4:
-    > cd dep/CommonLibF4
-  > xmake -y
+
+    cd dep/CommonLibF4
+    xmake -y
+
+To build for OG you also need the CommonLibF4 that is pegged to OG (because
+all of the IDs have changed from OG to NG):
+
+    cd dep/CommonLibF4-og
+    cmake -DCMAKE_CXX_FLAGS="/Zc:__cplusplus /W3 /WX-" -DCMAKE_C_FLAGS="/W3 /WX-" -DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%\scripts\buildsystems\vcpkg.cmake --preset vs2022-windows-vcpkg
+    cmake --build build --config Release
+    cd lib\commonlib-shared
+    xmake -y
+
 
 Notice CommonLibF4 .lib files are in dep/CommonLibF4/build/windows/x64/release.
 

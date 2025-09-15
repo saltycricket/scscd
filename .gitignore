@@ -6,3 +6,5 @@
 *.lib 
 *~
 scscd-*.zip
+build
+*.swp

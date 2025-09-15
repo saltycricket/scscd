@@ -16,27 +16,6 @@ static OccupationIndex OCCUPATIONS;
 static ArmorIndex ARMORS(&OCCUPATIONS);
 static ArmorIndex::SamplerConfig SAMPLER_CONFIG;
 
-extern "C" __declspec(dllexport) constinit auto F4SEPlugin_Version = [] {
-	F4SE::PluginVersionData v{};
-
-	// mandatory
-	v.PluginVersion(REL::Version(1, 0, 0));
-	v.PluginName("SC Smart Clothing Distributor");
-	v.AuthorName("saltycricket");
-
-	// compatibility flags
-	v.UsesSigScanning(false);
-	v.UsesAddressLibrary(true);
-	v.HasNoStructUse(false);
-	v.IsLayoutDependent(true);
-
-	// optional: minimum runtime requirements
-	v.CompatibleVersions({ REL::Version(1, 10, 984) });
-	v.MinimumRequiredXSEVersion(REL::Version(0, 7, 2));
-
-	return v;
-}();
-
 //typedef void (*Fbool)(IVirtualMachine&, std::uint32_t, std::monostate, bool v);
 //typedef void (*Ffloat)(IVirtualMachine&, std::uint32_t, std::monostate, float v);
 //typedef void (*Fint)(IVirtualMachine&, std::uint32_t, std::monostate, int v);
@@ -119,10 +98,14 @@ static bool F4SEAPI registerPapyrusFns(RE::BSScript::IVirtualMachine* vm) {
 }
 
 extern "C" __declspec(dllexport) bool F4SEPlugin_Load(const F4SE::LoadInterface* iface) {
+#ifdef F4OG
+	F4SE::Init(iface);
+#else // F4NG
 	struct F4SE::InitInfo info = {
 		.log = false
 	};
 	F4SE::Init(iface, info);
+#endif // F4NG
 	init_logger();
 	logger::info("SCSCD initializing");
 	ActorLoadWatcher::configure(&ARMORS, &SAMPLER_CONFIG);
