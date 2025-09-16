@@ -14,18 +14,22 @@ The general CSV rules follow the Clothings: First line is a header, comments
 are '#', case insensitive, and white space is trimmed. Read that README for
 details.
 
-There are 3 columns: Occupation, FormID and EditorID. Presently, EditorID
-is expected, but not actually used. I was toying with the idea of using
-EditorID instead of FormID, but there were technical limitations. I might
-return to it, so I HIGHLY recommend you enter the correct EditorID even though
-it isn't absolutely required at present.
+There are 2 columns: [ Occupation ], [ ID ]. The ID is either a Form ID or
+an Editor ID. Using its EditorID is obviously more convenient but it is also
+much less precise: EditorID is subject to conflicts across different plugins
+(and sometimes within the same plugin). So, FormID is generally safer, but
+EditorID has wider reach due to working across compacted and merged plugins.
+
+**Note** that as of this writing, NPCs cannot be found by their EditorID. (It
+seems the engine may strip it, probably for performance or to reduce memory
+footprint.) So, NPCs must always be specified by their FormID.
 
 You should go ahead and take a look at `scscd_official/Fallout4.esm.csv`
 for a detailed example. This file obviously targets occupations for vanilla
 entities. Other DLCs, mods, etc will be mapped in due time.
 
-A FormID can be assigned to more than one Occupation. If it is,
-the actual match will be chosen randomly at runtime. The FormID
+An ID can be assigned to more than one Occupation. If it is,
+the actual match will be chosen randomly at runtime. The ID
 can belong to a Class, Faction or NPC.
 
 You can safely pass a full 8-digit FormID, but only the rightmost
