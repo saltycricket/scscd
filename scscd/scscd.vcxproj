@@ -224,9 +224,7 @@
   <ItemGroup>
     <ClCompile Include="actor_load_watcher.cpp" />
     <ClCompile Include="armor_index.cpp" />
-    <ClCompile Include="csv_scanner_matswaps.cpp" />
     <ClCompile Include="csv_scanner_occupations.cpp" />
-    <ClCompile Include="csv_scanner_omods.cpp" />
     <ClCompile Include="csv_scanner_tuples.cpp" />
     <ClCompile Include="logger.cpp" />
     <ClCompile Include="main.cpp" />

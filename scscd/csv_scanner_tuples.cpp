@@ -110,7 +110,7 @@ void scan_tuples_csv(std::filesystem::path basedir, bool nsfw, ArmorIndex& index
                 + CSV_LINENO);
             index.registerTuple(level, localNSFW, sexes, occupations, armors);
             if (omods.size() > 0) {
-                if (!index.registerOmods(armors, omods, localNSFW) {
+                if (!index.registerOmods(armors, omods, localNSFW)) {
                     logger::warn(std::string("omod registration failed") + CSV_LINENO);
                 }
             }
