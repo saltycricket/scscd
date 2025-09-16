@@ -1,7 +1,5 @@
-======================
-SCSCD: How To Do It!
- (Occupations Edition)
-======================
+# SCSCD: How To Do It!
+# (Occupations Edition)
 
 This set of CSVs map classes, factions, and specific NPCs to Occupations.
 

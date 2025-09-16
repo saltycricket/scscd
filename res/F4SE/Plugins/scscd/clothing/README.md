@@ -1,14 +1,11 @@
-====================
-SCSCD: How To Do It!
- (Clothings Edition)
-====================
+# SCSCD: How To Do It!
+# (Clothings Edition)
 
 It's really not as complicated as it sounds. Promise. But, please read this file
 before asking questions.
 
 
-BASICS
-======
+## BASICS
 
 CSV files must be named after the mod that they apply to. For example, if you have
 a mod called MySpiffyClothingMod.esp, then you need a MySpiffyClothingMod.esp.csv.
@@ -19,8 +16,7 @@ put your CSV files in a subdirectory there, so that they can be combined with ot
 CSVs targeting the same plugin.
 
 
-CSV FILE FORMAT RULES
-=====================
+## CSV FILE FORMAT RULES
 
 CSV columns are in fixed order; don't rearrange them. The first column MUST
 be sex, the second MUST be occupation, and the third MUST be form IDs. The
@@ -51,11 +47,13 @@ MERGED. If one line specifies Gunner and another line specifies Raider, then
 that specific clothing will be used for both Gunners and Raiders.
 
 Valid sexes (length: 2):
+
     01 => Male
     10 => Female
     11 => Both
 
 Valid Occupations (length: 20):
+
     10000000000000000000 => RAILROAD_RUNAWAY
     01000000000000000000 => RAILROAD_AGENT
     00100000000000000000 => MINUTEMAN
@@ -77,11 +75,11 @@ Valid Occupations (length: 20):
     00000000000000000010 => CAPTIVE
     00000000000000000001 => DOCTOR
 
-    Example (Minuteman + Citizen + Drifter + Mercenary): 00100000001010001000
+Example (Minuteman + Citizen + Drifter + Mercenary): `00100000001010001000`
 
-    This example would indicate that the entry can be worn by minutemen,
-    citizens, drifters, and mercenaries; and unless the same form appears
-    again in another line, cannot be worn by anyone else.
+* This example would indicate that the entry can be worn by minutemen,
+  citizens, drifters, and mercenaries; and unless the same form appears
+  again in another line, cannot be worn by anyone else.
 
 
 If you have any difficulty, please:
@@ -92,13 +90,14 @@ If you have any difficulty, please:
 2. Reach out for help on the forum where you downloaded SCSCD.
 
 
-CSV COLUMNS
-===========
+## CSV COLUMNS
 
 CSV files are laid out like so:
 
+```
 Sex Bitmap , Occupation Bitmap , ID; ID; ...     , MinLevel , OMODs , NSFW
 11         , 101000001000      , 123ABC ; ABC123 , 10       ,       , true
+```
 
 Sex Bitmap - Defines which sexes can wear the item. Must be exactly two
              characters. The value is a bitmap, so a '1' means enabled and a
@@ -187,8 +186,7 @@ NSFW - Flags whether the clothing in question should be considered NSFW. If
   files a LOT easier to manage.
 
 
-USING FORM IDS
-==============
+## USING FORM IDS
 
 In general, if you can use Editor IDs, you'll have an easier time of it. But
 if you find for some reason that you need to use Form IDs (use cases do exist),
