@@ -13,3 +13,4 @@ scscd-*-og/
 screenshots/
 scscd-gui/bin/
 scscd-gui/obj/
+*.7z

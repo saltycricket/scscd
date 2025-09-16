@@ -36,7 +36,7 @@ scientist           ,BoSScienceScribeConvFaction
 bos_soldier         ,BoSSoldierConvFaction
 bos_support         ,BoSSquireFaction
 captive             ,BoundCaptiveFaction
-bos_support         ,BrootherhoodofSteelFaction
+bos_support         ,BrotherhoodofSteelFaction
 bos_soldier         ,BunkerHillBoSFaction
 captive             ,BunkerHillFF03PrisonerFaction
 citizen             ,BunkerHillGenericNPCFaction
@@ -78,7 +78,7 @@ drifter             ,DmndWallAudienceFaction
 cultist             ,DN019CultistFaction
 cultist             ,DN019CultistLeaderFaction
 raider              ,RaiderFaction
-drifter             ,ScavengerAttackFaction
+drifter             ,REScavengerFaction
 raider              ,DN035_EasyCityDownsRaiderFaction
 scientist           ,DN047ChemLabWorkerFaction
 raider              ,DN054AtomCatFaction
@@ -90,7 +90,7 @@ gunner              ,DN102_FrenziedGunnerFaction
 raider              ,DN121_SaugusBossRoomFaction
 mercenary           ,DN123_NessMercenaryFaction
 raider              ,DN123_SkylanesRaiderFaction
-railroad_agent      ,DN130_TempRailroadFaction
+railroad_agent      ,DN130TempRailroadFaction
 scientist           ,DN136_ScientistFaction
 scientist           ,DN136_ScientistFaction02
 scientist           ,DN136_ScientistFaction03
@@ -181,10 +181,11 @@ doctor              ,Vault81MedicineFaction
 citizen             ,Vault81RepairShopFaction
 drifter             ,ViciousDogFaction
 
-# Specific NPC base forms can be added too if needed.
-doctor              ,DocCrocker
-doctor              ,DoctorAmari
-doctor              ,DoctorCarrington
-doctor              ,DoctorDuff
-doctor              ,DoctorSun
-doctor              ,DocWeathers
+# Specific NPC base forms can be added too if needed. But doing this by
+# editor ID seems not to be working.
+doctor              ,00002CD6 # DocCrocker
+doctor              ,0009A680 # DoctorAmari
+doctor              ,00045ACD # DoctorCarrington
+doctor              ,00002EF8 # DoctorDuff
+doctor              ,00020B8E # DoctorSun
+doctor              ,0012FCCB # DocWeathers

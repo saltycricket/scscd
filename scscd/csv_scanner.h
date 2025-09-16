@@ -257,44 +257,14 @@ static bool isFormIDString(const std::string& s)
         });
 }
 
-static RE::TESForm* FindFormByFormIDOrEditorID(std::string& plugin_file, std::string &idString) {
-    RE::TESForm* form = NULL;
-    if (isFormIDString(idString)) {
-        uint32_t formid = 0;
-        if (auto v = hex_to_u32(idString))
-            formid = *v;
-        else {
-            logger::warn(std::string("skipped: could not parse form ID ")
-                + idString);
-            return NULL;
-        }
-        logger::trace(std::format("parse formid: {} => {:#10x}", idString, formid));
-        // At this point we've parsed a form ID and an occupation.
-        // Try to find the formID within the plugin file.
-        logger::trace(std::format("lookup formid: {}, {:#10x}", plugin_file, formid));
-        form = LookupFormInFile<RE::TESForm>(std::string_view(plugin_file), formid);
-        if (form == NULL) {
-            logger::error(std::format("skipped: form ID {:#x} could not be found in plugin {}", formid, plugin_file));
-            return NULL;
-        }
-    }
-    else {
-        form = RE::TESForm::GetFormByEditorID(idString);
-        if (form == NULL) {
-            logger::error(std::format("skipped: Editor ID '{}' could not be found", idString));
-            return NULL;
-        }
-    }
-    return form;
-}
-
+RE::TESForm* FindFormByFormIDOrEditorID(std::string& plugin_file, std::string& idString, RE::ENUM_FORM_ID expectedFormType);
 
 template<class T>
 static std::vector<T*> parseFormIDs(std::string &plugin_file, std::vector<std::string>& formIDs) {
     std::vector<T*> forms;
     for (std::string idString : formIDs) {
         // As of 1.1.0, idString could be a form ID or an editor ID.
-        RE::TESForm* form = FindFormByFormIDOrEditorID(plugin_file, idString);
+        RE::TESForm* form = FindFormByFormIDOrEditorID(plugin_file, idString, T::FORM_ID);
         if (form == NULL) {
             // if one form is bad the whole tuple is questionable - skip it
             forms.clear();

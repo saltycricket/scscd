@@ -208,19 +208,25 @@ void ActorLoadWatcher::OnActorLoaded(RE::Actor* actor)
         // check that all wardrobe items appear in the npc's inventory.
         for (size_t i = 0; i < armors.size(); ++i) {
             bool itemMissing = true;
-            actor->inventoryList->ForEachStack(
-                [&](RE::BGSInventoryItem& item) {
-                    // We purposely don't check the omods in case that information was damaged after game restore (e.g.
-                    // plugins changed).
-                    return item.object == armors[i].armor;
-                },
-                [&](RE::BGSInventoryItem& item, RE::BGSInventoryItem::Stack& stack) {
-                    // if we're in this callback at all, the item was found. We can
-                    // both stop iterating and flag that the item is not missing.
-                    itemMissing = false;
-                    return false;
-                }
-            );
+            // Sometimes actor->inventoryList is NULL. Not sure what causes this. It may be reasonable
+            // to assume that a NULL inventoryList means an empty inventory. Our only options would be
+            // to either do so, or try again later in case it's been initialized. For now I'm going to
+            // assume it's empty.
+            if (actor->inventoryList) {
+                actor->inventoryList->ForEachStack(
+                    [&](RE::BGSInventoryItem& item) {
+                        // We purposely don't check the omods in case that information was damaged after game restore (e.g.
+                        // plugins changed).
+                        return item.object == armors[i].armor;
+                    },
+                    [&](RE::BGSInventoryItem& item, RE::BGSInventoryItem::Stack& stack) {
+                        // if we're in this callback at all, the item was found. We can
+                        // both stop iterating and flag that the item is not missing.
+                        itemMissing = false;
+                        return false;
+                    }
+                );
+            }
             if (itemMissing) {
                 logger::warn(std::format("armor item {:#010x} was missing, assuming the player does not want us to equip this actor", armors[i].armor->GetFormID()));
                 return;
