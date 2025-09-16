@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <!-- We enable WinForms just to use the FolderBrowserDialog fallback -->
+    <UseWindowsForms>true</UseWindowsForms>
+    <RootNamespace>scscd_gui.wpf</RootNamespace>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Mutagen.Bethesda" Version="0.51.3" />
+    <PackageReference Include="Mutagen.Bethesda.Fallout4" Version="0.51.3" />
+  </ItemGroup>
+
+</Project>

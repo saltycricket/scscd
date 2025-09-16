@@ -8,3 +8,6 @@
 scscd-*.zip
 build
 *.swp
+scscd-*-ng/
+scscd-*-og/
+screenshots/

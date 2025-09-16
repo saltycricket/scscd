@@ -96,7 +96,7 @@ void ArmorIndex::SamplerConfig::load(std::filesystem::path inipath, std::filesys
     ini.LoadFile(inipath.c_str());
     // allow ini file to override log level
 #ifdef F4OG
-    logger::warn("Experimental build! Debug log remain enabled.")
+    logger::warn("Experimental build! Debug log remain enabled.");
     spdlog::set_level(spdlog::level::trace);
     spdlog::flush_on(spdlog::level::trace);
 #else // NG

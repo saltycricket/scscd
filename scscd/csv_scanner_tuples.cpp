@@ -34,9 +34,9 @@ void scan_tuples_csv(std::filesystem::path basedir, bool nsfw, ArmorIndex& index
                 continue;
             }
             // TODO make position-independent by reading headers
-            if (columns.size() != 3 && columns.size() != 4) {
-                // Sexes,Occupation,FormID[;FormID][,Level]
-                logger::error(std::format("skipped: expected 3 or 4 fields, got {}", columns.size()) + CSV_LINENO);
+            if (columns.size() < 3 || columns.size() > 6) {
+                // Sexes,Occupation,FormOrEditorIDs[,Level][,OModIDs]
+                logger::error(std::format("skipped: expected 3 to 6 fields, got {}", columns.size()) + CSV_LINENO);
                 continue;
             }
 
@@ -83,13 +83,37 @@ void scan_tuples_csv(std::filesystem::path basedir, bool nsfw, ArmorIndex& index
                 continue;
             }
 
+            // optional omods list (Form or editor IDs)
+            std::vector<RE::BGSMod::Attachment::Mod*> omods;
+            if (columns.size() >= 5) {
+                std::vector<std::string> omodIDs = split_and_trim(columns[4], ';');
+                if (omodIDs.size() > 0) {
+                    omods = parseFormIDs<RE::BGSMod::Attachment::Mod>(plugin_file, omodIDs);
+                }
+            }
+
+            // optional per-item nsfw flag
+            bool localNSFW = nsfw;
+            if (columns.size() >= 6 && columns[5].size() > 0) {
+                if (columns[5] == "1" || columns[5] == "true")
+                    localNSFW = true;
+                else
+                    localNSFW = false;
+            }
+
             logger::debug(filename + std::string(": registering a set of ")
                 + std::to_string(armors.size())
-                + std::format(" armors for level {}+ characters as ", level)
-                + (nsfw ? std::string("NSFW") : std::string("SFW"))
+                + std::format(" armors with {} potential omods", omods.size())
+                + std::format(" for level{} + characters as ", level)
+                + (localNSFW ? std::string("NSFW") : std::string("SFW"))
                 + std::format(" for occupation map {:#10x}", occupations)
                 + CSV_LINENO);
-            index.registerTuple(level, nsfw, sexes, occupations, armors);
+            index.registerTuple(level, localNSFW, sexes, occupations, armors);
+            if (omods.size() > 0) {
+                if (!index.registerOmods(armors, omods, localNSFW) {
+                    logger::warn(std::string("omod registration failed") + CSV_LINENO);
+                }
+            }
             count += 1;
         }
         logger::info(std::format("Registered {} sets from file {}", count, filename));

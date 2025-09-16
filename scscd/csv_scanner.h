@@ -247,34 +247,63 @@ static T* LookupFormInFile(std::string_view plugin, uint32_t csvIdLocalOrRuntime
 
 #define CSV_LINENO std::string(" at ") + filename + std::string(":") + std::to_string(lineno)
 
+static bool isFormIDString(const std::string& s)
+{
+    if (s.size() != 8) {
+        return false;
+    }
+    return std::all_of(s.begin(), s.end(), [](unsigned char c) {
+        return std::isxdigit(c);
+        });
+}
+
+static RE::TESForm* FindFormByFormIDOrEditorID(std::string& plugin_file, std::string &idString) {
+    RE::TESForm* form = NULL;
+    if (isFormIDString(idString)) {
+        uint32_t formid = 0;
+        if (auto v = hex_to_u32(idString))
+            formid = *v;
+        else {
+            logger::warn(std::string("skipped: could not parse form ID ")
+                + idString);
+            return NULL;
+        }
+        logger::trace(std::format("parse formid: {} => {:#10x}", idString, formid));
+        // At this point we've parsed a form ID and an occupation.
+        // Try to find the formID within the plugin file.
+        logger::trace(std::format("lookup formid: {}, {:#10x}", plugin_file, formid));
+        form = LookupFormInFile<RE::TESForm>(std::string_view(plugin_file), formid);
+        if (form == NULL) {
+            logger::error(std::format("skipped: form ID {:#x} could not be found in plugin {}", formid, plugin_file));
+            return NULL;
+        }
+    }
+    else {
+        form = RE::TESForm::GetFormByEditorID(idString);
+        if (form == NULL) {
+            logger::error(std::format("skipped: Editor ID '{}' could not be found", idString));
+            return NULL;
+        }
+    }
+    return form;
+}
+
+
 template<class T>
 static std::vector<T*> parseFormIDs(std::string &plugin_file, std::vector<std::string>& formIDs) {
     std::vector<T*> forms;
-    for (std::string formIDString : formIDs) {
-        uint32_t formid = 0;
-        if (auto v = hex_to_u32(formIDString))
-            formid = *v;
-        else {
-            logger::warn(std::format("could not parse form ID {}", formIDString));
+    for (std::string idString : formIDs) {
+        // As of 1.1.0, idString could be a form ID or an editor ID.
+        RE::TESForm* form = FindFormByFormIDOrEditorID(plugin_file, idString);
+        if (form == NULL) {
             // if one form is bad the whole tuple is questionable - skip it
             forms.clear();
             break;
         }
-        // At this point we've parsed a form ID and an occupation.
-        // Try to find the formID within the plugin file.
-        RE::TESForm* form = LookupFormInFile<RE::TESForm>(std::string_view(plugin_file), formid);
-        if (form == NULL) {
-            logger::error(std::format("form ID {:#10x} could not be found in plugin {}",
-                formid,
-                plugin_file));
-            // if one form is bad the whole set is questionable - skip it
-            forms.clear();
-            break;
-        }
 
-        if (form->GetFormType() !=  T::FORM_ID) {
-            logger::error(std::format("looked-up form has type {:#10x} (it must be ARMO)",
-                (unsigned int)form->GetFormType()));
+        if (form->GetFormType() != T::FORM_ID) {
+            logger::error(std::format("looked-up form has type {:#06x} (it must be {:#06x})",
+                (uint16_t)form->GetFormType(), (uint16_t) T::FORM_ID));
             // if one form is bad the whole set is questionable - skip it
             forms.clear();
             break;

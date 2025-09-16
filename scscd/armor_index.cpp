@@ -1,4 +1,5 @@
 #include "scscd.h"
+#include "matswap_validity_report.h"
 #include <random>
 
 ArmorIndex::CacheHit ArmorIndex::cachedIndexLookup(bool nsfw, RE::TESRace* race, uint32_t sex, uint32_t occupation)
@@ -413,6 +414,32 @@ RE::BGSMaterialSwap* ArmorIndex::sampleMatswap(RE::TESObjectARMO* armor, float p
 
 bool ArmorIndex::registerOmods(std::vector<RE::TESObjectARMO*>& armors, std::vector<RE::BGSMod::Attachment::Mod*>& omods, bool nsfw) {
 	logger::trace("> ArmorIndex::registerOmods");
+
+	/*
+	 validate omods: if we can reach into the BSMaterialSwap we should be able to use RE::BSResourceNiBinaryStream
+	 to try and open the material/texture files (even if it's in an archive) to check whether the materials are actually
+	 available. If we do this we won't have any purple outfits at runtime if someone's got an ESP but missing the
+	 textures.
+	*/
+	bool valid = true;
+	for (RE::BGSMod::Attachment::Mod* mod : omods) {
+		if (mod->swapForm) {
+			SwapPreflightReport report = PreflightValidateBGSMTextures(mod->swapForm);
+			if (report.missingMaterials.size() > 0 || report.missingTextures.size() > 0) {
+				logger::error(std::format("skipped: omod {:#010x} failed validation:", mod->GetFormID()));
+				for (auto& filename : report.missingMaterials) {
+					logger::error(std::format("    -> material {} could not be found", filename));
+					valid = false;
+				}
+				for (auto& filename : report.missingTextures) {
+					logger::error(std::format("    -> texture {} could not be found", filename));
+					valid = false;
+				}
+			}
+		}
+	}
+	if (!valid) return false;
+
 	for (RE::TESObjectARMO* armor : armors) {
 		uint32_t armorID = armor->GetFormID();
 		for (RE::BGSMod::Attachment::Mod* omod : omods) {

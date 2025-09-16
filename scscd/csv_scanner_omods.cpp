@@ -1,5 +1,4 @@
 #include "scscd.h"
-#include "matswap_validity_report.h"
 
 void scan_omods_csv(std::filesystem::path basedir, bool nsfw, ArmorIndex& index) {
     logger::info("Loading omods from " + basedir.string());
@@ -68,34 +67,12 @@ void scan_omods_csv(std::filesystem::path basedir, bool nsfw, ArmorIndex& index)
                 continue;
             }
 
-            /*
-             validate omods: if we can reach into the BSMaterialSwap we should be able to use RE::BSResourceNiBinaryStream
-             to try and open the material/texture files (even if it's in an archive) to check whether the materials are actually
-             available. If we do this we won't have any purple outfits at runtime if someone's got an ESP but missing the
-             textures.
-            */
-            bool valid = true;
-            for (RE::BGSMod::Attachment::Mod* mod : omods) {
-                if (mod->swapForm) {
-                    SwapPreflightReport report = PreflightValidateBGSMTextures(mod->swapForm);
-                    if (report.missingMaterials.size() > 0 || report.missingTextures.size() > 0) {
-                        logger::error(std::format("skipped: omod {:#010x} failed validation:", mod->GetFormID()) + CSV_LINENO);
-                        for (auto& filename : report.missingMaterials) {
-                            logger::error(std::format("    -> material {} could not be found", filename) + CSV_LINENO);
-                            valid = false;
-                        }
-                        for (auto& filename : report.missingTextures) {
-                            logger::error(std::format("    -> texture {} could not be found", filename) + CSV_LINENO);
-                            valid = false;
-                        }
-                    }
-                }
-            }
-            if (!valid) continue;
-
             logger::debug(std::format("{}: registering a set of {} {} omods to a set of {} armors", filename, omods.size(), nsfw ? "NSFW" : "SFW", armors.size()) + CSV_LINENO);
-            index.registerOmods(armors, omods, nsfw);
-            count += 1;
+            if (index.registerOmods(armors, omods, nsfw))
+                count += 1;
+            else {
+                logger::warn(std::string("omod registration failed") + CSV_LINENO);
+            }
         }
         logger::info(std::format("Registered {} omods from file {}", count, filename));
     }

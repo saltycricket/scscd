@@ -156,12 +156,17 @@ private:
         void Run() override
         {
             if (frames-- > 0) {
+                #ifdef F4OG
+                logger::trace(std::format("deferring task '{}' with {}", desc, frames));
+                #endif
                 F4SE::GetTaskInterface()->AddTask(new DeferFramesTask(frames, desc, std::move(fn)));   // run again next frame
             }
             else {
                 if (fn) {
-                    //logger::trace(std::format("calling deferred fn: {}", desc));
+                    logger::trace(std::format("calling deferred fn: {}", desc));
                     fn();
+                } else {
+                    logger::warn(std::format("BUG: No deferred fn to call! Task description: {}", desc));
                 }
             }
         }
@@ -212,6 +217,10 @@ private:
             a_event.formID
 #endif
             ;
+
+#ifdef F4OG
+        logger::trace(std::format("Processing object loaded event for form ID {:#010x}", id));
+#endif // F4OG
 
         OnActorLoadedSoon(id);
         return RE::BSEventNotifyControl::kContinue;

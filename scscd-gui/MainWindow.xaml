@@ -1,0 +1,126 @@
+﻿<Window x:Class="scscd_gui.wpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="FO4 Armor Tagger (WPF + Mutagen)" Height="640" Width="1000"
+        Loaded="Window_Loaded">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </Window.Resources>
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Search row -->
+        <DockPanel Grid.Row="0" Grid.ColumnSpan="2" LastChildFill="False" Margin="0,0,0,8">
+            <TextBlock Text="Filter by Editor ID: " VerticalAlignment="Center"/>
+            <TextBox Width="220" Margin="6,0" VerticalAlignment="Center"
+               ToolTip="EditorID filter"
+               Text="{Binding EditorFilter, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Text="Filter by Plugin Filename: " VerticalAlignment="Center"/>
+            <TextBox Width="220" Margin="6,0" VerticalAlignment="Center"
+               ToolTip="Plugin (mod filename) filter"
+               Text="{Binding PluginFilter, UpdateSourceTrigger=PropertyChanged}"/>
+            <CheckBox Content="Underwears" IsThreeState="False" Margin="6,0" VerticalAlignment="Center" IsChecked="{Binding ShowUnderwears, UpdateSourceTrigger=PropertyChanged}" />
+            <CheckBox Content="Overwears" IsThreeState="False" Margin="6,0" VerticalAlignment="Center" IsChecked="{Binding ShowOverwears, UpdateSourceTrigger=PropertyChanged}" />
+            <Button Content="Clear" Margin="6,0" Click="ClearFilters_Click"/>
+        </DockPanel>
+
+        <!-- Left: armor list -->
+        <ListView Grid.Row="1" Grid.Column="0"
+              Name="ArmorList"
+              ItemsSource="{Binding ArmorView}"
+              SelectionMode="Extended"
+              SelectionChanged="ArmorList_SelectionChanged">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <!-- FormKey [EditorID] — Full Name -->
+                    <TextBlock>
+                        <Run Text="{Binding FormKey}"/>
+                        <Run Text="  ["/>
+                        <Run Text="{Binding EditorID}"/>
+                        <Run Text="]  - "/>
+                        <Run Text="{Binding FullName}"/>
+                    </TextBlock>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <!-- Right: tags -->
+        <StackPanel Grid.Row="1" Grid.Column="1" Margin="12,0,0,0">
+            <GroupBox Header="Sex" Margin="0,0,0,8" IsEnabled="{Binding HasSelection}">
+                <StackPanel Orientation="Horizontal" Margin="8">
+                    <CheckBox Content="Male" IsThreeState="True" Margin="0,0,12,0"
+                    IsEnabled="{Binding HasSelection}"
+                    IsChecked="{Binding MaleState, Mode=TwoWay}"/>
+                    <CheckBox Content="Female" IsThreeState="True"
+                    IsEnabled="{Binding HasSelection}"
+                    IsChecked="{Binding FemaleState, Mode=TwoWay}"/>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header="Occupations" IsEnabled="{Binding HasSelection}">
+                <ItemsControl ItemsSource="{Binding Occupations}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox IsThreeState="True"
+                                        Content="{Binding Name}"
+                                        IsEnabled="{Binding DataContext.HasSelection, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        IsChecked="{Binding State, Mode=TwoWay}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </GroupBox>
+            
+            <GroupBox Header="Other Attributes" IsEnabled="{Binding HasSelection}">
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal" Margin="8">
+                        <TextBlock Text="Min Level: " VerticalAlignment="Center"/>
+                        <TextBox Width="50" Margin="6,0" VerticalAlignment="Center"
+                                 ToolTip="Minimum NPC Level To Equip"
+                                 Text="{Binding MinLevel, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="8">
+                        <CheckBox Content="NSFW" IsThreeState="True"
+                                IsEnabled="{Binding HasSelection}"
+                                IsChecked="{Binding NSFWState, Mode=TwoWay}"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+
+        <!-- Bottom buttons -->
+        <!-- Bottom buttons + current CSV path -->
+        <StackPanel Grid.Row="2" Grid.ColumnSpan="2"
+            Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
+            <TextBlock Margin="0,0,16,0" VerticalAlignment="Center">
+                <Run Text="CSV: "/>
+                <Run Text="{Binding CsvPath, TargetNullValue=(none loaded)}"/>  
+            </TextBlock>
+
+            <Button Content="Load CSV" Margin="0,0,8,0" Click="LoadCsv_Click"/>
+            <Button Content="Reset (Unload CSV)" Margin="0,0,8,0" IsEnabled="{Binding HasCsv}" Click="UnloadCsv_Click"/>
+            <Button Content="Save CSV" Click="SaveCsv_Click"/>
+        </StackPanel>
+
+        <!-- Loading overlay -->
+        <Grid Grid.RowSpan="3" Grid.ColumnSpan="2"
+          Visibility="{Binding IsLoading, Converter={StaticResource BoolToVis}}"
+          Background="#80000000" Panel.ZIndex="999">
+            <Border Background="#CCFFFFFF" CornerRadius="8"
+              Padding="20" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <StackPanel>
+                    <TextBlock Text="{Binding LoadingMessage}" FontSize="16"
+                     Margin="0,0,0,12" HorizontalAlignment="Center"/>
+                    <ProgressBar IsIndeterminate="True" Width="260" Height="16"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>

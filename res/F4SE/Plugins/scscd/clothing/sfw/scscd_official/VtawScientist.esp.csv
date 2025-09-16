@@ -1,8 +1,0 @@
-Sex , Occupation           , Form ID; Form ID; Form ID
-10  , 01000010101000010001 , D7000F9B                   # coat
-10  , 01000010101000010001 , D7000F9E                   # pumps
-10  , 01000010101000010001 , D7000FA1                   # skirt
-10  , 01000010101000010001 , D7000FA4                   # turtleneck
-10  , 01000010101000010001 , D700174A;D7000FA4          # pumps no clipping w/turtleneck
-10  , 01000010101000010001 , D700174A;D7001744;D7000F9B # pumps no clipping w/turtleneck for coat & coat
-10  , 01000010101000010001 , D7001744;D7000F9B          # turtleneck for coat & coat
