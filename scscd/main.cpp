@@ -141,6 +141,8 @@ extern "C" __declspec(dllexport) bool F4SEPlugin_Load(const F4SE::LoadInterface*
 				scan_occupations_csv(DataPath("F4SE\\Plugins\\scscd\\occupation"), OCCUPATIONS);
 				// Register tuples at CSV files :
 				scan_tuples_csv(DataPath("F4SE\\Plugins\\scscd\\clothing"), false, ARMORS);
+				// Look for excluded NPCs :
+				scan_exclusions_csv(DataPath("F4SE\\Plugins\\scscd\\exclusions"), ActorLoadWatcher::exclusionList);
 				ActorLoadWatcher::watchForSettingsChanges();
 			}
 			// Register listener here so we can pre-empt any actors which are loaded

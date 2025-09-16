@@ -225,6 +225,7 @@
     <ClCompile Include="actor_load_watcher.cpp" />
     <ClCompile Include="armor_index.cpp" />
     <ClCompile Include="csv_scanner.cpp" />
+    <ClCompile Include="csv_scanner_exclusions.cpp" />
     <ClCompile Include="csv_scanner_occupations.cpp" />
     <ClCompile Include="csv_scanner_tuples.cpp" />
     <ClCompile Include="logger.cpp" />

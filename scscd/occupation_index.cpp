@@ -24,6 +24,14 @@ Occupation OccupationIndex::sample(RE::Actor* actor) {
 		logger::trace("no klass");
 	else
 		logger::trace(std::format("klass form={:#010x} name={}", klass->GetFormID(), klass->GetFullName()));
+	// FIXME Does doing this imply exclusionList should be a member of OccupationIndex?
+	std::unordered_set<uint32_t>& exclusionList = ActorLoadWatcher::exclusionList;
+	if (exclusionList.contains(npc->GetFormID())
+		|| (klass && exclusionList.contains(klass->GetFormID()))) {
+		logger::info(std::format("not processing excluded NPC {:#010x} (refr {:#010x})", npc->GetFormID(), actor->GetFormID()));
+		return NO_OCCUPATION;
+	}
+
 	std::vector<Occupation>* classOccups = klass && registry.contains(klass->GetFormID()) ? &registry[klass->GetFormID()] : NULL;
 	std::vector<Occupation>* npcOccups = npc && registry.contains(npc->GetFormID()) ? &registry[npc->GetFormID()] : NULL;
 	// faction is the only hairy one, we have to consider all factions
@@ -33,6 +41,9 @@ Occupation OccupationIndex::sample(RE::Actor* actor) {
 		for (auto& fr : npc->factions) {
 			if (fr.faction) {
 				uint32_t factionID = fr.faction->GetFormID();
+				// Exclusion list might include this faction. If it does, the NPC isn't a valid
+				// target, no matter how many eligible factions it may belong to.
+				if (exclusionList.contains(factionID)) return NO_OCCUPATION;
 				bool included = registry.contains(factionID);
 				logger::trace(std::format(": : npc inFaction={} formid={:#010x}", included, factionID/*, fr.faction->GetFullName() */));
 				if (included) {

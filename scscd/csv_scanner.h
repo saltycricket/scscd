@@ -286,3 +286,4 @@ static std::vector<T*> parseFormIDs(std::string &plugin_file, std::vector<std::s
 
 void scan_occupations_csv(std::filesystem::path basedir, OccupationIndex& index);
 void scan_tuples_csv(std::filesystem::path basedir, bool nsfw, ArmorIndex& index);
+void scan_exclusions_csv(std::filesystem::path basedir, std::unordered_set<uint32_t>& exclusionList);

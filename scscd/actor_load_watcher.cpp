@@ -1,5 +1,6 @@
 #include "scscd.h"
 
+std::unordered_set<uint32_t> ActorLoadWatcher::exclusionList;
 ArmorIndex* ActorLoadWatcher::ARMORS = NULL;
 ArmorIndex::SamplerConfig* ActorLoadWatcher::ARMORS_CONFIG = NULL;
 
@@ -177,12 +178,6 @@ void ActorLoadWatcher::OnActorLoaded(RE::Actor* actor)
 
     if (npc == NULL) {
         logger::warn(std::format("nothing to do: NPC is NULL for actor {:#010x}", actorFormID));
-        return;
-    }
-
-    if (npc->GetFormID() == 0xA7D34 /* player spouse male */
-        || npc->GetFormID() == 0xA7D35 /* player spouse femaile */) {
-        logger::debug("not processing player spouses at game start");
         return;
     }
 

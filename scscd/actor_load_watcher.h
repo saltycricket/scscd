@@ -81,6 +81,7 @@ static bool isEquipped(RE::Actor* actor, RE::TESObjectARMO* armor) {
 class ActorLoadWatcher final : public /*RE::BSTEventSink<RE::BGSActorCellEvent>, */ RE::BSTEventSink<RE::TESObjectLoadedEvent>
 {
 public:
+    static std::unordered_set<uint32_t> exclusionList;
     static ArmorIndex* ARMORS;
     static ArmorIndex::SamplerConfig* ARMORS_CONFIG;
     bool _registered{ false };
