@@ -11,3 +11,5 @@ build
 scscd-*-ng/
 scscd-*-og/
 screenshots/
+scscd-gui/bin/
+scscd-gui/obj/
