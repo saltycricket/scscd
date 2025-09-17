@@ -211,6 +211,10 @@ private:
         const RE::TESObjectLoadedEvent& a_event,
         RE::BSTEventSource<RE::TESObjectLoadedEvent>* /*a_source*/) override
     {
+#ifdef F4OG
+        logger::trace(std::format("Processing object loaded event..."));
+#endif // F4OG
+
         const uint32_t id =
 #ifdef F4OG
             a_event.formId
@@ -220,7 +224,7 @@ private:
             ;
 
 #ifdef F4OG
-        logger::trace(std::format("Processing object loaded event for form ID {:#010x}", id));
+        logger::trace(std::format("... for form ID {:#010x}", id));
 #endif // F4OG
 
         OnActorLoadedSoon(id);
