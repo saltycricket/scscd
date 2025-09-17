@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using Microsoft.Win32;
+using System.Windows.Data;
 
 namespace scscd_gui.wpf
 {
@@ -21,6 +22,12 @@ namespace scscd_gui.wpf
             try
             {
                 await _vm.InitializeAsync();
+                var cvs = (CollectionViewSource)FindResource("ArmorCvs");
+                if (cvs.View is ListCollectionView lcv)
+                {
+                    var conv = (IValueConverter)FindResource("ArmorLabelConverter");
+                    lcv.CustomSort = new LabelComparer(conv);
+                }
             }
             catch (Exception ex)
             {
