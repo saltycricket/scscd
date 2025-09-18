@@ -31,7 +31,8 @@ namespace scscd_gui.wpf
 
             var hits = allOmods.Where(om => {
                 return (
-                    armoSlots.Contains(om.AttachPoint.FormKey)
+                    om.AttachPoint != null
+                    && armoSlots.Contains(om.AttachPoint.FormKey)
                     && armo.Keywords != null
                     && om.TargetOmodKeywords != null
                     && om.TargetOmodKeywords.Any(tkw => armo.Keywords.Contains(tkw))
