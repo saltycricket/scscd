@@ -36,14 +36,15 @@ Next you must build CommonLibF4:
     xmake -y
 
 To build for OG you also need the CommonLibF4 that is pegged to OG (because
-all of the IDs have changed from OG to NG):
+all of the IDs have changed from OG to NG). Also note that as of the current
+revision there is a bug in `CommonLibF4\include\RE\msvc\memory.h`, so you
+have to apply the patch before building.
 
     cd dep/CommonLibF4-og
+    git apply ..\commonlibf4-og.patch
+    mkdir cmake\ports
     cmake -DCMAKE_CXX_FLAGS="/Zc:__cplusplus /W3 /WX-" -DCMAKE_C_FLAGS="/W3 /WX-" -DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%\scripts\buildsystems\vcpkg.cmake --preset vs2022-windows-vcpkg
     cmake --build build --config Release
-    cd lib\commonlib-shared
-    xmake -y
-
 
 Notice CommonLibF4 .lib files are in dep/CommonLibF4/build/windows/x64/release.
 

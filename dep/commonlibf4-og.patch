@@ -1,0 +1,27 @@
+diff --git a/CommonLibF4/include/RE/msvc/memory.h b/CommonLibF4/include/RE/msvc/memory.h
+index c8450c7..2ab589c 100644
+--- a/CommonLibF4/include/RE/msvc/memory.h
++++ b/CommonLibF4/include/RE/msvc/memory.h
+@@ -270,8 +270,8 @@ namespace RE::msvc
+ 
+ 		// 3c
+ 		unique_ptr(pointer a_ptr, const deleter_type& a_dtor) noexcept  //
+-			requires((std::is_lvalue_reference<deleter_type> &&
+-					  std::is_const_v<deleter_type>)) :
++			requires (std::is_lvalue_reference_v<deleter_type> &&
++						std::is_const_v<deleter_type>) :
+ 			super(a_ptr, a_dtor)
+ 		{}
+ 
+@@ -484,9 +484,9 @@ namespace RE::msvc
+ 		// 3c
+ 		template <class U>
+ 		unique_ptr(U a_ptr, const deleter_type& a_dtor) noexcept  //
+-			requires((std::is_lvalue_reference<deleter_type> &&
++			requires(std::is_lvalue_reference_v<deleter_type> &&
+ 					  std::is_const_v<deleter_type> &&
+-					  detail::unique_ptr_array_convertible<U, unique_ptr>)) :
++					  detail::unique_ptr_array_convertible<U, unique_ptr>) :
+ 			super(a_ptr, a_dtor)
+ 		{}
+ 
