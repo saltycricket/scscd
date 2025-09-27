@@ -10,6 +10,20 @@ Enter, Wasteland Outfitter. Now NPCs will dress themselves on their own, without
 Please see https://www.nexusmods.com/fallout4/mods/89573 for details.
 
 
+## Release Checklist
+
+To build a final release version:
+
+1. Bump version in `version.h`.
+2. In MSVC++, build `scscd` with the `Release-NG` / `x64` build config.
+3. In MSVC++, build `scscd` with the `Release-OG` / `x64` build config.
+4. In MSVC++, build `scscd-gui` with the `Release` / `x64` build config.
+5. Tag current version. `git tag v1.2.3`
+6. From the command line, run `bin\build-release.bat`
+7. Release zips are generated in `release/*.7z`. Push tags, upload zips, and
+   update online docs/release notes.
+
+
 ## Development
 
 First you must update submodules:
