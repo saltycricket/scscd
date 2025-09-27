@@ -214,7 +214,7 @@
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <AdditionalDependencies>CommonLibF4.lib;commonlib-shared.lib;spdlog.lib;Catch2.lib;fmt.lib;nowide.lib;mmio.lib;advapi32.lib;bcrypt.lib;d3d11.lib;d3dcompiler.lib;dbghelp.lib;dxgi.lib;ole32.lib;shell32.lib;user32.lib;version.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>CommonLibF4.lib;spdlog.lib;Catch2.lib;fmt.lib;nowide.lib;mmio.lib;advapi32.lib;bcrypt.lib;d3d11.lib;d3dcompiler.lib;dbghelp.lib;dxgi.lib;ole32.lib;shell32.lib;user32.lib;version.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\dep\commonlibf4-og\build\CommonLibF4\Release;$(SolutionDir)\dep\commonlibf4-og\build\vcpkg_installed\x64-windows-static-md\lib;$(SolutionDir)\dep\commonlibf4-og\lib\commonlib-shared\build\windows\x64\release;$(SolutionDir)\x64\Release;%(AdditionalLibraryDirectories);%LOCALAPPDATA%\.xmake\packages\s\spdlog\v1.15.3\6425784fcb5c43dea6fd2000c451e041\lib</AdditionalLibraryDirectories>
     </Link>
     <ProjectReference>
