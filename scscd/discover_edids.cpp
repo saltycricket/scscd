@@ -52,7 +52,7 @@ static inline RE::ENUM_FORM_ID FourCCToFormEnum(std::uint32_t sig)
 
 
 struct RecordHeader {
-    char     sig[4];        // e.g. "ARMO", "NPC_", "OMOD", …
+    char     sig[4];        // e.g. "ARMO", "NPC_", "OMOD", ...
     uint32_t dataSize;
     uint32_t flags;
     uint32_t formID;
