@@ -40,9 +40,9 @@ void scan_exclusions_csv(std::filesystem::path basedir, std::unordered_set<uint3
             }
 
             std::string idString = trim(columns[0]);
-            RE::TESForm* form = FindFormByFormIDOrEditorID(plugin_file, idString, RE::TESClass::FORM_ID);
-            if (!form) form = FindFormByFormIDOrEditorID(plugin_file, idString, RE::TESFaction::FORM_ID);
-            if (!form) form = FindFormByFormIDOrEditorID(plugin_file, idString, RE::TESNPC::FORM_ID);
+            RE::TESForm* form = FindFormByFormIDOrEditorID(plugin_file, idString, RE::TESClass::FORM_ID, /*logOnMissing*/ false);
+            if (!form) form = FindFormByFormIDOrEditorID(plugin_file, idString, RE::TESFaction::FORM_ID, /*logOnMissing*/ false);
+            if (!form) form = FindFormByFormIDOrEditorID(plugin_file, idString, RE::TESNPC::FORM_ID, /*logOnMissing*/ false);
             if (!form) {
                 logger::warn(std::format("Form with ID {} for exclusion list was NOT FOUND", idString) + CSV_LINENO);
                 continue;

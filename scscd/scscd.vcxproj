@@ -228,9 +228,9 @@
     <ClCompile Include="csv_scanner_exclusions.cpp" />
     <ClCompile Include="csv_scanner_occupations.cpp" />
     <ClCompile Include="csv_scanner_tuples.cpp" />
+    <ClCompile Include="discover_edids.cpp" />
     <ClCompile Include="logger.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="matswaps.cpp" />
     <ClCompile Include="occupation_index.cpp" />
     <ClCompile Include="sampler_config.cpp" />
     <ClCompile Include="tuple.cpp" />

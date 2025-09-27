@@ -2,6 +2,7 @@
   "name": "scscd",
   "version": "1.0",
   "dependencies": [
-    "simpleini"
+    "simpleini",
+    "zlib"
   ]
 }

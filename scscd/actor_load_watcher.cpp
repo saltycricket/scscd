@@ -163,6 +163,7 @@ void ActorLoadWatcher::Register()
         ;
     if (src) {
         src->RegisterSink(this);
+        logger::info("SCSCD is now running.");
         _registered = true;
     }
 }

@@ -4,6 +4,7 @@
 #include <functional>
 
 #include "scscd.h"
+#include "armor_index.h"
 #include <F4SE/API.h>
 #include <F4SE/Interfaces.h>
 
@@ -73,7 +74,7 @@ static bool isEquipped(RE::Actor* actor, RE::TESObjectARMO* armor) {
     //RE::BGSObjectInstance inst(nullptr, nullptr);
     //const auto* filled = actor->GetEquippedItem(&inst, idx);
 
-    ///* Apparently this doesn't work as off 20250903 and object is always NULL. It leads to a redundant equip but that should be harmless (if a little less efficient). */
+    ///* Apparently this doesn't work as of 20250903 and object is always NULL. It leads to a redundant equip but that should be harmless (if a little less efficient). */
     ////logger::info(std::format("isEquipped {:#010x} ~= {:#010x}", armo->GetFormID(), inst.object ? inst.object->GetFormID() : 0));
     //return (filled && inst.object == armo);
 }

@@ -82,15 +82,23 @@ static void WriteToIni(std::filesystem::path inipath, std::string fieldName, boo
     logger::info(std::format("Saved modified config for {} (changed to boolean {})", fieldName, std::to_string(v)));
 }
 
-void ArmorIndex::SamplerConfig::load(std::filesystem::path inipath, std::filesystem::path defaultPath) {
+bool ArmorIndex::SamplerConfig::load(std::filesystem::path inipath, std::filesystem::path defaultPath) {
     this->inipath = inipath;
     this->defaultPath = defaultPath;
+    logger::warn(std::format("File at {} does not exist; falling back to default config at {}", inipath.string(), defaultPath.string()));
+
     if (!std::filesystem::exists(inipath)) {
         // if inipath doesn't exist, temporarily use defaultPath.
         // Later if we detect that inipath is created, it will switch
         // over automatically.
+        logger::warn(std::format("File at {} does not exist; falling back to default config at {}", inipath.string(), defaultPath.string()));
         inipath = defaultPath;
     }
+    if (!std::filesystem::exists(inipath)) {
+        logger::error(std::format("File at {} does not exist; config load failed", defaultPath.string()));
+        return false;
+    }
+
     CSimpleIniA ini;
     ini.SetUnicode(true);
     ini.LoadFile(inipath.c_str());
@@ -149,6 +157,7 @@ void ArmorIndex::SamplerConfig::load(std::filesystem::path inipath, std::filesys
     skipSlotChance[slot2bit(61)] = LoadFromIni(ini, "iSlotSkipChance61",  90); // Slot 61 - FX[misc FX; sometimes safe for special equipables]
     iniModTime = ini_mtime(inipath); // track modification time so we can see if it's changed
     logger::info("Loaded config from INI");
+    return true;
 }
 /*
 void ArmorIndex::SamplerConfig::setAllowNSFW(bool enabled) {

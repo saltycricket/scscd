@@ -182,14 +182,23 @@ std::vector<RE::TESObjectARMO*> ArmorIndex::sample(RE::Actor* a, SamplerConfig& 
 	logger::debug("SCSCD: constructing wardrobe sample");
 	uint32_t takenSlots = 0; // all slots available
 
+	if (a == NULL) {
+		logger::warn("asked to sample armor for a NULL actor!");
+		return wardrobe;
+	}
+
 	/* Conservative equipping: the actor may have been spawned with all kinds of leveled list
 	   equipment, armor overrides, etc. There's also a chance we might conflict with some other mod which
 	   altered the actor's outfit package. So, check which items are equipped by default. In
-	   vanilla ONLY slot 33 (bit 3) should be set; this is the Body outfit. Anything else is an
-	   armor, weapon, or someone else's mod. Initialize takenSlots to represent the current
+	   vanilla slot 33 (bit 3) should ALWAYS be set for clothing; this is the Body outfit. Anything
+	   else is an armor, weapon, or someone else's mod. (Slot 33 item may occupy more than one slot, but
+	   outfit always occupies slot 33.) Initialize takenSlots to represent the current
 	   outfit, MINUS the body slot that we intend to replace. The result is the set of available
-	   slots that aren't fitted with some leveled item that the actor should be using. */
-	if (a && a->inventoryList && !config.replaceArmor /* (if replaceArmor is true, move forward with an empty bitmap.) */) {
+	   slots that aren't fitted with some leveled item that the actor should be using. We can
+	   also check the high bits of the form ID. If it's less than some threshold (allowing for DLC),
+	   then we know that the item is vanilla. We should never replace a non-vanilla (modded)
+	   item as this may be part of a quest mod or other custom tailored NPC outfit. */
+	if (a->inventoryList) {
 		// Header for ForEachStack implies that we need a read lock for the operations below. Not sure the best way to do that but
 		// GetAllForms() returns us one.
 		const auto& [map, lock] = RE::TESForm::GetAllForms();
@@ -213,10 +222,28 @@ std::vector<RE::TESObjectARMO*> ArmorIndex::sample(RE::Actor* a, SamplerConfig& 
 							// Otherwise we'll set bits on other slots that it occupies, creating
 							// gaps in the final outfit as those slots wouldn't be considered for
 							// outfitting.
+							const uint32_t HIGHEST_VANILLA_HIGH_FORMID = 0x06; // Fallout4.esm at 0x00 plus 6 DLCs
 							uint32_t armoSlots = item.object->As<RE::TESObjectARMO>()->bipedModelData.bipedObjectSlots;
-							if (!(armoSlots & (1 << 3))) {
-								takenSlots = takenSlots | armoSlots;
+							#define EQUIP_THIS_SLOT        /* no action taken */
+							#define DO_NOT_EQUIP_THIS_SLOT takenSlots = takenSlots | armoSlots
+							if (config.replaceArmor || (armoSlots & (1 << 3))) {
+								// If config.replaceArmor is enabled OR this item occupies slot 33, then
+								// we DO NOT want to replace. Do nothing.
+								DO_NOT_EQUIP_THIS_SLOT;
 							}
+							else if (((item.object->GetFormID() >> 24) & 0xFF) > HIGHEST_VANILLA_HIGH_FORMID) {
+								// Alternatively, if config.replaceArmor is enabled (so we might replace
+								// it), BUT the equipped item was added by a mod, then again we
+								// DO NOT want to replace it.
+								DO_NOT_EQUIP_THIS_SLOT;
+							} else {
+								// In all other cases, we want to replace it.
+								// To replace it, we leave takenSlots with zero bits, indicating
+								// items can be equipped in those slots.
+								EQUIP_THIS_SLOT;
+							}
+							#undef DO_NOT_EQUP_THIS_SLOT
+							#undef EQUIP_THIS_SLOT
 							logger::debug(std::format("seen actor {:#010x} wearing armo {:#010x} has armoSlots {:#010x}, taken is now {:#010x}", a->GetFormID(), item.object->GetFormID(), armoSlots, takenSlots));
 							break;
 						}
@@ -367,50 +394,6 @@ std::vector<RE::TESObjectARMO*> ArmorIndex::sample(RE::Actor* a, SamplerConfig& 
 	}
 	return wardrobe;
 }
-
-bool ArmorIndex::registerMatswaps(std::vector<RE::TESObjectARMO*>& armors, std::vector<RE::BGSMaterialSwap*>& matswaps, bool nsfw) {
-	logger::trace("> ArmorIndex::registerMatswaps");
-	for (RE::TESObjectARMO* armor : armors) {
-		uint32_t armorID = armor->GetFormID();
-		for (RE::BGSMaterialSwap* swap : matswaps) {
-			uint32_t matswapID = swap->GetFormID();
-			std::unordered_set<uint32_t>& index = (nsfw ? nsfwArmorMatswaps[armorID] : sfwArmorMatswaps[armorID]);
-			// don't register a matswap more than once, else we'll end up weighting that
-			// matswap more than the others. (Guessing usually would not be what is intended.)
-			if (!index.contains(matswapID)) {
-				index.insert(matswapID);
-				matswapProximityIndex.add(matswapID, swap->GetFormEditorID());
-			}
-		}
-	}
-	logger::trace("< ArmorIndex::registerMatswaps");
-	return true;
-}
-
-RE::BGSMaterialSwap* ArmorIndex::sampleMatswap(RE::TESObjectARMO* armor, float proximityBias, RE::BGSMaterialSwap* other, bool allowNSFW) {
-	logger::trace("> ArmorIndex::sampleMatswap");
-	uint32_t armorFormID = armor->GetFormID();
-	uint32_t otherFormID = other ? other->GetFormID() : 0xFFFFFFFF;
-	std::vector<uint32_t> candidates;
-	for (uint32_t candidate : sfwArmorMatswaps[armorFormID])
-		candidates.push_back(candidate);
-	if (allowNSFW) {
-		for (uint32_t candidate : nsfwArmorMatswaps[armorFormID])
-			candidates.push_back(candidate);
-	}
-	uint32_t sampledID = matswapProximityIndex.sampleBiased(otherFormID, candidates, proximityBias);
-	RE::TESForm* form = RE::TESForm::GetFormByID(sampledID);
-	if (form == NULL) {
-		logger::trace("< ArmorIndex::sampleMatswap NULL");
-		return NULL;
-	}
-	else {
-		logger::trace("< ArmorIndex::sampleMatswap found");
-		return form->As<RE::BGSMaterialSwap>();
-	}
-}
-
-
 
 bool ArmorIndex::registerOmods(std::vector<RE::TESObjectARMO*>& armors, std::vector<RE::BGSMod::Attachment::Mod*>& omods, bool nsfw) {
 	logger::trace("> ArmorIndex::registerOmods");

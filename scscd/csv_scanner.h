@@ -1,6 +1,7 @@
 #pragma once
 
 #include "scscd.h"
+#include "armor_index.h"
 //#include <RE/Bethesda/BSTList.h>
 #include <windows.h>
 #include <iostream>
@@ -257,7 +258,7 @@ static bool isFormIDString(const std::string& s)
         });
 }
 
-RE::TESForm* FindFormByFormIDOrEditorID(std::string& plugin_file, std::string& idString, RE::ENUM_FORM_ID expectedFormType);
+RE::TESForm* FindFormByFormIDOrEditorID(std::string& plugin_file, std::string& idString, RE::ENUM_FORM_ID expectedFormType, bool logOnMissing = true);
 
 template<class T>
 static std::vector<T*> parseFormIDs(std::string &plugin_file, std::vector<std::string>& formIDs) {

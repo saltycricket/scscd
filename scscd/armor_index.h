@@ -9,8 +9,6 @@
 #include "edid_similarity.h"
 #include <filesystem>
 
-void applyMatSwap(RE::Actor* actor, RE::TESObjectARMO* armor, RE::BGSMaterialSwap* swap);
-
 // Utility: check if a biped slot (30-61) is set in the mask returned by GetFilledSlots()
 static bool HasSlot(std::uint32_t filledMask, int slotIndex)
 {
@@ -66,6 +64,8 @@ namespace std {
 } // namespace std
 
 class ArmorIndex {
+	static std::unordered_map<RE::ENUM_FORM_ID, std::unordered_map<std::string, uint32_t>> FORMS_BY_EDID_BY_TYPE;
+
 	// map of tuple ID -> tuple
 	std::vector<Tuple> tupleStorage;
 	std::unordered_map<uint32_t, size_t> tupleIDtoIndex;
@@ -74,17 +74,13 @@ class ArmorIndex {
 	// assumption that they are probably meant to be used together).
 	EdidIndex proximityIndex;
 
-	// Full set of available matswaps.
-	// We index them by [armor ID, matswap candidates]. We also maintain a
-	// second EdidIndex - this one for matswaps, not armors.
+	// Full set of available omods.
+	// We index them by [armor ID, omod candidates]. We also maintain a
+	// second EdidIndex - this one for omods, not armors.
 	// When sampling occurs, we use the proximityBias from the sampler config
-	// to choose a matswap that is similar to other chosen matswaps. Hopefully,
+	// to choose an omod that is similar to other chosen omods. Hopefully,
 	// this will encourage 'color' coordination and won't (usually) produce a
 	// rando-rainbow outfit.
-	std::unordered_map<uint32_t, std::unordered_set<uint32_t>> sfwArmorMatswaps;
-	std::unordered_map<uint32_t, std::unordered_set<uint32_t>> nsfwArmorMatswaps;
-	EdidIndex matswapProximityIndex;
-
 	std::unordered_map<uint32_t, std::unordered_set<uint32_t>> sfwArmorOmods;
 	std::unordered_map<uint32_t, std::unordered_set<uint32_t>> nsfwArmorOmods;
 	EdidIndex omodProximityIndex;
@@ -204,7 +200,7 @@ public:
 
 		SamplerConfig() {}
 
-		void load(std::filesystem::path filename, std::filesystem::path defaultSettingsFilename);
+		bool load(std::filesystem::path filename, std::filesystem::path defaultSettingsFilename);
 		void reload() { load(this->inipath, this->defaultPath); }
 		bool haveSettingsChanged();
 		//void setAllowNSFW(bool);
@@ -220,23 +216,41 @@ public:
 	{
 		this->occupations = occupations;
 	}
+
+	static void indexAllFormsByTypeAndEdid();
+
+	static uint32_t getFormByTypeAndEdid(RE::ENUM_FORM_ID form_type, const std::string& edid, bool warn = true) {
+		auto maybeFormsByEdid = FORMS_BY_EDID_BY_TYPE.find(form_type);
+		if (maybeFormsByEdid != FORMS_BY_EDID_BY_TYPE.end()) {
+			auto& formsByEdid = maybeFormsByEdid->second;
+			auto maybeFormID = formsByEdid.find(edid);
+			if (maybeFormID != formsByEdid.end()) {
+				return maybeFormID->second;
+			}
+			else {
+				if (warn) logger::warn(std::format("form index for type {:#010x} contains no edid {}", (uint32_t) form_type, edid));
+			}
+		}
+		else {
+			if (warn) logger::warn(std::format("form index does not contain type {:#010x} (given edid {} but could not check)", (uint32_t)form_type, edid));
+		}
+		return 0;
+	}
 	
 	/*
-	 * Registers a set of matswaps to a set of armors. Later, any one armor can be
-	 * used to retrieve a random matswap.
+	 * Registers a set of omods to a set of armors. Later, any one armor can be
+	 * used to retrieve a random omod.
 	 * 
 	 * Returns true on success.
 	 */
-	bool registerMatswaps(std::vector<RE::TESObjectARMO*>& armors, std::vector<RE::BGSMaterialSwap*>& matswaps, bool isNSFW);
 	bool registerOmods(std::vector<RE::TESObjectARMO*>& armors, std::vector<RE::BGSMod::Attachment::Mod*>& omods, bool isNSFW);
 
 	/*
-	 * Samples available matswaps for the given armor, returning one of them.
+	 * Samples available omods for the given armor, returning one of them.
 	 * You can provide 'other' to indicate a previous matswap selection. If you
 	 * do, a similar one will be found using proximityBias. If 'other' is NULL,
 	 * a matswap will be returned completely at random.
 	 */
-	RE::BGSMaterialSwap* sampleMatswap(RE::TESObjectARMO* armor, float proximityBias, RE::BGSMaterialSwap* other, bool allowNSFW);
 	RE::BGSMod::Attachment::Mod* sampleOmod(RE::TESObjectARMO* armor, float proximityBias, RE::BGSMod::Attachment::Mod* other, bool allowNSFW);
 
 	/*

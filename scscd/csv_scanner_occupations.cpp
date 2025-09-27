@@ -54,9 +54,9 @@ void scan_occupations_csv(std::filesystem::path basedir, OccupationIndex& index)
             logger::trace(std::format("parse occupation for {}: {} => {:#10x}", idString, occupationString, occupation));
             // As of 1.1.0, idString could be a form ID or an editor ID. Here we must support any of Class, Faction or NPC.
             // If there's a conflict then it's a matter of priority. We'll prioritize from less specific to more specific.
-            RE::TESForm* form = FindFormByFormIDOrEditorID(plugin_file, idString, RE::TESClass::FORM_ID);
-            if (!form) form = FindFormByFormIDOrEditorID(plugin_file, idString, RE::TESFaction::FORM_ID);
-            if (!form) form = FindFormByFormIDOrEditorID(plugin_file, idString, RE::TESNPC::FORM_ID);
+            RE::TESForm* form = FindFormByFormIDOrEditorID(plugin_file, idString, RE::TESClass::FORM_ID, /*logOnMissing*/ false);
+            if (!form) form = FindFormByFormIDOrEditorID(plugin_file, idString, RE::TESFaction::FORM_ID, /*logOnMissing*/ false);
+            if (!form) form = FindFormByFormIDOrEditorID(plugin_file, idString, RE::TESNPC::FORM_ID, /*logOnMissing*/ false);
             if (!form) {
                 logger::warn(std::format("Form with ID {} for occupation registration was NOT FOUND", idString) + CSV_LINENO);
                 continue;
