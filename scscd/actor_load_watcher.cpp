@@ -262,26 +262,36 @@ void ActorLoadWatcher::OnActorLoaded(RE::Actor* actor)
         return;
     }
 
-    // Sample omods for each armor entry.
+    // Sample omods for each armor entry. Also check whether any armor occupies slot 33.
+    // This is necessary even with the nudity check, because we might have left slot 33
+    // either vanilla (no available clothing) or modded (conservative equipping). If the
+    // new wardrobe does not explicitly contain a body slot item, we must not clear
+    // the NPC's outfit.
     std::vector<WardrobeEntry> wardrobe;
     RE::BGSMod::Attachment::Mod* lastMod = NULL;
+    bool bodySlot = false;
     for (RE::TESObjectARMO* armor : sample) {
+        if (armor->bipedModelData.bipedObjectSlots & (1 << 3))
+            bodySlot = true;
         RE::BGSMod::Attachment::Mod* mod = ActorLoadWatcher::ARMORS->sampleOmod(armor, ActorLoadWatcher::ARMORS_CONFIG->proximityBias, lastMod, ActorLoadWatcher::ARMORS_CONFIG->allowNSFWChoices);
         lastMod = mod;
         wardrobe.push_back(WardrobeEntry{ armor, mod });
         seenSet[actorFormID].push_back(PersistenceEntry{ armor->GetFormID(), mod ? mod->GetFormID() : 0 });
     }
 
-    npc->defOutfit = nullptr;
-    npc->sleepOutfit = nullptr;
-    // Force reevaluation: unequip everything that came from outfit, then equip armors
-    // I considered unequipping every slot, but in vanilla only the body slot is really
-    // used for outfits.
+    // only if the new wardrobe contains a body slot item, clear the NPC's outfit.
+    if (bodySlot) {
+        npc->defOutfit = nullptr;
+        npc->sleepOutfit = nullptr;
+        // Force reevaluation: unequip everything that came from outfit, then equip armors
+        // I considered unequipping every slot, but in vanilla only the body slot is really
+        // used for outfits.
 #ifdef F4OG
-    actor->UnequipArmorFromSlot(static_cast<RE::BIPED_OBJECT>(3), false);
+        actor->UnequipArmorFromSlot(static_cast<RE::BIPED_OBJECT>(3), false);
 #else // NG
-    actor->UnequipArmorFromSlot(RE::BIPED_OBJECT::kBody, false);
+        actor->UnequipArmorFromSlot(RE::BIPED_OBJECT::kBody, false);
 #endif
+    }
     equipWardrobe(actor, wardrobe);
     logger::info(std::format("processed actor {:#010x} name={} (npc: {:#010x}); {} armors equipped", actorFormID, actorFullName, npcFormID, wardrobe.size()));
 }

@@ -226,21 +226,22 @@ std::vector<RE::TESObjectARMO*> ArmorIndex::sample(RE::Actor* a, SamplerConfig& 
 							uint32_t armoSlots = item.object->As<RE::TESObjectARMO>()->bipedModelData.bipedObjectSlots;
 							#define EQUIP_THIS_SLOT        /* no action taken */
 							#define DO_NOT_EQUIP_THIS_SLOT takenSlots = takenSlots | armoSlots
-							if (config.replaceArmor || (armoSlots & (1 << 3))) {
-								// If config.replaceArmor is enabled OR this item occupies slot 33, then
-								// we DO NOT want to replace. Do nothing.
+							if (((item.object->GetFormID() >> 24) & 0xFF) > HIGHEST_VANILLA_HIGH_FORMID) {
+								// If the item is a modded item, we never want to replace it. Do nothing.
 								DO_NOT_EQUIP_THIS_SLOT;
-							}
-							else if (((item.object->GetFormID() >> 24) & 0xFF) > HIGHEST_VANILLA_HIGH_FORMID) {
-								// Alternatively, if config.replaceArmor is enabled (so we might replace
-								// it), BUT the equipped item was added by a mod, then again we
-								// DO NOT want to replace it.
-								DO_NOT_EQUIP_THIS_SLOT;
-							} else {
-								// In all other cases, we want to replace it.
-								// To replace it, we leave takenSlots with zero bits, indicating
-								// items can be equipped in those slots.
+							} else if (config.replaceArmor || (armoSlots & (1 << 3))) {
+								// If the item is vanilla, and either config is set to replace it OR
+								// it's the body slot which we always replace (if vanilla), then
+								// DO replace it.
 								EQUIP_THIS_SLOT;
+							}
+							else if (config.replaceArmor) {
+								// This is not a body slot, and config wants to replace the item.
+								EQUIP_THIS_SLOT;
+							} else {
+								// replaceArmor is false, and the slot is not a body slot.
+								// Do nothing.
+								DO_NOT_EQUIP_THIS_SLOT;
 							}
 							#undef DO_NOT_EQUP_THIS_SLOT
 							#undef EQUIP_THIS_SLOT
