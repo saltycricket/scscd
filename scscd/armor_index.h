@@ -128,6 +128,8 @@ class ArmorIndex {
 
 public:
 	class SamplerConfig {
+		bool load(std::filesystem::path &single, bool noisy);
+	
 	public:
 		/*
 		 * Integer percentage value betwen [0, 100].
