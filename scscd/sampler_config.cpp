@@ -118,7 +118,7 @@ bool ArmorIndex::SamplerConfig::load(std::filesystem::path &path, bool noisy) {
     skipSlotChance[slot2bit(59)] = LoadFromIni(ini, "iSlotSkipChance59", 100, noisy); // Slot 59 - Shield[avoid:buggy / conflicts with grenades]
     skipSlotChance[slot2bit(60)] = LoadFromIni(ini, "iSlotSkipChance60", 100, noisy); // Slot 60 - Pip - Boy[reserved by engine, Pip - Boy only]
     skipSlotChance[slot2bit(61)] = LoadFromIni(ini, "iSlotSkipChance61", 90, noisy); // Slot 61 - FX[misc FX; sometimes safe for special equipables]
-    iniModTime = ini_mtime(inipath); // track modification time so we can see if it's changed
+    iniModTime = ini_mtime(path); // track modification time so we can see if it's changed
     logger::info(std::format("Loaded config from {}", path.string()));
     return true;
 }
