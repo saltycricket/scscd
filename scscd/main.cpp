@@ -12,16 +12,12 @@ static OccupationIndex OCCUPATIONS;
 static ArmorIndex ARMORS(&OCCUPATIONS);
 static ArmorIndex::SamplerConfig SAMPLER_CONFIG;
 
-//extern "C" void __sanitizer_set_report_path(const char* path);
-
 void _d(int line) {
 	std::string str = std::format("Line: {}", line);
 	MessageBox(NULL, str.c_str(), "SCSCD Debug", 0L);
 }
 
 extern "C" __declspec(dllexport) bool F4SEPlugin_Load(const F4SE::LoadInterface* iface) {
-	//__sanitizer_set_report_path("C:\\Users\\Colin2\\Documents\\scscd_asan.txt");
-
 	// Init logger before anything else happens. Note that F4SE::Init inits
 	// F4SE first and logger second. I want logger first in case F4SE fails.
 	if (!init_logger()) {
@@ -59,9 +55,17 @@ extern "C" __declspec(dllexport) bool F4SEPlugin_Load(const F4SE::LoadInterface*
 			}
 			logger::trace(std::format("message received: type {}", msg->type));
 			switch (msg->type) {
-			case F4SE::MessagingInterface::kGameDataReady:
+			case
+				/* TODO Retest this: not really sure if #ifdef is needed. kGameDataReady might work for both. */
+#ifdef F4OG
+				F4SE::MessagingInterface::kGameLoaded:
+				logger::trace("message is kGameLoaded");
+#else // NG
+				F4SE::MessagingInterface::kGameDataReady:
 				logger::trace("message is kGameDataReady");
-				if ((bool)msg->data) { // false before data, true after data
+#endif
+				if (/* OG: kGameLoaded */ msg->type == F4SE::MessagingInterface::kGameLoaded ||
+					/* NG: kGameDataReady, false before data, true after data */ (bool)msg->data) {
 					logger::info("SCSCD indexing forms");
 					// might be tempting to scan earlier on but it's safer to wait for game data
 					// because we don't know if the game is might be loading plugins in a separate
@@ -71,7 +75,6 @@ extern "C" __declspec(dllexport) bool F4SEPlugin_Load(const F4SE::LoadInterface*
 					scan_occupations_csv(DataPath("F4SE\\Plugins\\scscd\\occupation"), OCCUPATIONS);
 					scan_tuples_csv(DataPath("F4SE\\Plugins\\scscd\\clothing"), false, ARMORS);
 					scan_exclusions_csv(DataPath("F4SE\\Plugins\\scscd\\exclusions"), ActorLoadWatcher::exclusionList);
-					ActorLoadWatcher::watchForSettingsChanges();
 				}
 				// Register listener here so we can pre-empt any actors which are loaded
 				// as part of savegame restore.
@@ -85,13 +88,13 @@ extern "C" __declspec(dllexport) bool F4SEPlugin_Load(const F4SE::LoadInterface*
 				break;
 			}
 		});
-
-		logger::info("SCSCD is ready");
-		return true;
 	}
 	catch (std::exception const &exc) {
 		MessageBox(NULL, "Fatal error!", "Fatal error!", 0L);
 		logger::critical(std::format("Fatal error! {}", exc.what()));
 		return false;
 	}
+
+	logger::info("SCSCD is ready");
+	return true;
 }

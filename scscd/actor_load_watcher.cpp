@@ -160,12 +160,16 @@ void ActorLoadWatcher::Register()
 #else // NG
         RE::TESObjectLoadedEvent::GetEventSource()
 #endif
-        ;
+         ;
     if (src) {
         src->RegisterSink(this);
         logger::info("SCSCD is now running.");
-        _registered = true;
     }
+    else {
+        logger::critical("SCSCD could not find FO4 event sink! SCSCD will not function.");
+    }
+
+    _registered = true;
 }
 
 void ActorLoadWatcher::OnActorLoaded(RE::Actor* actor)
@@ -347,32 +351,11 @@ void equipArmorOmodPair(RE::Actor* actor, WardrobeEntry &wardrobe, bool applyNow
     }
 }
 
-void ActorLoadWatcher::equipWardrobe(RE::Actor* actor, std::vector<WardrobeEntry> wardrobe, bool isRetry, int attemptsRemaining) {
-    logger::trace(std::format("equipWardrobe isRetry={} attemptsRemaining={}", isRetry, attemptsRemaining));
-
-    // If isRetry is true, we need to query the actor and see which item(s) failed to equip. Otherwise
-    // we continue on.
-    // Note: matswap is implemented here. Since we have to check if an item is equipped AND we need the
-    // item to be equipped to generate instance data, we can do both things at once; and in fact, we can
-    // only proceed with matswap if we can confirm the item was indeed equipped.
-    if (isRetry) {
-        std::vector<WardrobeEntry> retry;
-        for (auto& entry : wardrobe) {
-            if (!isEquipped(actor, entry.armor)) {
-                logger::trace(std::format("isEquipped was false for {:#010x}", entry.armor->GetFormID()));
-                retry.push_back(entry);
-            }
-        }
-        wardrobe = retry;
-    }
+void ActorLoadWatcher::equipWardrobe(RE::Actor* actor, std::vector<WardrobeEntry> wardrobe) {
+    logger::trace(std::format("equipWardrobe"));
 
     if (wardrobe.size() == 0) {
         logger::debug(std::format("wardrobe has been fully equipped on actor {:#010x}", actor->GetFormID()));
-        return;
-    }
-
-    if (attemptsRemaining == 0) {
-        logger::warn(std::format("no more attempts remaining to equip actor {:#010x}; giving up with {} armors remaining", actor->GetFormID(), wardrobe.size()));
         return;
     }
 
@@ -422,8 +405,4 @@ void ActorLoadWatcher::equipWardrobe(RE::Actor* actor, std::vector<WardrobeEntry
         done++;
     }
     logger::debug(std::format("{} armors equipped to actor {:#010x}", done, actor->GetFormID()));
-    // wait 2 frames and then verify success, re-equipping as needed
-    NextFrames("equip wardrobe confirm/retry", [actor, wardrobe, attemptsRemaining]() {
-        ActorLoadWatcher::equipWardrobe(actor, wardrobe, /*isRetry=*/true, attemptsRemaining - 1);
-    }, 30);
 }
