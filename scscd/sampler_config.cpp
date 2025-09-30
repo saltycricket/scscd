@@ -66,11 +66,6 @@ bool ArmorIndex::SamplerConfig::load(std::filesystem::path &path, bool noisy) {
     ini.SetUnicode(true);
     ini.LoadFile(path.c_str());
     // allow ini file to override log level
-#ifdef F4OG
-    logger::warn("Experimental build! Debug log will remain enabled.");
-    spdlog::set_level(spdlog::level::trace);
-    spdlog::flush_on(spdlog::level::trace);
-#else // NG
     if (LoadFromIni(ini, "bDebugLog", false, noisy)) {
         spdlog::set_level(spdlog::level::trace);
         spdlog::flush_on(spdlog::level::trace);
@@ -79,7 +74,6 @@ bool ArmorIndex::SamplerConfig::load(std::filesystem::path &path, bool noisy) {
         spdlog::set_level(spdlog::level::info);
         spdlog::flush_on(spdlog::level::warn);
     }
-#endif // F4NG
     changeOutfitChanceM = LoadFromIni(ini, "iOutfitChangeChanceM", 75, noisy); // touch 3 out of every 4 NPCs
     changeOutfitChanceF = LoadFromIni(ini, "iOutfitChangeChanceF", 75, noisy); // touch 3 out of every 4 NPCs
     proximityBias = LoadFromIni(ini, "fProximityBias", 2.0f, noisy);
