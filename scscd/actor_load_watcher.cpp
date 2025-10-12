@@ -18,9 +18,11 @@ void F4SEAPI ActorLoadWatcher::serialize(const F4SE::SerializationInterface* int
     for (std::pair<uint32_t, std::vector<PersistenceEntry>> pair : GetSingleton()->seenSet) {
         uint32_t actorID = pair.first;
         size_t size = pair.second.size();
+        logger::trace(std::format("serialize: writing seen-set actor id {:#010x} with {} wardrobe entries", actorID, size));
         (void)intfc->WriteRecordData(&actorID, sizeof(std::uint32_t));
         (void)intfc->WriteRecordData(&size, sizeof(std::size_t));
         for (PersistenceEntry& entry : pair.second) {
+            logger::trace(std::format("serialize: writing wardrobe entry {:#010x} omod {:#010x}", entry.armorFormID, entry.omodFormID));
             (void)intfc->WriteRecordData(&entry.armorFormID, sizeof(uint32_t));
             (void)intfc->WriteRecordData(&entry.omodFormID, sizeof(uint32_t));
         }
@@ -85,8 +87,11 @@ void F4SEAPI ActorLoadWatcher::deserialize(const F4SE::SerializationInterface* i
             //uint32_t* armorIDs = NULL;
             (void)intfc->ReadRecordData(&actorID, sizeof(uint32_t));
             (void)intfc->ReadRecordData(&numArmors, sizeof(size_t));
+            logger::debug(std::format(" ... {} armors on actor {:#010x} (unresolved)", numArmors, actorID));
             std::optional<uint32_t> resolvedActorID = intfc->ResolveFormID(actorID);
-            logger::debug(std::format(" ... {} armors", numArmors));
+            // Ensure the seen-set contains the actor - even if the wardrobe was empty.
+            if (resolvedActorID.has_value())
+                GetSingleton()->seenSet[resolvedActorID.value()];
             for (uint32_t armorIdx = 0; armorIdx < numArmors; armorIdx++) {
                 uint32_t armorID, omodID = 0;
                 // read
@@ -110,7 +115,7 @@ void F4SEAPI ActorLoadWatcher::deserialize(const F4SE::SerializationInterface* i
                     }
                     else {
                         if (pe.omodFormID != 0) {
-                            form = RE::TESForm::GetFormByID(pe.armorFormID);
+                            form = RE::TESForm::GetFormByID(pe.omodFormID);
                             if (!form || form->GetFormType() != RE::ENUM_FORM_ID::kOMOD) {
                                 // wardrobe is not invalidated here because re-equip doesn't actually use the omod.
                                 // but if we need omod for any reason, it will show as 'no omod' for this armor.
@@ -131,7 +136,7 @@ void F4SEAPI ActorLoadWatcher::deserialize(const F4SE::SerializationInterface* i
                     uint32_t actorFormID = resolvedActorID.value();
                     GetSingleton()->seenSet.erase(actorFormID);
                 }
-                logger::warn(std::format("invalidated actor (failed to deserialize)"));
+                logger::warn(std::format("invalidated actor {:#010x} (failed to deserialize)", actorID));
             }
             else {
                 logger::debug(std::format("deserialized actor {:#010x} set into {} armors", actorID, numArmors));
@@ -175,6 +180,11 @@ void ActorLoadWatcher::Register()
 void ActorLoadWatcher::OnActorLoaded(RE::Actor* actor)
 {
     if (!actor) return;
+    if (suppressProcessing) {
+        logger::debug(std::format("suppressing behavior: actor {:#010x} will have to wait", actor->GetFormID()));
+        suppressedActors.push_back(actor->GetFormID());
+        return;
+    }
     std::unordered_map<uint32_t, std::vector<PersistenceEntry>>& seenSet = GetSingleton()->seenSet;
     uint32_t actorFormID = actor->GetFormID();
     const char* actorFullName = GetDisplayFullName(actor);
@@ -297,7 +307,7 @@ void ActorLoadWatcher::OnActorLoaded(RE::Actor* actor)
 #endif
     }
     equipWardrobe(actor, wardrobe);
-    logger::info(std::format("processed actor {:#010x} name={} (npc: {:#010x}); {} armors equipped", actorFormID, actorFullName, npcFormID, wardrobe.size()));
+    logger::info(std::format("processed actor {:#010x} name={} (npc: {:#010x}); {} armors equipped (seenSet size={})", actorFormID, actorFullName, npcFormID, wardrobe.size(), seenSet[actorFormID].size()));
 }
 
 void equipArmorOmodPair(RE::Actor* actor, WardrobeEntry &wardrobe, bool applyNow) {
@@ -305,7 +315,7 @@ void equipArmorOmodPair(RE::Actor* actor, WardrobeEntry &wardrobe, bool applyNow
         RE::TESObjectARMO* armor = wardrobe.armor;
         RE::BGSMod::Attachment::Mod* mod = wardrobe.omod;
         if (mod != NULL) {
-            logger::trace("  adding armor with omod to actor's inventory");
+            logger::trace(std::format("  adding armor {:#010x} with omod {:#010x} to actor {:#010x}'s inventory", armor->GetFormID(), mod->GetFormID(), actor->GetFormID()));
             RE::BSTSmartPointer<RE::TBO_InstanceData> instData;
 
             auto* instExtra = new RE::BGSObjectInstanceExtra();      // default ctor is available
@@ -325,7 +335,7 @@ void equipArmorOmodPair(RE::Actor* actor, WardrobeEntry &wardrobe, bool applyNow
         }
         else {
             RE::BGSObjectInstance inst(armor, nullptr);
-            logger::trace("  adding base armor to actor's inventory");
+            logger::trace(std::format("  adding base armor {:#010x} to actor {:#010x}'s inventory", armor->GetFormID(), actor->GetFormID()));
             actor->AddObjectToContainer(
                 armor,
                 nullptr,

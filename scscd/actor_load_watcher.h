@@ -86,6 +86,34 @@ public:
     static ArmorIndex::SamplerConfig* ARMORS_CONFIG;
     bool _registered{ false };
 
+    /*
+    * On game load from the main menu, we get an interesting sequence of events.
+    * First we get kPreLoadGame, and then actors start getting loaded and our
+    * ObjectLoaded event listener begins to fire. But the savegame hasn't finished
+    * loading and F4SE deserialization happens at some unknown point along the way
+    * (probably after the initial references are loaded). Finally, kPostLoadGame
+    * fires when everything (including deserialization) has finished and the game
+    * routine starts.
+    * 
+    * This sequence is problematic because when the initial ObjectLoaded events fire,
+    * we haven't got a seenSet yet so all actors appear as never-seen. So even if
+    * we have previously assigned an outfit (or player has made changes), we would
+    * process them as if they were first loaded. Only after deserialization happens
+    * can we realize we made a mistake and by then it's too late.
+    *
+    * NOTE: on quickload, this sequence doesn't occur. We get few or no loaded events
+    * and go straight to deserialization. I assume this is because the engine merely
+    * rolls back changesets and doesn't actually 'load' the actors. So, quickload
+    * behaves fine as no out-of-sequence events are received.
+    *
+    * Let's try this: we'll suppress any outfit assignment during game load. We'll
+    * keep a tally of ObjectLoaded events seen during suppression, and process them
+    * all after suppression ends as by then we should have finished deserializing
+    * and will be able to identify actors already in the seenSet.
+    */
+    bool suppressProcessing{ false };
+    std::vector<uint32_t> suppressedActors;
+
     static void configure(ArmorIndex* index, ArmorIndex::SamplerConfig* config) {
         ARMORS = index;
         ARMORS_CONFIG = config;
@@ -105,9 +133,23 @@ public:
         GetSingleton()->seenSet.clear();
     }
 
+    void Suppress() {
+        logger::debug("Actor processing suppressed.");
+        suppressProcessing = true;
+        suppressedActors.clear();
+    }
+
+    void Unsuppress() {
+        logger::debug(std::format("Actor processing suppressed; now processing {} deferred actors.", suppressedActors.size()));
+        suppressProcessing = false;
+        for (uint32_t formid : suppressedActors)
+            OnActorLoaded(RE::TESForm::GetFormByID<RE::Actor>(formid));
+        suppressedActors.clear();
+    }
+
     void Register();
 
-    static void OnActorLoaded(RE::Actor* actor);
+    void OnActorLoaded(RE::Actor* actor);
 
 private:
     std::unordered_map<uint32_t, std::vector<PersistenceEntry>> seenSet;
@@ -118,6 +160,7 @@ private:
         const RE::TESObjectLoadedEvent& a_event,
         RE::BSTEventSource<RE::TESObjectLoadedEvent>* /*a_source*/) override
     {
+        ActorLoadWatcher* watcher = GetSingleton();
         const uint32_t id =
 #ifdef F4OG
             a_event.formId
@@ -134,7 +177,7 @@ private:
         if (auto* form = RE::TESForm::GetFormByID(id)) {
             if (auto* ref = form->As<RE::TESObjectREFR>()) {
                 if (auto* actor = ref->As<RE::Actor>()) {
-                    OnActorLoaded(actor);
+                    watcher->OnActorLoaded(actor);
                 }
             }
         }
