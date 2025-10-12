@@ -8,9 +8,10 @@ bool OccupationIndex::put(uint32_t form, Occupation o) {
 
 Occupation OccupationIndex::sample(RE::Actor* actor) {
 	// No matter how many occupations match an actor,
-	// only one can be chosen. So instead of trying to
-	// accumulate all possible occupations, just iterate
-	// in a random order and return the first match.
+	// only one can be chosen. Try to pick one at random in
+	// priority order (character first, then faction, then class as a last resort).
+	// This allows character assignments to act as overrides, and since class is often wrong, makes
+	// class a last resort.
 
 	RE::TESClass* klass = NULL;
 	RE::TESNPC* npc = actor->GetNPC();
@@ -32,8 +33,15 @@ Occupation OccupationIndex::sample(RE::Actor* actor) {
 		return NO_OCCUPATION;
 	}
 
-	std::vector<Occupation>* classOccups = klass && registry.contains(klass->GetFormID()) ? &registry[klass->GetFormID()] : NULL;
 	std::vector<Occupation>* npcOccups = npc && registry.contains(npc->GetFormID()) ? &registry[npc->GetFormID()] : NULL;
+	size_t nNPCOccups = (npcOccups == NULL ? 0 : npcOccups->size());
+	if (nNPCOccups != 0) {
+		size_t choice = (size_t)(rand() % nNPCOccups);
+		logger::debug(std::format("OccupationIndex::sample NPC actorID={:#010x} npcOccupsSize={} choiceIndex={}",
+						actor->GetFormID(), nNPCOccups, choice));
+		return (*npcOccups)[choice];
+	}
+
 	// faction is the only hairy one, we have to consider all factions
 	// the NPC is a part of, that we also have registrants for.
 	std::vector<Occupation> factionOccups;
@@ -71,22 +79,22 @@ Occupation OccupationIndex::sample(RE::Actor* actor) {
 		//	*/
 		//}
 	}
-
-	// now we have all possible occups, with minimal copying.
-	// just pick a number and bucket them by their sizes.
-	size_t nClassOccups = (classOccups == NULL ? 0 : classOccups->size());
-	size_t nNPCOccups = (npcOccups == NULL ? 0 : npcOccups->size());
-	size_t total_count = nClassOccups + nNPCOccups + factionOccups.size();
-	size_t choice = total_count == 0 ? 0 : (size_t)(rand() % total_count);
-	logger::debug(std::format("OccupationIndex::sample formID={:#010x} classOccupsSize={}, npcOccupsSize={}, factionOccupsSize={}, totalOccupsSize={}, choiceIndex={}",
-		actor->GetFormID(), nClassOccups, nNPCOccups, factionOccups.size(), total_count, choice));
-	if (choice < nClassOccups)
-		return (*classOccups)[choice];
-	choice -= nClassOccups;
-	if (choice < nNPCOccups)
-		return (*npcOccups)[choice];
-	choice -= nNPCOccups;
-	if (choice < factionOccups.size())
+	if (factionOccups.size() != 0) {
+		size_t choice = (size_t)(rand() % factionOccups.size());
+		logger::debug(std::format("OccupationIndex::sample Faction actorID={:#010x} factionOccupsSize={} choiceIndex={}",
+			actor->GetFormID(), factionOccups.size(), choice));
 		return factionOccups[choice];
+	}
+
+	std::vector<Occupation>* classOccups = klass && registry.contains(klass->GetFormID()) ? &registry[klass->GetFormID()] : NULL;
+	size_t nClassOccups = (classOccups == NULL ? 0 : classOccups->size());
+	if (nClassOccups != 0) {
+		size_t choice = (size_t)(rand() % nClassOccups);
+		logger::debug(std::format("OccupationIndex::sample Class actorID={:#010x} classOccupsSize={} choiceIndex={}",
+			actor->GetFormID(), nClassOccups, choice));
+		return (*classOccups)[choice];
+	}
+
+	// no matches in index
 	return NO_OCCUPATION;
 }
