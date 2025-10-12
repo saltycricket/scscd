@@ -1,4 +1,5 @@
 #include "scscd.h"
+#include "csv_scanner.h"
 
 void scan_exclusions_csv(std::filesystem::path basedir, std::unordered_set<uint32_t> &exclusionList) {
     logger::info("Loading exclusions from " + basedir.string());
@@ -27,7 +28,7 @@ void scan_exclusions_csv(std::filesystem::path basedir, std::unordered_set<uint3
             // strip comments
             if (size_t n = line.find('#'); n != std::string::npos)
                 line = line.substr(0, n);
-            std::vector<std::string> columns = split_and_trim(line, ',');
+            std::vector<std::string> columns = csv_parse_line(line);
             if (columns.size() == 0 || (columns.size() == 1 && columns[0] == ""))
             {
                 // blank line
@@ -36,6 +37,10 @@ void scan_exclusions_csv(std::filesystem::path basedir, std::unordered_set<uint3
             // TODO make position-independent by reading headers
             if (columns.size() != 1) {
                 logger::error(std::format("skipped: expected 1 column, got {}", columns.size()) + CSV_LINENO);
+                continue;
+            }
+            if (iequals(columns[0], "NPC Form or Editor ID")) {
+                // header
                 continue;
             }
 

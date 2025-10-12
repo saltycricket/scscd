@@ -7,7 +7,6 @@
 #include "race.h"
 #include "occupation_index.h"
 #include "armor_index.h"
-#include "csv_scanner.h"
 #include "gamedir.h"
 #include "actor_load_watcher.h"
 

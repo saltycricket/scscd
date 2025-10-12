@@ -1,6 +1,7 @@
 #include "scscd.h"
+#include "csv_scanner.h"
 
-void scan_tuples_csv(std::filesystem::path basedir, bool nsfw, ArmorIndex& index) {
+void scan_tuples_csv(std::filesystem::path basedir, bool nsfw, ArmorIndex& index, std::unordered_map<std::string, Taxon> &taxonomy) {
     logger::info("Loading tuples from " + basedir.string());
     std::vector<std::string> filenames = scandir(basedir, ".csv");
     for (std::string filename : filenames) {
@@ -27,16 +28,16 @@ void scan_tuples_csv(std::filesystem::path basedir, bool nsfw, ArmorIndex& index
             // strip comments
             if (size_t n = line.find('#'); n != std::string::npos)
                 line = line.substr(0, n);
-            std::vector<std::string> columns = split_and_trim(line, ',');
+            std::vector<std::string> columns = csv_parse_line(line);
             if (columns.size() == 0 || (columns.size() == 1 && columns[0] == ""))
             {
                 // blank line
                 continue;
             }
             // TODO make position-independent by reading headers
-            if (columns.size() < 3 || columns.size() > 6) {
-                // Sexes,Occupation,FormOrEditorIDs[,Level][,OModIDs]
-                logger::error(std::format("skipped: expected 3 to 6 fields, got {}", columns.size()) + CSV_LINENO);
+            if (columns.size() < 3 || columns.size() > 7) {
+                // Sexes,Occupation,FormOrEditorIDs[,Level][,OModIDs][,ClothingTypeID]
+                logger::error(std::format("skipped: expected 3 to 7 fields, got {}", columns.size()) + CSV_LINENO);
                 continue;
             }
 
@@ -99,6 +100,36 @@ void scan_tuples_csv(std::filesystem::path basedir, bool nsfw, ArmorIndex& index
                     localNSFW = true;
                 else
                     localNSFW = false;
+            }
+
+            // optional item category name for biped slot override
+            if (columns.size() >= 7 && columns[6].size() > 0) {
+                if (taxonomy.contains(columns[6])) {
+                    if (armors.size() == 1) {
+                        const Taxon& taxon = taxonomy[columns[6]];
+                        RE::TESObjectARMO* armor = armors[0];
+                        uint32_t armo_former = static_cast<RE::BGSBipedObjectForm*>(armor)->bipedModelData.bipedObjectSlots;
+                        static_cast<RE::BGSBipedObjectForm*>(armor)->bipedModelData.bipedObjectSlots = taxon.armo_slots;
+                        logger::debug(std::format("changed ARMO bipe flags for armor {:#010x} from {:#010x} to {:#010x}", armor->GetFormID(), armo_former, taxon.armo_slots) + CSV_LINENO);
+                        // modelArray contains armor attachments. We expect attachment 0 to always be the base object which
+                        // is what we want to modify here. If there are any other attachments, they may be matswaps/etc, and
+                        // we shouldn't have to manipulate those.
+                        if (armor->modelArray.size() > 0) {
+                            uint32_t arma_former = armor->modelArray[0].armorAddon->bipedModelData.bipedObjectSlots;
+                            armor->modelArray[0].armorAddon->bipedModelData.bipedObjectSlots = taxon.arma_slots;
+                            logger::debug(std::format("changed ARMA bipe flags for armor {:#010x} from {:#010x} to {:#010x}", armor->GetFormID(), arma_former, taxon.arma_slots) + CSV_LINENO);
+                        }
+                        else {
+                            logger::warn(std::format("tried to modify ARMA flags for armor {:#010x} but there were no armor attachments", armor->GetFormID()) + CSV_LINENO);
+                        }
+                    }
+                    else {
+                        logger::warn(std::format("{} items specify clothing type {} in one entry, but only 1 item can appear if a clothing type is given", armors.size(), columns[6]) + CSV_LINENO);
+                    }
+                }
+                else {
+                    logger::warn(std::format("item specifies clothing type {} but that type does not exist so no slots will be changed", columns[6]) + CSV_LINENO);
+                }
             }
 
             logger::debug(filename + std::string(": registering a set of ")

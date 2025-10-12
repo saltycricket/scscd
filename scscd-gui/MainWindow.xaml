@@ -11,7 +11,7 @@
     </Window.Resources>
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="10*"/>
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -41,11 +41,38 @@
               ItemsSource="{Binding ArmorView}"
               SelectionMode="Extended"
               SelectionChanged="ArmorList_SelectionChanged">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Converter={StaticResource ArmorLabelConverter}}"/>
-                </DataTemplate>
-            </ListView.ItemTemplate>
+            <ListView.Resources>
+                <Style TargetType="GridViewColumnHeader">
+                    <EventSetter Event="Click" Handler="GridViewColumnHeader_Click"/>
+                </Style>
+            </ListView.Resources>
+            <ListView.View>
+                <GridView AllowsColumnReorder="False">
+                    <GridViewColumn DisplayMemberBinding="{Binding EditorID}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Content="Editor ID" Tag="EditorID" />
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+
+                    <GridViewColumn DisplayMemberBinding="{Binding FullName}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Content="Full Name" Tag="FullName" />
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+
+                    <GridViewColumn DisplayMemberBinding="{Binding SlotDescription}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Content="Slot" Tag="SlotDescription" />
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+
+                    <GridViewColumn DisplayMemberBinding="{Binding FormKey}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Content="Form Key" Tag="FormKey" />
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
         </ListView>
 
         <!-- Right: tags -->
@@ -86,6 +113,22 @@
                         <CheckBox Content="NSFW" IsThreeState="True"
                                 IsEnabled="{Binding HasSelection}"
                                 IsChecked="{Binding NSFWState, Mode=TwoWay}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="8">
+                        <Grid Margin="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="75"/>
+                            </Grid.ColumnDefinitions>
+
+                            <ComboBox Grid.Column="0"
+									ItemsSource="{Binding ClothingTypes}"
+                                    DisplayMemberPath="Name"
+									IsEditable="True" IsTextSearchEnabled="True" StaysOpenOnEdit="True"
+									Text="{Binding ClothingType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+        						    />
+                            <Button Grid.Column="1" Content="Manage..." Margin="6,0" Click="ManageClothingTypes_Click"/>
+                        </Grid>
                     </StackPanel>
                 </StackPanel>
             </GroupBox>

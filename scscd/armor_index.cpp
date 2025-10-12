@@ -388,7 +388,7 @@ std::vector<RE::TESObjectARMO*> ArmorIndex::sample(RE::Actor* a, SamplerConfig& 
 	}
 	// no need to check or log anything if it's already an empty set - no changes would be made
 	if (wardrobe.size() > 0) {
-		if (!config.allowNudity && (!HasSlot(takenSlots, 36) || !HasSlot(takenSlots, 39))) {
+		if (!config.allowNudity && ((sex == FEMALE && !HasSlot(takenSlots, /* chest underwear */ 36)) || !HasSlot(takenSlots, /* pelvis underwear */ 55))) {
 			logger::debug("SCSCD: nudity detected in this wardrobe, returning empty set instead");
 			wardrobe.clear();
 		}

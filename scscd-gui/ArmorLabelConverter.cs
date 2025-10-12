@@ -11,9 +11,8 @@ namespace scscd_gui.wpf
             if (a is null) return string.Empty;
             var eid = a.EditorID ?? "(no EDID)";
             var full = a.FullName ?? "";
-            var mod = a.ModFile ?? "";
             var fk = a.FormKey ?? "";
-            return $"{eid} [{fk}] - {full}";
+            return $"{eid} - {full}";
         }
 
         public object? ConvertBack(object v, Type? t, object? p, CultureInfo c) => throw new NotSupportedException();

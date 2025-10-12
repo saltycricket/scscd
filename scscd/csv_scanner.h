@@ -41,6 +41,8 @@ static std::string trim(std::string_view sv) {
     return (begin < end ? std::string(begin, end) : std::string{});
 }
 
+std::vector<std::string> csv_parse_line(const std::string& input);
+
 static std::vector<std::string> split_and_trim(const std::string& input, char delimiter = ',') {
     std::vector<std::string> result;
     std::string_view sv{ input };
@@ -55,6 +57,10 @@ static std::vector<std::string> split_and_trim(const std::string& input, char de
         result.push_back(trim(token));
         start = end + 1;
     }
+
+    // if final character is delimeter, add an additional blank string.
+    if (input.size() > 0 && input[input.length() - 1] == delimiter)
+        result.push_back("");
 
     return result;
 }
@@ -285,6 +291,15 @@ static std::vector<T*> parseFormIDs(std::string &plugin_file, std::vector<std::s
     return forms;
 }
 
+class Taxon {
+public:
+    uint32_t armo_slots;
+    uint32_t arma_slots;
+    Taxon() {}
+    Taxon(uint32_t armo, uint32_t arma) : armo_slots(armo), arma_slots(arma | armo) {}
+};
+
 void scan_occupations_csv(std::filesystem::path basedir, OccupationIndex& index);
-void scan_tuples_csv(std::filesystem::path basedir, bool nsfw, ArmorIndex& index);
+void scan_tuples_csv(std::filesystem::path basedir, bool nsfw, ArmorIndex& index, std::unordered_map<std::string, Taxon>& taxonomy);
 void scan_exclusions_csv(std::filesystem::path basedir, std::unordered_set<uint32_t>& exclusionList);
+void scan_taxonomies_csv(std::filesystem::path basedir, std::unordered_map<std::string, Taxon>& index);

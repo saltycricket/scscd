@@ -1,4 +1,5 @@
 #include "scscd.h"
+#include "csv_scanner.h"
 
 void scan_occupations_csv(std::filesystem::path basedir, OccupationIndex& index) {
     logger::info("Loading occupations from " + basedir.string());
@@ -27,7 +28,7 @@ void scan_occupations_csv(std::filesystem::path basedir, OccupationIndex& index)
             // strip comments
             if (size_t n = line.find('#'); n != std::string::npos)
                 line = line.substr(0, n);
-            std::vector<std::string> columns = split_and_trim(line, ',');
+            std::vector<std::string> columns = csv_parse_line(line);
             // skip blank lines (after comments)
             if (columns.size() == 0 || (columns.size() == 1 && columns[0] == ""))
             {

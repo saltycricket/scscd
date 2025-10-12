@@ -1,4 +1,5 @@
-﻿using Mutagen.Bethesda;
+﻿using DynamicData;
+using Mutagen.Bethesda;
 using Mutagen.Bethesda.Environments;
 using Mutagen.Bethesda.Fallout4;
 using Mutagen.Bethesda.Installs;
@@ -18,12 +19,15 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Data;
-using System.Windows.Forms; // for FolderBrowserDialog
+using System.Windows.Forms;
+using System.Windows.Media; // for FolderBrowserDialog
 
 namespace scscd_gui.wpf
 {
     public class MainViewModel : INotifyPropertyChanged
     {
+        public DirectoryPath dataDir;
+
         public event PropertyChangedEventHandler? PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string? name = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
@@ -34,6 +38,12 @@ namespace scscd_gui.wpf
         private ImmutableLoadOrderLinkCache<IFallout4Mod, IFallout4ModGetter>? linkCache;
 
         public ObservableCollection<OccCheck> Occupations { get; } = new();
+
+        public ObservableCollection<ItemTypeVM> _clothingTypes = new();
+        public ObservableCollection<ItemTypeVM> ClothingTypes
+        {
+            get => _clothingTypes;
+        }
 
         /* Important: the order here represents its position in the bitmap. For example
          * Doctor is the rightmost bit in the map. */
@@ -183,11 +193,28 @@ namespace scscd_gui.wpf
             }
         }
 
+        private string? _clothingType;
+        public string? ClothingType
+        {
+            get => _clothingType;
+            set
+            {
+                if (_suppress) { _clothingType = value; OnPropertyChanged(); return; }
+                _clothingType = value;
+                OnPropertyChanged();
+                ApplyClothingTypeToSelection(_clothingType);
+            }
+        }
+
         public MainViewModel()
         {
             // CollectionView for filtering
             ArmorView = CollectionViewSource.GetDefaultView(ArmorItems);
             ArmorView.Filter = FilterArmor;
+
+            var view = CollectionViewSource.GetDefaultView(ClothingTypes);
+            view.SortDescriptions.Clear();
+            view.SortDescriptions.Add(new SortDescription(nameof(ItemTypeVM.Name), ListSortDirection.Ascending));
 
             // Build occupation items (tri-state checkboxes)
             foreach (var name in _occupationNames)
@@ -208,8 +235,11 @@ namespace scscd_gui.wpf
             try
             {
                 // Pick Data folder on the UI thread (dialogs must be on UI thread)
-                if (!new GameLocator().TryGetDataDirectory(GameRelease.Fallout4, out var dataDir))
+                if (!new GameLocator().TryGetDataDirectory(GameRelease.Fallout4, out dataDir))
                     PromptForDataFolder();
+
+                // Load clothing types before scanning armors, otherwise they won't auto detect.
+                RefreshClothingTypes();
 
                 // Do Mutagen scanning off the UI thread
                 var armors = await Task.Run(() => ScanArmors(dataDir)); // returns List<ArmorListItem>
@@ -229,6 +259,13 @@ namespace scscd_gui.wpf
             {
                 IsLoading = false;
             }
+        }
+
+        public void RefreshClothingTypes()
+        {
+            ClothingTypes.Clear();
+            foreach (var t in new ItemTypeManagerVM(dataDir).ItemTypes)
+                ClothingTypes.Add(t);
         }
 
         private static string PromptForDataFolder()
@@ -317,6 +354,7 @@ namespace scscd_gui.wpf
                 {
                     var eid = armo.EditorID ?? "(no EDID)";
                     var mod = armo.FormKey.ModKey.FileName;
+                    var key = $"{eid}|{mod}"; // human-friendly + collision-resistant
                     return new ArmorListItem
                     {
                         EditorID = eid,
@@ -324,8 +362,13 @@ namespace scscd_gui.wpf
                         ModFile = mod,
                         FormKey = armo.FormKey.ToString(),
                         Armor = armo,
-                        IsUnderwear = HasBipedSlot(armo, 36, linkCache) || HasBipedSlot(armo, 39, linkCache),
-                        Key = $"{eid}|{mod}"   // human-friendly + collision-resistant
+                        IsUnderwear = HasBipedSlot(armo, 36, linkCache)
+                                    || HasBipedSlot(armo, 37, linkCache)
+                                    || HasBipedSlot(armo, 38, linkCache)
+                                    || HasBipedSlot(armo, 39, linkCache)
+                                    || HasBipedSlot(armo, 40, linkCache),
+                        SlotDescription = GetSlotDescription(eid, armo),
+                        Key = key
                     };
                 })
                 .OrderBy(a => a.EditorID, StringComparer.OrdinalIgnoreCase)
@@ -382,6 +425,13 @@ namespace scscd_gui.wpf
             if (ml == -1) MinLevel = "";
             else MinLevel = ml.ToString();
 
+            var itemTypes = new ItemTypeManagerVM(dataDir).ItemTypes;
+            var typeNames = itemTypes.Select(x => x.Name).AsEnumerable();
+            string currentType = AggregateClothingType();
+            if (!currentType.Equals("<<multiple>>") && !typeNames.Contains(currentType))
+                currentType = "DEFAULT";
+            ClothingType = currentType;
+
             _suppress = false;
         }
 
@@ -396,6 +446,115 @@ namespace scscd_gui.wpf
                 else if (first.Value != val) return null; // indeterminate
             }
             return first ?? false; // no selection -> false (UI disabled anyway)
+        }
+
+        private ArmorListItem? findArmorItem(string editorID)
+        {
+            foreach (ArmorListItem item in this.ArmorItems)
+            {
+                if (item.EditorID.Equals(editorID))
+                    return item;
+            }
+            return null;
+        }
+
+        private string GetSlotDescription(string key, IArmorGetter? armor = null)
+        {
+            var tags = GetOrCreateTags(key);
+            if (tags.clothingType != null) return tags.clothingType;
+
+            var item = findArmorItem(key);
+            if (armor == null) armor = item?.Armor;
+            if (armor == null) return "None";
+            HashSet<string> defSlots = new HashSet<string>();
+            string? str = null;
+            string? tag = null;
+            // try to see if the used slots match a specific clothing type
+            var selection = ClothingTypes.Where(x => {
+                List<int> boundSlots = new List<int>();
+                for (int i = 30; i < 64; i++)
+                    if (HasBipedSlot(armor, i, linkCache))
+                        boundSlots.Add(i);
+                List<int> xSlots = x.Slots.Where(y => y.IsArmoChecked).Select(y => y.SlotIndex).ToList();
+                xSlots.Sort();
+                boundSlots.Sort();
+                if (xSlots.SequenceEqual(boundSlots))
+                    // the biped slots on this armor exactly match the equipped slots on this clothing type.
+                    return true;
+                else
+                    // a slot is biped on the armor but doesn't match any slots
+                    // for this clothing type
+                    return false;
+            });
+            if (selection.Any())
+            {
+                // slots match at least one existing clothing type even though
+                // the item wasn't explicitly assigned to one
+                foreach (var sel in selection)
+                    defSlots.Add(sel.Name);
+                tag = "AUTO";
+            }
+            else
+            {
+                // slots did not match any existing clothing type, so
+                // just list the slots themselves
+                for (int i = 30; i < 64; i++)
+                    if (HasBipedSlot(armor, i, linkCache))
+                        if (SlotCatalog.ById.ContainsKey(i))
+                            defSlots.Add(SlotCatalog.ById[i].name);
+                        else
+                            defSlots.Add("" + i);
+                tag = "SLOT";
+            }
+            foreach (var n in defSlots)
+                str = (str == null ? "" + n : str + ", " + n);
+            str = tag + ": " + str;
+            return str;
+        }
+
+        // Clothing type is probably the most cumbersome part to hook up and important to get
+        // right, due to clipping. So we want this to be as helpful as possible, but have limited
+        // space to work with.
+        // If an item is selected, we want to try to indicate first if it has an explicit clothing
+        // type. It of course won't if the mod has no CSV, which is when it's hardest to work with.
+        // So, if it has no clothing type, we'll next look at its biped slots. If they exactly match
+        // an existing clothing type, we'll indicate that, so that the user knows it is compatible
+        // with the existing mapping (or it will have the wrong name, e.g. "Hat" when it should
+        // be "Gloves"). If there is no matching clothing item at all, we'll just show the slot names
+        // as defined in ClothingTypeModel.
+        // If there are multiple selected, we'll try to follow the same rule, and use "<<multiple>>"
+        // if there are several distinct layouts in use, to indicate that they maybe shouldn't be
+        // grouped together.
+        private string AggregateClothingType()
+        {
+            string? aggregate = null;
+            foreach (var key in _selectedKeys)
+            {
+                var tags = GetOrCreateTags(key);
+                var ct = tags.clothingType;
+                if (ct == null)
+                {
+                    // item has no clothing type assigned, get its used slots
+                    string str = GetSlotDescription(key);
+                    if (aggregate == null)
+                        aggregate = str;
+                    else
+                    {
+                        // another item already populated `aggregate`; if the aggregates
+                        // match there is no issue, otherwise return indicating they
+                        // follow differen layouts.
+                        if (!aggregate.Equals(str))
+                            return "<<multiple>>";
+                    }
+                }
+                else
+                {
+                    if (aggregate == null) aggregate = ct;
+                    if (aggregate != null && !aggregate.Equals(ct))
+                        return "<<multiple>>";
+                }
+            }
+            return aggregate == null ? "None" : aggregate;
         }
 
         private int AggregateMinLevel()
@@ -424,6 +583,22 @@ namespace scscd_gui.wpf
             _suppress = false;
 
             // Recompute aggregates so UI moves out of "mixed"
+            RefreshAggregateStates();
+        }
+
+        private void ApplyClothingTypeToSelection(string? clothingType)
+        {
+            _suppress = true;
+            if (!ClothingTypes.Select(x => x.Name).Where(x => x.Equals(clothingType)).Any())
+                // clothingType is not valid, we assume it's meant to represent default/no type override
+                clothingType = null;
+            foreach (var key in _selectedKeys)
+            {
+                GetOrCreateTags(key).clothingType = clothingType;
+                var a = findArmorItem(key);
+                if (a != null) a.SlotDescription = GetSlotDescription(key);
+            }
+            _suppress = false;
             RefreshAggregateStates();
         }
 
@@ -513,6 +688,8 @@ namespace scscd_gui.wpf
 
                 // EditorID (formerly FormID)
                 string editorID = parts[2].Trim();
+                _tagsByKey[editorID] = tags;
+
                 // Old format: if it looks like hex, it's a form ID. We can use the CSV filename
                 // to convert it into a form key, and use the form key to look up the editor ID.
                 Debug.WriteLine($"seen editorID={editorID}");
@@ -557,7 +734,15 @@ namespace scscd_gui.wpf
                 if (parts.Count() >= 6)
                     tags.Set("nsfw", parts[5].Trim() == "1" || parts[5].Trim() == "true");
 
-                _tagsByKey[editorID] = tags;
+                if (parts.Count() >= 7 && parts[6].Trim().Length > 0)
+                {
+                    tags.clothingType = parts[6].Trim();
+                    var armor = findArmorItem(editorID);
+                    if (armor != null)
+                    {
+                        armor.SlotDescription = GetSlotDescription(editorID, armor.Armor);
+                    }
+                }
             }
         }
 
@@ -572,7 +757,7 @@ namespace scscd_gui.wpf
 
         public void SaveCsvTo(string path)
         {
-            var header = new List<string> { "Sex", "Occupation", "EditorID", "MinLevel", "Compatible OMODs", "Is NSFW?" };
+            var header = new List<string> { "Sex", "Occupation", "EditorID", "MinLevel", "Compatible OMODs", "Is NSFW?", "Clothing Type" };
 
             using var sw = new StreamWriter(path, false);
             sw.WriteLine(string.Join(",", header));
@@ -601,7 +786,8 @@ namespace scscd_gui.wpf
                         Csv(item.EditorID ?? ""),
                         tags.minLevel.ToString(),
                         omodsList,
-                        tags.Get("nsfw") ? "1" : "0"
+                        tags.Get("nsfw") ? "1" : "0",
+                        tags.clothingType == null ? "" : tags.clothingType
                     };
 
                     sw.WriteLine(string.Join(",", row));

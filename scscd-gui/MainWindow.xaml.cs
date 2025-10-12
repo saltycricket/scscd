@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,11 +11,47 @@ namespace scscd_gui.wpf
     public partial class MainWindow : Window
     {
         private readonly MainViewModel _vm = new();
+        private GridViewColumnHeader? _lastHeaderClicked;
+        private ListSortDirection _lastDirection = ListSortDirection.Ascending;
 
         public MainWindow()
         {
             InitializeComponent();
             DataContext = _vm;
+        }
+
+        private void GridViewColumnHeader_Click(object sender, RoutedEventArgs e)
+        {
+            if (e.OriginalSource is not GridViewColumnHeader header || header.Column == null)
+                return;
+
+            string? sortBy = header.Tag as string;
+            if (string.IsNullOrEmpty(sortBy))
+                return;
+
+            ListSortDirection direction = ListSortDirection.Ascending;
+            if (_lastHeaderClicked == header && _lastDirection == ListSortDirection.Ascending)
+                direction = ListSortDirection.Descending;
+
+            var view = CollectionViewSource.GetDefaultView(ArmorList.ItemsSource);
+            view.SortDescriptions.Clear();
+            view.SortDescriptions.Add(new SortDescription(sortBy, direction));
+            view.Refresh();
+
+            // remember for next click
+            _lastHeaderClicked = header;
+            _lastDirection = direction;
+        }
+
+        private async void ManageClothingTypes_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new ClothingTypesWindow(_vm.dataDir)
+            {
+                Owner = this, // sets window ownership for centering/stacking
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+            window.Closed += (_, __) => _vm.RefreshClothingTypes();
+            window.Show(); // or: _info.ShowDialog();
         }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)

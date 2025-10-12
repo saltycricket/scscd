@@ -1,6 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug-NG|Win32">
+      <Configuration>Debug-NG</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug-NG|x64">
+      <Configuration>Debug-NG</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release-OG|Win32">
       <Configuration>Release-OG</Configuration>
       <Platform>Win32</Platform>
@@ -56,6 +64,12 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug-NG|x64'">
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug-NG|Win32'">
     <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -227,6 +241,7 @@
     <ClCompile Include="csv_scanner.cpp" />
     <ClCompile Include="csv_scanner_exclusions.cpp" />
     <ClCompile Include="csv_scanner_occupations.cpp" />
+    <ClCompile Include="csv_scanner_taxonomy.cpp" />
     <ClCompile Include="csv_scanner_tuples.cpp" />
     <ClCompile Include="discover_edids.cpp" />
     <ClCompile Include="logger.cpp" />

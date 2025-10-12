@@ -5,8 +5,12 @@ using System.Runtime.CompilerServices;
 
 namespace scscd_gui.wpf
 {
-    public class ArmorListItem
+    public class ArmorListItem : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string name = null)
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+
         public string Key { get; set; } = "";
         public string? EditorID { get; set; }
         public string? FullName { get; set; }
@@ -15,6 +19,22 @@ namespace scscd_gui.wpf
         public IArmorGetter? Armor { get; set; }
         public bool IsUnderwear { get; set; }
         public bool IsLight { get; set; } // is the containing plugin ESL flagged?
+        
+        // Human-readable description of the slots this armor uses or its autodetected clothing type
+        private string? _slotDescription;
+        public string? SlotDescription
+        {
+            get => _slotDescription;
+            set
+            {
+                if (_slotDescription != value)
+                {
+                    _slotDescription = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
     }
 
     public class ArmorTags
@@ -22,6 +42,7 @@ namespace scscd_gui.wpf
         private readonly System.Collections.Generic.HashSet<string> _fields;
         private readonly System.Collections.Generic.Dictionary<string, bool> _values;
         public int minLevel;
+        public string? clothingType;
 
         private ArmorTags(System.Collections.Generic.HashSet<string> fields,
                           System.Collections.Generic.Dictionary<string, bool> values)
@@ -29,6 +50,7 @@ namespace scscd_gui.wpf
             _fields = fields;
             _values = values;
             minLevel = 0;
+            clothingType = null;
         }
 
         public static ArmorTags Empty(string[] occupations)
