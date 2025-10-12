@@ -1,10 +1,10 @@
-Sex,Occupation,EditorID,MinLevel,Compatible OMODs,Is NSFW?
-10,10001010011110000010,Vtaw_GothicDress,0,,0
-10,10001010011110000010,Vtaw_GothicDressV2,0,,0
-10,10001010011110000010,Vtaw_GothicDressV3,0,,0
-10,10001010011110000010,Vtaw_GothicDressV4,0,,1
-10,10001010011110000010,Vtaw_GothicDress_Choker,0,,0
-10,10001010011110000010,Vtaw_GothicDress_Outfit,0,,0
-10,10001010011110000010,Vtaw_GothicDress_Shoes,0,,0
-10,10001010011110000010,Vtaw_GothicDress_StockingsArms,0,,0
-10,10001010011110000010,Vtaw_GothicDress_StockingsLegs,0,,0
+Sex,Occupation,EditorID,MinLevel,Compatible OMODs,Is NSFW?,Clothing Type
+10,10001010011110000010,Vtaw_GothicDress,0,,0,Minidress
+10,10001010011110000010,Vtaw_GothicDressV2,0,,0,Minidress
+10,10001010011110000010,Vtaw_GothicDressV3,0,,0,Tank Top
+10,10001010011110000010,Vtaw_GothicDressV4,0,,1,Waist Wrap
+10,10001010011110000010,Vtaw_GothicDress_Choker,0,,0,Necklace
+10,10001010011110000010,Vtaw_GothicDress_Outfit,0,,0,Full Boots, Leggings, Minidress, Sleeves, Choker
+10,10001010011110000010,Vtaw_GothicDress_Shoes,0,,0,
+10,10001010011110000010,Vtaw_GothicDress_StockingsArms,0,,0,Sleeves
+10,10001010011110000010,Vtaw_GothicDress_StockingsLegs,0,,0,Leggings

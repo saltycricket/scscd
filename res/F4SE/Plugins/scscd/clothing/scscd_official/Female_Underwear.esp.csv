@@ -1,15 +1,15 @@
-Sex,Occupation,EditorID,MinLevel,Compatible OMODs,Is NSFW?
-10,11111111111111111111,Female_Underwear,0,,0
-10,11111111111111111111,Female_Underwear_black,0,,0
-10,11111111111111111111,Female_Underwear_black_Mix,0,,0
-10,11111111111111111111,Female_Underwear_Blue,0,,0
-10,11111111111111111111,Female_Underwear_Blue_Mix,0,,0
-10,11111111111111111111,Female_Underwear_Lace_black,0,,0
-10,11111111111111111111,Female_Underwear_Lace_white,0,,0
-10,11111111111111111111,Female_Underwear_Mix,0,,0
-10,11111111111111111111,Female_Underwear_Red,0,,0
-10,11111111111111111111,Female_Underwear_Red_Mix,0,,0
-10,11111111111111111111,Female_Underwear_Stripes,0,,0
-10,11111111111111111111,Female_Underwear_Stripes_Mix,0,,0
-10,11111111111111111111,Female_Underwear_white,0,,0
-10,11111111111111111111,Female_Underwear_white_Mix,0,,0
+Sex,Occupation,EditorID,MinLevel,Compatible OMODs,Is NSFW?,Clothing Type
+10,10000010011111001010,Female_Underwear,0,,0,Bra & Panties (Body)
+10,10000010011111001010,Female_Underwear_black,0,,0,Bra & Panties (Body)
+10,10000010011111011011,Female_Underwear_black_Mix,0,,0,Bra & Panties
+10,10000010011111001010,Female_Underwear_Blue,0,,0,Bra & Panties (Body)
+10,10000010011111001010,Female_Underwear_Blue_Mix,0,,0,Bra & Panties
+10,10000010011111001010,Female_Underwear_Lace_black,0,,0,Bra & Panties (Body)
+10,10000010011111001010,Female_Underwear_Lace_white,0,,0,Bra & Panties (Body)
+10,10000010011111001010,Female_Underwear_Mix,0,,0,Bra & Panties
+10,10000010011111001010,Female_Underwear_Red,0,,0,Bra & Panties (Body)
+10,10000010011111001010,Female_Underwear_Red_Mix,0,,0,Bra & Panties
+10,10000010011111001010,Female_Underwear_Stripes,0,,0,Bra & Panties (Body)
+10,10000010011111001010,Female_Underwear_Stripes_Mix,0,,0,Bra & Panties
+10,10000010011111001010,Female_Underwear_white,0,,0,Bra & Panties (Body)
+10,10000010011111011011,Female_Underwear_white_Mix,0,,0,Bra & Panties

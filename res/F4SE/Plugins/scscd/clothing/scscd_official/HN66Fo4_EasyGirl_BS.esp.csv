@@ -1,211 +1,211 @@
-Sex,Occupation,EditorID,MinLevel,Compatible OMODs,Is NSFW?
-10,10001010011010111001,33_EasyGirl_BuckleBoots_BlackChrome_BS,0,,0
-10,10001010011010111001,33_EasyGirl_BuckleBoots_Black_BS,0,,0
-10,10001010011010111001,33_EasyGirl_BuckleBoots_Brown_BS,0,,0
-10,10001010011010111001,33_EasyGirl_BuckleBoots_White_BS,0,,0
-10,11111111111011111101,33_EasyGirl_Buckled_AlpineBoots_Brown_BS,0,,0
-10,11111111111011111101,33_EasyGirl_Buckled_BikerBoots_Black_BS,0,,0
-10,11111111111011111101,33_EasyGirl_Buckled_BikerBoots_Brown_BS,0,,0
-10,11111111111011111101,33_EasyGirl_Buckled_GothicBoots_Black_BS,0,,0
-10,10001010011110011111,33_EasyGirl_GladiatorSandals_BlackVelvet_BS,0,,0
-10,10001010011110011111,33_EasyGirl_GladiatorSandals_SlinkyRed_BS,0,,0
-10,10001010011110011011,33_EasyGirl_HeelBootlets_Black_BS,0,,0
-10,10001010011110011011,33_EasyGirl_HeelBootlets_White_BS,0,,0
-10,11001010011110011011,33_EasyGirl_HeelSandals_BlackChrome_BS,0,,0
-10,11001010011110011011,33_EasyGirl_HeelSandals_BlackClear_BS,0,,0
-10,11001010011110011011,33_EasyGirl_HeelSandals_Black_BS,0,,0
-10,11001010011110011011,33_EasyGirl_HeelSandals_GoGoBlackChrome_BS,0,,0
-10,11001010011110011011,33_EasyGirl_HeelSandals_GoGoClear_BS,0,,0
-10,11001010011110011011,33_EasyGirl_HeelSandals_GoGoPlaidRedChrome_BS,0,,0
-10,11001010011110011011,33_EasyGirl_HeelSandals_PinkClear_BS,0,,0
-10,11001010011110011011,33_EasyGirl_HeelSandals_PlaidPurple_BS,0,,0
-10,11001010011110011011,33_EasyGirl_HeelSandals_Red2_BS,0,,0
-10,11001010011110011011,33_EasyGirl_HeelSandals_White2_BS,0,,0
-10,11001010011110011011,33_EasyGirl_HeelSandals_WhiteClear_BS,0,,0
-10,11001010011110011011,33_EasyGirl_HighHeelSandals_BlackVelvet_BS,0,,0
-10,11001010011110011011,33_EasyGirl_HighHeel_PeepToes_Black_BS,0,,0
-10,11001010011110011011,33_EasyGirl_HighHeel_PeepToes_Red_BS,0,,0
-10,11001010011110011011,33_EasyGirl_HighHeel_PeepToes_White_BS,0,,0
-10,11001010011110011011,33_EasyGirl_KneeHigh_GladiatorSandals_BlackLatex_BS,0,,0
-10,11001010011110011011,33_EasyGirl_KneeHigh_GladiatorSandals_BlackVelvet_BS,0,,0
-10,11001010011110011011,33_EasyGirl_KneeHigh_Institute_Sandals_BS,0,,0
-10,11001010011110011011,33_EasyGirl_KneeHigh_Sandals_BlackLatex_BS,0,,0
-10,11001010011110011011,33_EasyGirl_Overknee_HeelBoots_Black_BS,0,,0
-10,11001010011110011011,33_EasyGirl_Overknee_HeelBoots_Red_BS,0,,0
-10,11001010011110011011,33_EasyGirl_Overknee_HeelBoots_White_BS,0,,0
-10,00000000000000010001,33_EasyGirl_RadSuit_BS,0,,0
-10,11110110111111100000,33_EasyGirl_Sneakers_BS,0,,0
-10,11111111111111111111,36_EasyGirl_Bracelets_Gothic_BS,0,,1
-10,11111111111111111111,36_EasyGirl_Bracelets_Silver_BS,0,,1
-10,11111111111111111111,36_EasyGirl_Gauntlets_BlackLeather_BS,0,,1
-10,11111111111111111111,36_EasyGirl_Gauntlets_BrownLeather_BS,0,,1
-10,11111111111111111111,36_EasyGirl_Gauntlets_GreyWool_BS,0,,1
-10,11111111111111111111,36_EasyGirl_Gauntlets_WhiteLeather_BS,0,,1
-10,11111111111111111111,36_EasyGirl_Xazomns_Gauntlets_WhiteKnit_BS,0,,1
-10,11101010011111001010,37_EasyGirl_LacedCorsage_BlackLeather_BS,0,,0
-10,11101010011111001010,37_EasyGirl_LacedCorsage_BrownLeather_BS,0,,0
-10,11101010011111001010,37_EasyGirl_LacedCorsage_Cait_BS,0,,0
-10,11101010011111001010,37_EasyGirl_LacedCorsage_WhiteLeather_BS,0,,0
-10,10000010011111000000,37_EasyGirl_Waist_KnittedWool_Rose_BS,0,,0
-10,10000010011111000000,37_EasyGirl_Waist_KnittedWool_Turquoise_BS,0,,0
-10,10000010011111000000,37_EasyGirl_Waist_KnittedWool_White_BS,0,,0
-10,11000010011111101010,37_EasyGirl_Waist_Leather_BS,0,,0
-10,11000010011111101010,37_EasyGirl_Waist_Leather_Rings_BS,0,,0
-10,10000010011111000000,37_EasyGirl_Xazomns_Waist_KnittedRose_BS,0,,0
-10,10000010011111000000,37_EasyGirl_Xazomns_Waist_KnittedWool_White_BS,0,,0
-10,10000110001011000000,38_EasyGirl_BaseballTshirt_White_BS,0,,0
-10,11001110111011111001,38_EasyGirl_Blouse_White_BS,0,,0
-10,11001110111011111001,38_EasyGirl_Blouse_White_Short_BS,0,,0
-10,11001110111011111001,38_EasyGirl_Blouse_White_UnderBoob_BS,0,,1
-10,11001110111011111001,38_EasyGirl_Blouse_White_UnderBoob_ShortArm_BS,0,,1
-10,00110101100000101000,38_EasyGirl_BoS_FlightSuit_green_BS,0,,0
-10,00110101100000101000,38_EasyGirl_BoS_FlightSuit_orange_BS,0,,0
-10,00110101100000101000,38_EasyGirl_BoS_FlightSuit_Revealing_green_BS,0,,0
-10,00110101100000101000,38_EasyGirl_BoS_FlightSuit_white_BS,0,,0
-10,10000010011111000010,38_EasyGirl_CroppedTshirt_White_BS,0,,0
-10,00001010001000001010,38_EasyGirl_GoGoTop_SlinkyRed_BS,0,,0
-10,10000010011011000000,38_EasyGirl_KnittedCrop_LongSleeve_Rose_BS,0,,0
-10,10000010011011000000,38_EasyGirl_KnittedCrop_LongSleeve_Turquoise_BS,0,,0
-10,10000010011011000000,38_EasyGirl_KnittedCrop_LongSleeve_White_BS,0,,0
-10,11000010011011001010,38_EasyGirl_LacedBolero_BlackLeather_BS,0,,0
-10,11000010011011001010,38_EasyGirl_LacedBolero_BrownLeather_BS,0,,0
-10,10000010001011000010,38_EasyGirl_LacedBolero_Plaid_Red_BS,0,,0
-10,10000010001011000010,38_EasyGirl_LacedBolero_Plaid_WhiteBlue_BS,0,,0
-10,11000010011011001010,38_EasyGirl_LacedBolero_WhiteLeather_BS,0,,0
-10,10000010001111001000,38_EasyGirl_MiniBolero_Leather_BS,0,,0
-10,10001010011011001000,38_EasyGirl_MiniDress_BlackLatex_BS,0,,0
-10,10001010011011001000,38_EasyGirl_MiniDress_BlackLeather_Laced_BS,0,,0
-10,10001010011011001000,38_EasyGirl_MiniDress_BlueFlowered_BS,0,,0
-10,10001010011011001000,38_EasyGirl_MiniDress_FishNet_Black_BS,0,,0
-10,10001010011011001000,38_EasyGirl_MiniDress_FishNet_Pink_BS,0,,0
-10,10001010011011001000,38_EasyGirl_MiniDress_FishNet_White_BS,0,,0
-10,00000000000000010001,38_EasyGirl_MiniDress_InstituteVar2_BS,0,,0
-10,00000000000000010001,38_EasyGirl_MiniDress_Institute_BS,0,,0
-10,10001010011011001000,38_EasyGirl_MiniDress_PlaidPurple_BS,0,,0
-10,10001010011011001000,38_EasyGirl_MiniDress_RedLeather_BS,0,,0
-10,10001010011011001000,38_EasyGirl_MiniDress_SlinkyRed_BS,0,,0
-10,10001010011011001000,38_EasyGirl_MiniDress_SlinkyWhite_BS,0,,0
-10,10001010011011001000,38_EasyGirl_MiniDress_WhiteLeather_BS,0,,0
-10,10001010011011001000,38_EasyGirl_MiniDress_WhiteLeather_Laced_BS,0,,0
-10,10000010011111000010,38_EasyGirl_SloppyBlouse_WhiteButtoned_BS,0,,0
-10,10000010001011000010,38_EasyGirl_SloppyTop_PlaidRed_BS,0,,0
-10,10000010011111000010,38_EasyGirl_SluttyBlouse_WhiteButtoned_BS,0,,0
-10,10000010011111000010,38_EasyGirl_SluttyGoGoTop_SlinkyBlack_BS,0,,0
-10,10000010001011000010,38_EasyGirl_SluttyTop_PlaidGreen_BS,0,,0
-10,10000010001011000010,38_EasyGirl_SluttyTop_PlaidPurple_BS,0,,0
-10,10000010001011000010,38_EasyGirl_SluttyTop_PlaidRed_BS,0,,0
-10,11101010011011001010,38_EasyGirl_TankTop_DoItYourself_BS,0,,0
-10,11101010011011001010,38_EasyGirl_TankTop_EasyGirl_BS,0,,0
-10,11101010011011001010,38_EasyGirl_TankTop_FishNet_Black_BS,0,,0
-10,11101010011011001010,38_EasyGirl_TankTop_FishNet_White_BS,0,,0
-10,11101010011011001010,38_EasyGirl_TankTop_Leather_BS,0,,0
-10,11101010011011001010,38_EasyGirl_TankTop_MasonBlue_BS,0,,0
-10,11101010011011001010,38_EasyGirl_TankTop_PlaidPurple_BS,0,,0
-10,11101010011011001010,38_EasyGirl_TankTop_Plaid_WhiteRose_BS,0,,0
-10,11101010011011001010,38_EasyGirl_TankTop_RoseFlowered_BS,0,,0
-10,11101010011011001010,38_EasyGirl_TankTop_Royo1_BS,0,,0
-10,11101010011011001010,38_EasyGirl_TankTop_UnderBoob_DoItYourself_BS,0,,0
-10,11101010011011001010,38_EasyGirl_TankTop_UnderBoob_EasyGirl_BS,0,,0
-10,11101010011011001010,38_EasyGirl_TankTop_UnderBoob_FishNet_Pink_BS,0,,0
-10,11101010011011001010,38_EasyGirl_TankTop_UnderBoob_FishNet_White_BS,0,,0
-10,11101010011011001010,38_EasyGirl_TankTop_UnderBoob_KnittedRose_BS,0,,0
-10,11101010011011001010,38_EasyGirl_TankTop_UnderBoob_KnittedTurquoise_BS,0,,0
-10,11101010011011001010,38_EasyGirl_TankTop_UnderBoob_KnittedWhite_BS,0,,0
-10,11101010011011001010,38_EasyGirl_TankTop_UnderBoob_Leather_BS,0,,0
-10,11101010011011001010,38_EasyGirl_TankTop_UnderBoob_MasonBlue_BS,0,,0
-10,11101010011011001010,38_EasyGirl_TankTop_UnderBoob_PlaidPurple_BS,0,,0
-10,11101010011011001010,38_EasyGirl_TankTop_UnderBoob_SlinkyRed_BS,0,,0
-10,11101010011011001010,38_EasyGirl_TankTop_UnderBoob_SlinkyWhite_BS,0,,0
-10,11101010011011001010,38_EasyGirl_TankTop_UnderBoob_White_Buttoned_BS,0,,0
-10,11101010011011001010,38_EasyGirl_TankTop_WhiteDirty_BS,0,,0
-10,10000010011011000000,38_EasyGirl_Xazomns_KnittedCrop_LongSleeve_White_BS,0,,0
-10,10000010011011000000,38_EasyGirl_Xazomns_MiniDress_Knitted_White_BS,0,,0
-10,10000010001011000010,38_EasyGirl_Xazomns_SloppyTop_White_BS,0,,0
-10,10000010001011000000,38_EasyGirl_Xazomns_TankTop_UnderBoob_KnittedRose_BS,0,,0
-10,10000010011111001010,39_EasyGirl_ThighHighs_PlaidPurple_BS,0,,1
-10,10000010011111001010,39_EasyGirl_ThighHighs_PlaidWhiteRose_BS,0,,1
-10,10000010011111001010,39_EasyGirl_ThighHighs_StripedTurquoise_BS,0,,1
-10,10000010011111001010,39_EasyGirl_ThighHighs_WoolWhite_BS,0,,1
-10,10000010011111001010,39_EasyGirl_WoolSocks_White_BS,0,,1
-10,10000010011111001010,39_EasyGirl_Xazomns_ThighHighs_Black_BS,0,,1
-10,10000010011111001010,39_EasyGirl_Xazomns_ThighHighs_Red_BS,0,,1
-10,10000010011111001010,39_EasyGirl_Xazomns_ThighHighs_White_BS,0,,1
-10,00001000000000000000,40_EasyGirl_CourserPants_BS,0,,0
-10,10000010001111001010,40_EasyGirl_HotPantsMicro_JeansBlue_BS,0,,0
-10,10000010001111001010,40_EasyGirl_HotPantsMicro_JeansBlue_Open_BS,0,,0
-10,10000010001111001010,40_EasyGirl_HotPantsMicro_JeansGrey_BS,0,,0
-10,10000010001111001010,40_EasyGirl_HotPantsMicro_Leather_BS,0,,0
-10,10000010001111001010,40_EasyGirl_HotPants_JeansBlue_BS,0,,0
-10,11100010011011001000,40_EasyGirl_JeansPantsBootcut_BS,0,,0
-10,11100010011011001000,40_EasyGirl_JeansPants_Clean_Blue_BS,0,,0
-10,11100010011011001000,40_EasyGirl_JeansPants_Ripped_Blue_BS,0,,0
-10,11100010011011001000,40_EasyGirl_JeansPants_Ripped_Grey_BS,0,,0
-10,11100010011011001000,40_EasyGirl_JeansPants_Ripped_White_BS,0,,0
-10,11100010011011001000,40_EasyGirl_Kellogs_Pants_BS,0,,0
-10,11100010011011001000,40_EasyGirl_LeatherPantsBootcut_Black_BS,0,,0
-10,11100010011011001000,40_EasyGirl_LeatherPants_Black_BS,0,,0
-10,11100010011011001000,40_EasyGirl_LeatherPants_LowCut_Black_BS,0,,0
-10,10001010011011001000,40_EasyGirl_MiniSkirt_BlackLeather_BS,0,,0
-10,10001010001111001000,40_EasyGirl_PlaidSkirt_Red_BS,0,,0
-10,10001010001111001000,40_EasyGirl_Pleated_Skirt_BlackLeather_BS,0,,0
-10,10001010001111001000,40_EasyGirl_Pleated_Skirt_Green_BS,0,,0
-10,10001010001111001000,40_EasyGirl_Pleated_Skirt_Purple_BS,0,,0
-10,10001010001111001000,40_EasyGirl_Pleated_Skirt_Red_BS,0,,0
-10,00000010001010000000,40_EasyGirl_Striped_Pants_GreyBlack_BS,0,,0
-10,00000010001010000000,40_EasyGirl_Striped_Pants_RedBlack_BS,0,,0
-10,00010000000000010001,40_EasyGirl_SynthPants_BS,0,,0
-10,00000010001010000000,40_EasyGirl_Xazomns_Pants_KnittedRose_BS,0,,0
-10,00000010001010000000,40_EasyGirl_Xazomns_Pants_KnittedWhite_BS,0,,0
-10,00001000000000000000,41_EasyGirl_CourserJacket_BS,0,,0
-10,00001000000000000000,41_EasyGirl_CourserJacket_Red_BS,0,,0
-10,11100111101010101000,41_EasyGirl_Kellogs_Jacket_BS,0,,0
-10,11100111101010101000,41_EasyGirl_KnightLancerJacket_BS,0,,0
-10,11100111101010101000,41_EasyGirl_Maxons_Coat_BS,0,,0
-10,10000010001111000010,41_EasyGirl_OpenBlouse_WhiteFlowered_BS,0,,0
-10,11100010001010101000,41_EasyGirl_Pipers_Coat_BS,0,,0
-10,00011000000000010001,41_EasyGirl_SynthJacket_BS,0,,0
-10,00000010010000000000,41_EasyGirl_TuxedoJacket_BS,0,,0
-10,00000110000010100000,41_EasyGirl_UmpireBustier_BS,0,,0
-10,00000110000010100000,41_EasyGirl_UmpirePad_BS,0,,0
-10,11100110001010101000,41_EasyGirl_Vest_BlackLeather_VeryFarOpen_BS,0,,0
-10,11100110001010101000,41_EasyGirl_Vest_RoadLeather_BS,0,,0
-10,11100110001010101000,41_EasyGirl_Vest_RoadLeather_FarOpen_BS,0,,0
-10,11100110001010101000,41_EasyGirl_Vest_RoadLeather_Open_BS,0,,0
-10,11100110001010101000,41_EasyGirl_Vest_RoadLeather_VeryFarOpen_BS,0,,0
-10,11111111111111111111,42_EasyGirl_Bracelet_Metal_UpperArmL_BS,0,,0
-10,11111111111111111111,43_EasyGirl_Bracelet_Leather_UpperArmR_BS,0,,0
-10,00000010001100000010,45_EasyGirl_MasamuneThong_BlackLeather_BS,0,,0
-10,00000010001100000010,45_EasyGirl_Thong_BlackLeather_BS,0,,0
-10,00000010001100000010,45_EasyGirl_Thong_PlaidRed_BS,0,,0
-10,00000010001100000010,45_EasyGirl_Thong_SlinkyRed_BS,0,,0
-10,00000010001100000010,45_EasyGirl_Thong_SlinkyWhite_BS,0,,0
-10,00000010001100000010,45_EasyGirl_Thong_WhiteLeather_BS,0,,0
-10,11000010011011010101,47_EasyGirl_Glasses_Round_Black,0,,0
-10,11000010011011010101,47_EasyGirl_Glasses_Round_Blue,0,,0
-10,11000010011011010101,47_EasyGirl_Glasses_Round_Red,0,,0
-10,10000010001111000000,48_EasyGirl_BikiniTop_BlackLeather_BS,0,,0
-10,10000010001111000000,48_EasyGirl_BikiniTop_BrownLeather_BS,0,,0
-10,10000010001111000000,48_EasyGirl_BikiniTop_PlaidRed_BS,0,,0
-10,10000010001111000000,48_EasyGirl_BikiniTop_SlinkyRed_BS,0,,0
-10,10000010001111000000,48_EasyGirl_BikiniTop_SlinkyWhite_BS,0,,0
-10,10000010001111000000,48_EasyGirl_BikiniTop_WhiteLeather_BS,0,,0
-10,10000010001111000000,48_EasyGirl_Masamune_BikiniTop_BS,0,,0
-10,10000010001111000000,48_EasyGirl_Masamune_BikiniTop_PlaidRed_BS,0,,0
-10,10000010001111000000,48_EasyGirl_Masamune_BikiniTop_SlinkyRed_BS,0,,0
-10,10000010001111000010,48_EasyGirl_Masamune_NeckHolder_BS,0,,0
-10,10000010001111000010,48_EasyGirl_Xazomns_NeckHolder_KnittedRose_BS,0,,0
-10,10000010001111000010,48_EasyGirl_Xazomns_NeckHolder_KnittedWhite_BS,0,,0
-10,10000010001111000010,50_EasyGirl_Collar_Leather_Spikes_n_Lez,0,,0
-10,10000010001111000010,50_EasyGirl_Necklace_LeatherLaces_Lez,0,,0
-10,01111111100010101000,54_EasyGirl_ThighBelt_L_44_BS,0,,0
-10,01111111100010101000,55_EasyGirl_GunBelt_R_44_BS,0,,0
-10,01111111100011101000,56_EasyGirl_Gloves_Fingerless_BrownLeather,0,,0
-10,11100110011111111111,57_EasyGirl_Tattoo_TrampStamp1_BS,0,,0
-10,11100110011111111111,57_EasyGirl_Tattoo_TrampStamp2_BS,0,,0
-10,11100110011111111111,57_EasyGirl_Tattoo_TrampStamp3_BS,0,,0
-10,11000010011111001010,58_EasyGirl_NavelPiercing4_BS,0,,0
-10,11000010011111001010,58_EasyGirl_Navel_and_HoodPiercing4_BS,0,,0
-10,11000010011111001010,58_EasyGirl_Navel_Hood_NippleDiag_Piercing4_BS,0,,0
-10,11000010011111001010,58_EasyGirl_Navel_Hood_NippleHoriz_Piercing4_BS,0,,0
-10,11000010011111001010,58_EasyGirl_Navel_Hood_NippleVert_Piercing4_BS,0,,0
-10,11000010011111001010,58_EasyGirl_Navel_Hood_Nipple_Piercing4_BS,0,,0
+Sex,Occupation,EditorID,MinLevel,Compatible OMODs,Is NSFW?,Clothing Type
+10,10001010011010111001,33_EasyGirl_BuckleBoots_BlackChrome_BS,0,,0,
+10,10001010011010111001,33_EasyGirl_BuckleBoots_Black_BS,0,,0,
+10,10001010011010111001,33_EasyGirl_BuckleBoots_Brown_BS,0,,0,
+10,10001010011010111001,33_EasyGirl_BuckleBoots_White_BS,0,,0,
+10,11111111111011111101,33_EasyGirl_Buckled_AlpineBoots_Brown_BS,0,,0,
+10,11111111111011111101,33_EasyGirl_Buckled_BikerBoots_Black_BS,0,,0,
+10,11111111111011111101,33_EasyGirl_Buckled_BikerBoots_Brown_BS,0,,0,
+10,11111111111011111101,33_EasyGirl_Buckled_GothicBoots_Black_BS,0,,0,
+10,10001010011110011111,33_EasyGirl_GladiatorSandals_BlackVelvet_BS,0,,0,
+10,10001010011110011111,33_EasyGirl_GladiatorSandals_SlinkyRed_BS,0,,0,
+10,10001010011110011011,33_EasyGirl_HeelBootlets_Black_BS,0,,0,
+10,10001010011110011011,33_EasyGirl_HeelBootlets_White_BS,0,,0,
+10,11001010011110011011,33_EasyGirl_HeelSandals_BlackChrome_BS,0,,0,
+10,11001010011110011011,33_EasyGirl_HeelSandals_BlackClear_BS,0,,0,
+10,11001010011110011011,33_EasyGirl_HeelSandals_Black_BS,0,,0,
+10,11001010011110011011,33_EasyGirl_HeelSandals_GoGoBlackChrome_BS,0,,0,
+10,11001010011110011011,33_EasyGirl_HeelSandals_GoGoClear_BS,0,,0,
+10,11001010011110011011,33_EasyGirl_HeelSandals_GoGoPlaidRedChrome_BS,0,,0,
+10,11001010011110011011,33_EasyGirl_HeelSandals_PinkClear_BS,0,,0,
+10,11001010011110011011,33_EasyGirl_HeelSandals_PlaidPurple_BS,0,,0,
+10,11001010011110011011,33_EasyGirl_HeelSandals_Red2_BS,0,,0,
+10,11001010011110011011,33_EasyGirl_HeelSandals_White2_BS,0,,0,
+10,11001010011110011011,33_EasyGirl_HeelSandals_WhiteClear_BS,0,,0,
+10,11001010011110011011,33_EasyGirl_HighHeelSandals_BlackVelvet_BS,0,,0,
+10,11001010011110011011,33_EasyGirl_HighHeel_PeepToes_Black_BS,0,,0,
+10,11001010011110011011,33_EasyGirl_HighHeel_PeepToes_Red_BS,0,,0,
+10,11001010011110011011,33_EasyGirl_HighHeel_PeepToes_White_BS,0,,0,
+10,11001010011110011011,33_EasyGirl_KneeHigh_GladiatorSandals_BlackLatex_BS,0,,0,
+10,11001010011110011011,33_EasyGirl_KneeHigh_GladiatorSandals_BlackVelvet_BS,0,,0,
+10,11001010011110011011,33_EasyGirl_KneeHigh_Institute_Sandals_BS,0,,0,
+10,11001010011110011011,33_EasyGirl_KneeHigh_Sandals_BlackLatex_BS,0,,0,
+10,11001010011110011011,33_EasyGirl_Overknee_HeelBoots_Black_BS,0,,0,
+10,11001010011110011011,33_EasyGirl_Overknee_HeelBoots_Red_BS,0,,0,
+10,11001010011110011011,33_EasyGirl_Overknee_HeelBoots_White_BS,0,,0,
+10,00000000000000010001,33_EasyGirl_RadSuit_BS,0,,0,
+10,11110110111111100000,33_EasyGirl_Sneakers_BS,0,,0,
+10,11111111111111111111,36_EasyGirl_Bracelets_Gothic_BS,0,,0,Bracelet
+10,11111111111111111111,36_EasyGirl_Bracelets_Silver_BS,0,,0,Bracelet
+10,11111111111111111111,36_EasyGirl_Gauntlets_BlackLeather_BS,0,,0,Bracelet
+10,11111111111111111111,36_EasyGirl_Gauntlets_BrownLeather_BS,0,,0,Bracelet
+10,11111111111111111111,36_EasyGirl_Gauntlets_GreyWool_BS,0,,0,Bracelet
+10,11111111111111111111,36_EasyGirl_Gauntlets_WhiteLeather_BS,0,,0,Bracelet
+10,11111111111111111111,36_EasyGirl_Xazomns_Gauntlets_WhiteKnit_BS,0,,0,Bracelet
+10,11101010011111001010,37_EasyGirl_LacedCorsage_BlackLeather_BS,0,,0,Corset
+10,11101010011111001010,37_EasyGirl_LacedCorsage_BrownLeather_BS,0,,0,Corset
+10,11101010011111001010,37_EasyGirl_LacedCorsage_Cait_BS,0,,0,Corset
+10,11101010011111001010,37_EasyGirl_LacedCorsage_WhiteLeather_BS,0,,0,Corset
+10,10000010011111000000,37_EasyGirl_Waist_KnittedWool_Rose_BS,0,,0,Waist Wrap
+10,10000010011111000000,37_EasyGirl_Waist_KnittedWool_Turquoise_BS,0,,0,Waist Wrap
+10,10000010011111000000,37_EasyGirl_Waist_KnittedWool_White_BS,0,,0,Waist Wrap
+10,11000010011111101010,37_EasyGirl_Waist_Leather_BS,0,,0,Waist Wrap
+10,11000010011111101010,37_EasyGirl_Waist_Leather_Rings_BS,0,,0,Waist Wrap
+10,10000010011111000000,37_EasyGirl_Xazomns_Waist_KnittedRose_BS,0,,0,Waist Wrap
+10,10000010011111000000,37_EasyGirl_Xazomns_Waist_KnittedWool_White_BS,0,,0,Waist Wrap
+10,10000110001011000000,38_EasyGirl_BaseballTshirt_White_BS,0,,0,Crop Top (Sleeves)
+10,11001110111011111001,38_EasyGirl_Blouse_White_BS,0,,0,Blouse
+10,11001110111011111001,38_EasyGirl_Blouse_White_Short_BS,0,,0,Crop Top (Sleeves)
+10,11001110111011111001,38_EasyGirl_Blouse_White_UnderBoob_BS,0,,1,Crop Top (Sleeves)
+10,11001110111011111001,38_EasyGirl_Blouse_White_UnderBoob_ShortArm_BS,0,,1,Crop Top (No Sleeves)
+10,00110101100000101000,38_EasyGirl_BoS_FlightSuit_green_BS,0,,0,Bodysuit (No Arms)
+10,00110101100000101000,38_EasyGirl_BoS_FlightSuit_orange_BS,0,,0,Bodysuit (No Arms)
+10,00110101100000101000,38_EasyGirl_BoS_FlightSuit_Revealing_green_BS,0,,0,Bodysuit (No Arms)
+10,00110101100000101000,38_EasyGirl_BoS_FlightSuit_white_BS,0,,0,Bodysuit (No Arms)
+10,10000010011111000010,38_EasyGirl_CroppedTshirt_White_BS,0,,0,Crop Top (Sleeves)
+10,00001010001000001010,38_EasyGirl_GoGoTop_SlinkyRed_BS,0,,0,Corset
+10,10000010011011000000,38_EasyGirl_KnittedCrop_LongSleeve_Rose_BS,0,,0,Crop Top (Sleeves)
+10,10000010011011000000,38_EasyGirl_KnittedCrop_LongSleeve_Turquoise_BS,0,,0,Crop Top (Sleeves)
+10,10000010011011000000,38_EasyGirl_KnittedCrop_LongSleeve_White_BS,0,,0,Crop Top (Sleeves)
+10,11000010011011001010,38_EasyGirl_LacedBolero_BlackLeather_BS,0,,0,Crop Top (No Sleeves)
+10,11000010011011001010,38_EasyGirl_LacedBolero_BrownLeather_BS,0,,0,Crop Top (No Sleeves)
+10,10000010001011000010,38_EasyGirl_LacedBolero_Plaid_Red_BS,0,,0,Crop Top (No Sleeves)
+10,10000010001011000010,38_EasyGirl_LacedBolero_Plaid_WhiteBlue_BS,0,,0,Crop Top (No Sleeves)
+10,11000010011011001010,38_EasyGirl_LacedBolero_WhiteLeather_BS,0,,0,Crop Top (No Sleeves)
+10,10000010001111001000,38_EasyGirl_MiniBolero_Leather_BS,0,,0,Bra
+10,10001010011011001000,38_EasyGirl_MiniDress_BlackLatex_BS,0,,0,Minidress
+10,10001010011011001000,38_EasyGirl_MiniDress_BlackLeather_Laced_BS,0,,0,Minidress
+10,10001010011011001000,38_EasyGirl_MiniDress_BlueFlowered_BS,0,,0,Minidress
+10,10001010011011001000,38_EasyGirl_MiniDress_FishNet_Black_BS,0,,0,Minidress
+10,10001010011011001000,38_EasyGirl_MiniDress_FishNet_Pink_BS,0,,0,Minidress
+10,10001010011011001000,38_EasyGirl_MiniDress_FishNet_White_BS,0,,0,Minidress
+10,00000000000000010001,38_EasyGirl_MiniDress_InstituteVar2_BS,0,,0,Minidress
+10,00000000000000010001,38_EasyGirl_MiniDress_Institute_BS,0,,0,Minidress
+10,10001010011011001000,38_EasyGirl_MiniDress_PlaidPurple_BS,0,,0,Minidress
+10,10001010011011001000,38_EasyGirl_MiniDress_RedLeather_BS,0,,0,Minidress
+10,10001010011011001000,38_EasyGirl_MiniDress_SlinkyRed_BS,0,,0,Minidress
+10,10001010011011001000,38_EasyGirl_MiniDress_SlinkyWhite_BS,0,,0,Minidress
+10,10001010011011001000,38_EasyGirl_MiniDress_WhiteLeather_BS,0,,0,Minidress
+10,10001010011011001000,38_EasyGirl_MiniDress_WhiteLeather_Laced_BS,0,,0,Minidress
+10,10000010011111000010,38_EasyGirl_SloppyBlouse_WhiteButtoned_BS,0,,0,Corset
+10,10000010001011000010,38_EasyGirl_SloppyTop_PlaidRed_BS,0,,0,Bra
+10,10000010011111000010,38_EasyGirl_SluttyBlouse_WhiteButtoned_BS,0,,0,Corset
+10,10000010011111000010,38_EasyGirl_SluttyGoGoTop_SlinkyBlack_BS,0,,0,Corset
+10,10000010001011000010,38_EasyGirl_SluttyTop_PlaidGreen_BS,0,,0,Bra
+10,10000010001011000010,38_EasyGirl_SluttyTop_PlaidPurple_BS,0,,0,Bra
+10,10000010001011000010,38_EasyGirl_SluttyTop_PlaidRed_BS,0,,0,Bra
+10,11101010011011001010,38_EasyGirl_TankTop_DoItYourself_BS,0,,0,Tank Top
+10,11101010011011001010,38_EasyGirl_TankTop_EasyGirl_BS,0,,0,Tank Top
+10,11101010011011001010,38_EasyGirl_TankTop_FishNet_Black_BS,0,,0,Tank Top
+10,11101010011011001010,38_EasyGirl_TankTop_FishNet_White_BS,0,,0,Tank Top
+10,11101010011011001010,38_EasyGirl_TankTop_Leather_BS,0,,0,Tank Top
+10,11101010011011001010,38_EasyGirl_TankTop_MasonBlue_BS,0,,0,Tank Top
+10,11101010011011001010,38_EasyGirl_TankTop_PlaidPurple_BS,0,,0,Tank Top
+10,11101010011011001010,38_EasyGirl_TankTop_Plaid_WhiteRose_BS,0,,0,Tank Top
+10,11101010011011001010,38_EasyGirl_TankTop_RoseFlowered_BS,0,,0,Tank Top
+10,11101010011011001010,38_EasyGirl_TankTop_Royo1_BS,0,,0,Tank Top
+10,11101010011011001010,38_EasyGirl_TankTop_UnderBoob_DoItYourself_BS,0,,0,Crop Top (No Sleeves)
+10,11101010011011001010,38_EasyGirl_TankTop_UnderBoob_EasyGirl_BS,0,,0,Crop Top (No Sleeves)
+10,11101010011011001010,38_EasyGirl_TankTop_UnderBoob_FishNet_Pink_BS,0,,0,Crop Top (No Sleeves)
+10,11101010011011001010,38_EasyGirl_TankTop_UnderBoob_FishNet_White_BS,0,,0,Crop Top (No Sleeves)
+10,11101010011011001010,38_EasyGirl_TankTop_UnderBoob_KnittedRose_BS,0,,0,Crop Top (No Sleeves)
+10,11101010011011001010,38_EasyGirl_TankTop_UnderBoob_KnittedTurquoise_BS,0,,0,Crop Top (No Sleeves)
+10,11101010011011001010,38_EasyGirl_TankTop_UnderBoob_KnittedWhite_BS,0,,0,Crop Top (No Sleeves)
+10,11101010011011001010,38_EasyGirl_TankTop_UnderBoob_Leather_BS,0,,0,Crop Top (No Sleeves)
+10,11101010011011001010,38_EasyGirl_TankTop_UnderBoob_MasonBlue_BS,0,,0,Crop Top (No Sleeves)
+10,11101010011011001010,38_EasyGirl_TankTop_UnderBoob_PlaidPurple_BS,0,,0,Crop Top (No Sleeves)
+10,11101010011011001010,38_EasyGirl_TankTop_UnderBoob_SlinkyRed_BS,0,,0,Crop Top (No Sleeves)
+10,11101010011011001010,38_EasyGirl_TankTop_UnderBoob_SlinkyWhite_BS,0,,0,Crop Top (No Sleeves)
+10,11101010011011001010,38_EasyGirl_TankTop_UnderBoob_White_Buttoned_BS,0,,0,Crop Top (No Sleeves)
+10,11101010011011001010,38_EasyGirl_TankTop_WhiteDirty_BS,0,,0,Tank Top
+10,10000010011011000000,38_EasyGirl_Xazomns_KnittedCrop_LongSleeve_White_BS,0,,0,Crop Top (Sleeves)
+10,10000010011011000000,38_EasyGirl_Xazomns_MiniDress_Knitted_White_BS,0,,0,Minidress
+10,10000010001011000010,38_EasyGirl_Xazomns_SloppyTop_White_BS,0,,0,Bra
+10,10000010001011000000,38_EasyGirl_Xazomns_TankTop_UnderBoob_KnittedRose_BS,0,,0,Crop Top (No Sleeves)
+10,10000010011111001010,39_EasyGirl_ThighHighs_PlaidPurple_BS,0,,0,Leggings
+10,10000010011111001010,39_EasyGirl_ThighHighs_PlaidWhiteRose_BS,0,,0,Leggings
+10,10000010011111001010,39_EasyGirl_ThighHighs_StripedTurquoise_BS,0,,0,Leggings
+10,10000010011111001010,39_EasyGirl_ThighHighs_WoolWhite_BS,0,,0,Leggings
+10,10000010011111001010,39_EasyGirl_WoolSocks_White_BS,0,,0,Leggings
+10,10000010011111001010,39_EasyGirl_Xazomns_ThighHighs_Black_BS,0,,0,Leggings
+10,10000010011111001010,39_EasyGirl_Xazomns_ThighHighs_Red_BS,0,,0,Leggings
+10,10000010011111001010,39_EasyGirl_Xazomns_ThighHighs_White_BS,0,,0,Leggings
+10,00001000000000000000,40_EasyGirl_CourserPants_BS,0,,0,Long Pants (Underwear Visible)
+10,10000010001111001010,40_EasyGirl_HotPantsMicro_JeansBlue_BS,0,,0,Hotpants
+10,10000010001111001010,40_EasyGirl_HotPantsMicro_JeansBlue_Open_BS,0,,0,Hotpants
+10,10000010001111001010,40_EasyGirl_HotPantsMicro_JeansGrey_BS,0,,0,Hotpants
+10,10000010001111001010,40_EasyGirl_HotPantsMicro_Leather_BS,0,,0,Hotpants
+10,10000010001111001010,40_EasyGirl_HotPants_JeansBlue_BS,0,,0,Hotpants
+10,11100010011011001000,40_EasyGirl_JeansPantsBootcut_BS,0,,0,Long Pants (Underwear Visible)
+10,11100010011011001000,40_EasyGirl_JeansPants_Clean_Blue_BS,0,,0,Long Pants (Underwear Visible)
+10,11100010011011001000,40_EasyGirl_JeansPants_Ripped_Blue_BS,0,,0,Long Pants (Underwear Visible)
+10,11100010011011001000,40_EasyGirl_JeansPants_Ripped_Grey_BS,0,,0,Long Pants (Underwear Visible)
+10,11100010011011001000,40_EasyGirl_JeansPants_Ripped_White_BS,0,,0,Long Pants (Underwear Visible)
+10,11100010011011001000,40_EasyGirl_Kellogs_Pants_BS,0,,0,Long Pants (Underwear Visible)
+10,11100010011011001000,40_EasyGirl_LeatherPantsBootcut_Black_BS,0,,0,Long Pants (Underwear Visible)
+10,11100010011011001000,40_EasyGirl_LeatherPants_Black_BS,0,,0,Long Pants (Underwear Visible)
+10,11100010011011001000,40_EasyGirl_LeatherPants_LowCut_Black_BS,0,,0,Long Pants (Underwear Visible)
+10,10001010011011001000,40_EasyGirl_MiniSkirt_BlackLeather_BS,0,,0,Hotpants
+10,10001010001111001000,40_EasyGirl_PlaidSkirt_Red_BS,0,,0,Hotpants
+10,10001010001111001000,40_EasyGirl_Pleated_Skirt_BlackLeather_BS,0,,0,Hotpants
+10,10001010001111001000,40_EasyGirl_Pleated_Skirt_Green_BS,0,,0,Hotpants
+10,10001010001111001000,40_EasyGirl_Pleated_Skirt_Purple_BS,0,,0,Hotpants
+10,10001010001111001000,40_EasyGirl_Pleated_Skirt_Red_BS,0,,0,Hotpants
+10,00000010001010000000,40_EasyGirl_Striped_Pants_GreyBlack_BS,0,,0,Long Pants (Underwear Visible)
+10,00000010001010000000,40_EasyGirl_Striped_Pants_RedBlack_BS,0,,0,Long Pants (Underwear Visible)
+10,00010000000000010001,40_EasyGirl_SynthPants_BS,0,,0,Long Pants (Underwear Visible)
+10,00000010001010000000,40_EasyGirl_Xazomns_Pants_KnittedRose_BS,0,,0,Long Pants (Underwear Visible)
+10,00000010001010000000,40_EasyGirl_Xazomns_Pants_KnittedWhite_BS,0,,0,Long Pants (Underwear Visible)
+10,00001000000000000000,41_EasyGirl_CourserJacket_BS,0,,0,Jacket
+10,00001000000000000000,41_EasyGirl_CourserJacket_Red_BS,0,,0,Jacket
+10,11100111101010101000,41_EasyGirl_Kellogs_Jacket_BS,0,,0,Jacket
+10,11100111101010101000,41_EasyGirl_KnightLancerJacket_BS,0,,0,Jacket
+10,11100111101010101000,41_EasyGirl_Maxons_Coat_BS,0,,0,Trenchcoat
+10,10000010001111000010,41_EasyGirl_OpenBlouse_WhiteFlowered_BS,0,,0,Crop Top (No Sleeves)
+10,11100010001010101000,41_EasyGirl_Pipers_Coat_BS,0,,0,Trenchcoat
+10,00011000000000010001,41_EasyGirl_SynthJacket_BS,0,,0,Jacket
+10,00000010010000000000,41_EasyGirl_TuxedoJacket_BS,0,,0,Jacket (Long)
+10,00000110000010100000,41_EasyGirl_UmpireBustier_BS,0,,0,Crop Top (No Sleeves)
+10,00000110000010100000,41_EasyGirl_UmpirePad_BS,0,,0,T-Shirt (Long)
+10,11100110001010101000,41_EasyGirl_Vest_BlackLeather_VeryFarOpen_BS,0,,0,Vest
+10,11100110001010101000,41_EasyGirl_Vest_RoadLeather_BS,0,,0,Vest
+10,11100110001010101000,41_EasyGirl_Vest_RoadLeather_FarOpen_BS,0,,0,Vest
+10,11100110001010101000,41_EasyGirl_Vest_RoadLeather_Open_BS,0,,0,Vest
+10,11100110001010101000,41_EasyGirl_Vest_RoadLeather_VeryFarOpen_BS,0,,0,Vest
+10,11111111111111111111,42_EasyGirl_Bracelet_Metal_UpperArmL_BS,0,,0,Arm Band L
+10,11111111111111111111,43_EasyGirl_Bracelet_Leather_UpperArmR_BS,0,,0,Arm Band R
+10,00000010001100000010,45_EasyGirl_MasamuneThong_BlackLeather_BS,0,,0,Panties/Briefs
+10,00000010001100000010,45_EasyGirl_Thong_BlackLeather_BS,0,,0,Panties/Briefs
+10,00000010001100000010,45_EasyGirl_Thong_PlaidRed_BS,0,,0,Panties/Briefs
+10,00000010001100000010,45_EasyGirl_Thong_SlinkyRed_BS,0,,0,Panties/Briefs
+10,00000010001100000010,45_EasyGirl_Thong_SlinkyWhite_BS,0,,0,Panties/Briefs
+10,00000010001100000010,45_EasyGirl_Thong_WhiteLeather_BS,0,,0,Panties/Briefs
+10,11000010011011010101,47_EasyGirl_Glasses_Round_Black,0,,0,
+10,11000010011011010101,47_EasyGirl_Glasses_Round_Blue,0,,0,
+10,11000010011011010101,47_EasyGirl_Glasses_Round_Red,0,,0,
+10,10000010001111000000,48_EasyGirl_BikiniTop_BlackLeather_BS,0,,0,Bra
+10,10000010001111000000,48_EasyGirl_BikiniTop_BrownLeather_BS,0,,0,Bra
+10,10000010001111000000,48_EasyGirl_BikiniTop_PlaidRed_BS,0,,0,Bra
+10,10000010001111000000,48_EasyGirl_BikiniTop_SlinkyRed_BS,0,,0,Bra
+10,10000010001111000000,48_EasyGirl_BikiniTop_SlinkyWhite_BS,0,,0,Bra
+10,10000010001111000000,48_EasyGirl_BikiniTop_WhiteLeather_BS,0,,0,Bra
+10,10000010001111000000,48_EasyGirl_Masamune_BikiniTop_BS,0,,0,Bra
+10,10000010001111000000,48_EasyGirl_Masamune_BikiniTop_PlaidRed_BS,0,,0,Bra
+10,10000010001111000000,48_EasyGirl_Masamune_BikiniTop_SlinkyRed_BS,0,,0,Bra
+10,10000010001111000010,48_EasyGirl_Masamune_NeckHolder_BS,0,,0,Bra
+10,10000010001111000010,48_EasyGirl_Xazomns_NeckHolder_KnittedRose_BS,0,,0,Bra
+10,10000010001111000010,48_EasyGirl_Xazomns_NeckHolder_KnittedWhite_BS,0,,0,Bra
+10,10000010001111000010,50_EasyGirl_Collar_Leather_Spikes_n_Lez,0,,0,
+10,10000010001111000010,50_EasyGirl_Necklace_LeatherLaces_Lez,0,,0,
+10,01111111100010101000,54_EasyGirl_ThighBelt_L_44_BS,0,,0,Leg Holster/Straps L
+10,01111111100010101000,55_EasyGirl_GunBelt_R_44_BS,0,,0,Leg Holster/Straps R
+10,01111111100011101000,56_EasyGirl_Gloves_Fingerless_BrownLeather,0,,0,Gloves
+10,11100110011111111111,57_EasyGirl_Tattoo_TrampStamp1_BS,0,,0,Jewelry, Abdomen
+10,11100110011111111111,57_EasyGirl_Tattoo_TrampStamp2_BS,0,,0,Jewelry, Abdomen
+10,11100110011111111111,57_EasyGirl_Tattoo_TrampStamp3_BS,0,,0,Jewelry, Abdomen
+10,11000010011111001010,58_EasyGirl_NavelPiercing4_BS,0,,0,
+10,11000010011111001010,58_EasyGirl_Navel_and_HoodPiercing4_BS,0,,0,
+10,11000010011111001010,58_EasyGirl_Navel_Hood_NippleDiag_Piercing4_BS,0,,0,
+10,11000010011111001010,58_EasyGirl_Navel_Hood_NippleHoriz_Piercing4_BS,0,,0,
+10,11000010011111001010,58_EasyGirl_Navel_Hood_NippleVert_Piercing4_BS,0,,0,
+10,11000010011111001010,58_EasyGirl_Navel_Hood_Nipple_Piercing4_BS,0,,0,

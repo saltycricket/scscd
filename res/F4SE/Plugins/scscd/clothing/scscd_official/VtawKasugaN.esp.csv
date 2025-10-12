@@ -1,6 +1,2 @@
-Sex,Occupation,EditorID,MinLevel,Compatible OMODs,Is NSFW?
-10,01111100100000101000,Vtaw_Kasuga,0,,0
-10,01111100100000101000,Vtaw_KasugaOutfit,0,,0
-10,01111100100000101000,Vtaw_KasugaOutfitNoArms,0,,0
-10,01111100100000101000,Vtaw_KasugaOutfitV2,0,,0
-10,01111100100000101000,Vtaw_KasugaOutfitV3,0,,0
+Sex,Occupation,EditorID,MinLevel,Compatible OMODs,Is NSFW?,Clothing Type
+10,01111100100000101000,Vtaw_KasugaOutfitV4,0,,0,Jumpsuit (Arms)

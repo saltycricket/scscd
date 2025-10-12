@@ -1,4 +1,4 @@
-Sex,Occupation,EditorID,MinLevel,Compatible OMODs,Is NSFW?
-11,00000000000000000010,bip_armor_raghood,0,,0
-11,00000000000000000010,bip_armor_simpleBallGag,0,,0
-11,00000000000000000010,bip_armor_simpleBlindfold,0,,0
+Sex,Occupation,EditorID,MinLevel,Compatible OMODs,Is NSFW?,Clothing Type
+11,00000000000000000010,bip_armor_raghood,0,,0,Hood
+11,00000000000000000010,bip_armor_simpleBallGag,0,,0,Gag
+11,00000000000000000010,bip_armor_simpleBlindfold,0,,0,

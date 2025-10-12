@@ -1,11 +1,11 @@
-Sex,Occupation,EditorID,MinLevel,Compatible OMODs,Is NSFW?
-11,00001001000000000000,armo_NanoAccesories,65,,0
-11,00001001000000000000,armo_NanoBackpack,65,,0
-11,00001001000000000000,armo_NanoGloves,65,,0
-11,00001001000000000000,armo_NanoJetPack,65,,0
-11,00001001000000000000,armo_NanoJetPackSwords,65,,0
-11,00001001000000000000,armo_NanoMask,65,,0
-11,00001001000000000000,armo_NanoMask_Up,65,,0
-11,00001001000000000000,armo_NanoSuit,65,omod_NanoSuit_Color_Standard;omod_NanoSuit_Color_Black;omod_NanoSuit_Color_Green;omod_NanoSuit_Color_Red;omod_NanoSuit_Color_White;omod_NanoSuit_Color_Blue;omod_NanoSuit_Color_Orange,0
-11,00001001000000000000,armo_NanoSuit_Armored,65,omod_NanoSuit_Color_Standard;omod_NanoSuit_Color_Black;omod_NanoSuit_Color_Green;omod_NanoSuit_Color_Red;omod_NanoSuit_Color_White;omod_NanoSuit_Color_Blue;omod_NanoSuit_Color_Orange,0
-11,00001001000000000000,armo_NanoSwords,65,,0
+Sex,Occupation,EditorID,MinLevel,Compatible OMODs,Is NSFW?,Clothing Type
+11,00001001000000000000,armo_NanoAccesories,65,,0,Leg Holster/Straps LR + Wrist Strap R
+11,00001001000000000000,armo_NanoBackpack,65,,0,Backpack
+11,00001001000000000000,armo_NanoGloves,65,,0,Gloves
+11,00001001000000000000,armo_NanoJetPack,65,,0,Backpack
+11,00001001000000000000,armo_NanoJetPackSwords,65,,0,Backpack
+11,00001001000000000000,armo_NanoMask,65,,0,Face Mask
+11,00001001000000000000,armo_NanoMask_Up,65,,0,Face Mask (Up)
+11,00001001000000000000,armo_NanoSuit,65,omod_NanoSuit_Color_Standard;omod_NanoSuit_Color_Black;omod_NanoSuit_Color_Green;omod_NanoSuit_Color_Red;omod_NanoSuit_Color_White;omod_NanoSuit_Color_Blue;omod_NanoSuit_Color_Orange,0,Bodysuit
+11,00001001000000000000,armo_NanoSuit_Armored,65,omod_NanoSuit_Color_Standard;omod_NanoSuit_Color_Black;omod_NanoSuit_Color_Green;omod_NanoSuit_Color_Red;omod_NanoSuit_Color_White;omod_NanoSuit_Color_Blue;omod_NanoSuit_Color_Orange,0,Bodysuit
+11,00001001000000000000,armo_NanoSwords,65,,0,Backpack

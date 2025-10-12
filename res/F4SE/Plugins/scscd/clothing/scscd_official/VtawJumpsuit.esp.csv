@@ -1,3 +1,8 @@
-Sex,Occupation,EditorID,MinLevel,Compatible OMODs,Is NSFW?
-10,10000010111011001100,Vtaw_boots4,0,,0
-10,10000010111011001100,Vtaw_boots4,0,,0
+Sex,Occupation,EditorID,MinLevel,Compatible OMODs,Is NSFW?,Clothing Type
+10,10000010111011001100,Vtaw_boots4,0,,0,
+10,10000010111011001100,Vtaw_boots4,0,,0,
+10,00000000000000000100,Vtaw_jumpsuit,0,OMOD_VtawjumpsuitBase,0,Jumpsuit (No Arms)
+10,01100100000000000000,Vtaw_jumpsuit,0,OMOD_Vtawjumpsuitmetal;OMOD_Vtawjumpsuitblack;OMOD_Vtawjumpsuitcamo,0,Jumpsuit (No Arms)
+10,10000010011001000000,Vtaw_jumpsuit,0,OMOD_Vtawjumpsuitmetal;OMOD_Vtawjumpsuitpink;OMOD_Vtawjumpsuitred;OMOD_Vtawjumpsuitblack;OMOD_Vtawjumpsuityellow;OMOD_Vtawjumpsuitleather,0,Jumpsuit (No Arms)
+10,00011000000000000000,Vtaw_jumpsuit,0,OMOD_VtawjumpsuitScifi;OMOD_Vtawjumpsuitywhite,0,Jumpsuit (No Arms)
+10,00000000000000010001,Vtaw_jumpsuit,0,OMOD_Vtawjumpsuitywhite,0,Jumpsuit (No Arms)
