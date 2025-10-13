@@ -396,6 +396,78 @@ std::vector<RE::TESObjectARMO*> ArmorIndex::sample(RE::Actor* a, SamplerConfig& 
 	return wardrobe;
 }
 
+// Utility: is TESForm a BGSMaterialSwap?
+static inline RE::BGSMaterialSwap* AsMSWP(RE::TESForm* f) {
+	return f ? f->As<RE::BGSMaterialSwap>() : nullptr;
+}
+
+// Utility: lookup by raw FormID when you only have an ID (e.g., TYPE::kPair -> FormValuePair.formID)
+template <class T = RE::TESForm>
+static inline T* LookupByID(RE::TESFormID id) {
+	return id ? RE::TESForm::GetFormByID(id)->As<T>() : nullptr;
+}
+
+static bool validateMSWP(RE::BGSMaterialSwap *swap) {
+	bool valid = true;
+	logger::trace(std::format("  validating mswp: {:#010x}", swap->GetFormID()));
+	SwapPreflightReport report = PreflightValidateBGSMTextures(swap);
+	if (report.missingMaterials.size() > 0 || report.missingTextures.size() > 0) {
+		for (auto& filename : report.okMaterials) {
+			logger::trace(std::format("    -> ok! material {}", filename));
+		}
+		for (auto& filename : report.missingMaterials) {
+			logger::error(std::format("    -> material {} could not be found", filename));
+			valid = false;
+		}
+		for (auto& filename : report.okTextures) {
+			logger::trace(std::format("    -> ok! texture {}", filename));
+		}
+		for (auto& filename : report.missingTextures) {
+			logger::error(std::format("    -> texture {} could not be found", filename));
+			valid = false;
+		}
+	}
+	return valid;
+}
+
+// Minimal stand-in for the buffer header that BGSMod::Container (BSTDataBuffer<2>) uses.
+// If your CommonLib already defines BSTDataBuffer, prefer that instead.
+struct RawDataBuffer
+{
+	void* data;      // -> points to BGSMod::Container::Data
+	std::uint32_t size;      // bytes used
+	std::uint32_t capacity;  // bytes allocated
+};
+
+static std::span<const RE::BGSMod::Property::Mod>
+TryGetPropertySpan(const RE::BGSMod::Container* cont)
+{
+	// Probe both possible block IDs (0 and 1). Return the one that "looks like" Property::Mod[].
+	std::array<std::span<const RE::BGSMod::Property::Mod>, 2> cands = {
+		cont->GetBuffer<RE::BGSMod::Property::Mod>(0),
+		cont->GetBuffer<RE::BGSMod::Property::Mod>(1),
+	};
+
+	auto looks_valid = [](std::span<const RE::BGSMod::Property::Mod> s) -> bool {
+		if (s.empty()) return false;
+		// Sanity-check a few entries: type must be within enum range.
+		std::size_t checks = std::min<std::size_t>(s.size(), 4);
+		for (std::size_t i = 0; i < checks; ++i) {
+			const auto t = s[i].type;
+			using T = RE::BGSMod::Property::TYPE;
+			if (!(t == T::kInt || t == T::kFloat || t == T::kBool || t == T::kString ||
+				t == T::kForm || t == T::kEnum || t == T::kPair)) {
+				return false;
+			}
+		}
+		return true;
+	};
+
+	if (looks_valid(cands[0])) return cands[0];
+	if (looks_valid(cands[1])) return cands[1];
+	return {}; // none found
+}
+
 bool ArmorIndex::registerOmods(std::vector<RE::TESObjectARMO*>& armors, std::vector<RE::BGSMod::Attachment::Mod*>& omods, bool nsfw) {
 	logger::trace("> ArmorIndex::registerOmods");
 
@@ -405,28 +477,60 @@ bool ArmorIndex::registerOmods(std::vector<RE::TESObjectARMO*>& armors, std::vec
 	 available. If we do this we won't have any purple outfits at runtime if someone's got an ESP but missing the
 	 textures.
 	*/
-	bool valid = true;
+	std::vector<RE::BGSMod::Attachment::Mod*> validOmods;
 	for (RE::BGSMod::Attachment::Mod* mod : omods) {
+		bool valid = true;
+
+		// legacy - matswap specified directly on omod; uncommon in FO4 but should still be supported
 		if (mod->swapForm) {
-			SwapPreflightReport report = PreflightValidateBGSMTextures(mod->swapForm);
-			if (report.missingMaterials.size() > 0 || report.missingTextures.size() > 0) {
-				logger::error(std::format("skipped: omod {:#010x} failed validation:", mod->GetFormID()));
-				for (auto& filename : report.missingMaterials) {
-					logger::error(std::format("    -> material {} could not be found", filename));
-					valid = false;
-				}
-				for (auto& filename : report.missingTextures) {
-					logger::error(std::format("    -> texture {} could not be found", filename));
-					valid = false;
-				}
+			if (!validateMSWP(mod->swapForm)) {
+				logger::error(std::format("skipped: omod {:#010x} failed validation (1)", mod->GetFormID()));
+				valid = false;
 			}
 		}
+
+		// FO4 'modern' - matswap specified as omod property. mod->GetData() isn't working in our revision,
+		// so we'll try an alternative way to gain access.
+		const auto props = TryGetPropertySpan(mod);
+		for (const auto& p : props) {
+			switch (p.type) {
+				case RE::BGSMod::Property::TYPE::kForm: {
+					if (auto* f = p.data.form) {
+						if (auto* mswp = f->As<RE::BGSMaterialSwap>()) {
+							if (!validateMSWP(mswp)) {
+								logger::error(std::format("skipped: omod {:#010x}: mswp {:#010x} failed validation (2)", mod->GetFormID(), mswp->GetFormID()));
+								valid = false;
+							}
+						}
+					}
+					break;
+				}
+				case RE::BGSMod::Property::TYPE::kPair: {
+					// Some mods encode (form,value) in a pair. Resolve the formID.
+					const auto formID = p.data.fv.formID;
+					if (auto* f = RE::TESForm::GetFormByID(formID)) {
+						if (auto* mswp = f->As<RE::BGSMaterialSwap>()) {
+							if (!validateMSWP(mswp)) {
+								logger::error(std::format("skipped: omod {:#010x}: mswp {:#010x} failed validation (3)", mod->GetFormID(), mswp->GetFormID()));
+								valid = false;
+							}
+						}
+					}
+					break;
+				}
+				default:
+					// kEnum/kInt/kFloat/kBool/kString don't carry forms; ignore for MSWP collection.
+					break;
+			}
+		}
+
+		if (valid) validOmods.push_back(mod);
 	}
-	if (!valid) return false;
+	logger::trace(std::format("{} of {} omods survived validation", validOmods.size(), omods.size()));
 
 	for (RE::TESObjectARMO* armor : armors) {
 		uint32_t armorID = armor->GetFormID();
-		for (RE::BGSMod::Attachment::Mod* omod : omods) {
+		for (RE::BGSMod::Attachment::Mod* omod : validOmods) {
 			uint32_t omodID = omod->GetFormID();
 			std::unordered_set<uint32_t>& index = (nsfw ? nsfwArmorOmods[armorID] : sfwArmorOmods[armorID]);
 			// don't register an omod more than once, else we'll end up weighting that

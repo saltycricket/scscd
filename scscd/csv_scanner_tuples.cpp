@@ -19,7 +19,8 @@ void scan_tuples_csv(std::filesystem::path basedir, bool nsfw, ArmorIndex& index
         std::string plugin_file = file_basename(filename);
         remove_suffix_icase(plugin_file, ".csv");
         // check if relevant plugin is loaded or not
-        if (!FindTESFileByName(plugin_file)) {
+        RE::TESFile* tesFile = FindTESFileByName(plugin_file);
+        if (!tesFile) {
             logger::debug(std::format("plugin {} not loaded; skipping", plugin_file));
             continue;
         }

@@ -248,12 +248,14 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="occupation_index.cpp" />
     <ClCompile Include="sampler_config.cpp" />
+    <ClCompile Include="texture_index.cpp" />
     <ClCompile Include="tuple.cpp" />
     <ClCompile Include="version.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="actor_load_watcher.h" />
     <ClInclude Include="armor_equip_random.h" />
+    <ClInclude Include="benchmark.h" />
     <ClInclude Include="csv_scanner.h" />
     <ClInclude Include="edid_similarity.h" />
     <ClInclude Include="gamedir.h" />
@@ -263,6 +265,7 @@
     <ClInclude Include="omod_index.h" />
     <ClInclude Include="race.h" />
     <ClInclude Include="scscd.h" />
+    <ClInclude Include="texture_index.h" />
     <ClInclude Include="tuple.h" />
     <ClInclude Include="armor_index.h" />
     <ClInclude Include="_fallout.h" />

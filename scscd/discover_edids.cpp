@@ -248,7 +248,7 @@ void ArmorIndex::indexAllFormsByTypeAndEdid() {
 
     auto fn = [&count](RE::ENUM_FORM_ID formtype, const std::string& edid, uint32_t formid) {
         if (!FORMS_BY_EDID_BY_TYPE[formtype].contains(edid)) {
-            logger::trace(std::format("saw form {:#010x} with type {:#06x} and edid {}", formid, (uint32_t) formtype, edid));
+            //logger::trace(std::format("saw form {:#010x} with type {:#06x} and edid {}", formid, (uint32_t) formtype, edid));
             FORMS_BY_EDID_BY_TYPE[formtype][edid] = formid;
             count++;
         }

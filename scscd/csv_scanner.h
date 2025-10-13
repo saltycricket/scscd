@@ -15,12 +15,31 @@
 #include <filesystem>
 #include <utility>
 
-static std::vector<std::string> scandir(std::filesystem::path dir, std::string ext) {
+static bool iequals(std::string_view a, std::string_view b) {
+    if (a.size() != b.size()) return false;
+    for (size_t i = 0; i < a.size(); ++i) {
+        unsigned char ca = static_cast<unsigned char>(a[i]);
+        unsigned char cb = static_cast<unsigned char>(b[i]);
+        if ((ca | 32) != (cb | 32)) return false;
+    }
+    return true;
+}
+
+static std::vector<std::string> scandir(std::filesystem::path dir, std::string ext, bool recursive = true) {
     std::vector<std::string> matches;
     try {
-        for (auto const& entry : std::filesystem::recursive_directory_iterator(dir)) {
-            if (entry.is_regular_file() && entry.path().extension() == ".csv") {
-                matches.push_back(entry.path().string());
+        if (recursive) {
+            for (auto const& entry : std::filesystem::recursive_directory_iterator(dir)) {
+                if (entry.is_regular_file() && iequals(entry.path().extension().string(), ext)) {
+                    matches.push_back(entry.path().string());
+                }
+            }
+        }
+        else {
+            for (auto const& entry : std::filesystem::directory_iterator(dir)) {
+                if (entry.is_regular_file() && iequals(entry.path().extension().string(), ext)) {
+                    matches.push_back(entry.path().string());
+                }
             }
         }
     }
@@ -125,16 +144,6 @@ static uint32_t MakeRuntimeFormID(const RE::TESFile* file, uint32_t csvIdLocalOr
         const std::uint8_t idx = file ? file->GetCompileIndex() : 0xFF; // 0xFF = invalid
         return (static_cast<uint32_t>(idx) << 24) | (localId & 0x00FFFFFFu);
     }
-}
-
-static bool iequals(std::string_view a, std::string_view b) {
-    if (a.size() != b.size()) return false;
-    for (size_t i = 0; i < a.size(); ++i) {
-        unsigned char ca = static_cast<unsigned char>(a[i]);
-        unsigned char cb = static_cast<unsigned char>(b[i]);
-        if ((ca | 32) != (cb | 32)) return false;
-    }
-    return true;
 }
 
 static bool istartswith(std::string_view a, std::string_view b) {

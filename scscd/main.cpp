@@ -1,5 +1,6 @@
 #include "scscd.h"
 #include "csv_scanner.h"
+#include "benchmark.h"
 
 #include "F4SE/API.h"
 #include "F4SE/Interfaces.h"
@@ -72,12 +73,13 @@ extern "C" __declspec(dllexport) bool F4SEPlugin_Load(const F4SE::LoadInterface*
 					// because we don't know if the game is might be loading plugins in a separate
 					// thread, and we must not risk contesting an open file.
 					ArmorIndex::indexAllFormsByTypeAndEdid();
-					logger::info("SCSCD scanning CSV files");
-					std::unordered_map<std::string, Taxon> taxonomy;
-					scan_taxonomies_csv(DataPath("F4SE\\Plugins\\scscd\\taxonomy"), taxonomy);
-					scan_occupations_csv(DataPath("F4SE\\Plugins\\scscd\\occupation"), OCCUPATIONS);
-					scan_tuples_csv(DataPath("F4SE\\Plugins\\scscd\\clothing"), false, ARMORS, taxonomy);
-					scan_exclusions_csv(DataPath("F4SE\\Plugins\\scscd\\exclusions"), ActorLoadWatcher::exclusionList);
+					benchmark("SCSCD scanning CSV files", []{
+						std::unordered_map<std::string, Taxon> taxonomy;
+						scan_taxonomies_csv(DataPath("F4SE\\Plugins\\scscd\\taxonomy"), taxonomy);
+						scan_occupations_csv(DataPath("F4SE\\Plugins\\scscd\\occupation"), OCCUPATIONS);
+						scan_tuples_csv(DataPath("F4SE\\Plugins\\scscd\\clothing"), false, ARMORS, taxonomy);
+						scan_exclusions_csv(DataPath("F4SE\\Plugins\\scscd\\exclusions"), ActorLoadWatcher::exclusionList);
+					});
 				}
 				// Register listener here so we can pre-empt any actors which are loaded
 				// as part of savegame restore.

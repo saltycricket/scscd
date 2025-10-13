@@ -1,4 +1,5 @@
 #include "scscd.h"
+#include "texture_index.h"
 #include <string>
 #include <vector>
 #include <unordered_set>
@@ -14,15 +15,18 @@ struct SwapPreflightReport
 
 namespace detail
 {
+    // BSResourceNiBinaryStream is only working for 'Main' BA2s, not for 'Textures' BA2s.
+    // So we have to index the latter ourselves to complete validation.
+    static TextureIndex textureIndex;
+
     // Open and test via operator bool()
     inline bool ResourceExists(const char* path)
     {
         if (!path || !*path) return false;
 
+        // Handles loose files and general BA2s. Does not handle texture BA2s.
         RE::BSResourceNiBinaryStream s(path);
-        // Optionally: fall back to a rescan-aware open if you need it:
-        // if (!s) { std::unique_ptr<RE::BSResourceNiBinaryStream> rs(RE::BSResourceNiBinaryStream::BinaryStreamWithRescan(path)); return rs && static_cast<bool>(*rs); }
-        return static_cast<bool>(s);
+        return static_cast<bool>(s) || /* handle texture BA2s -> */textureIndex.contains(path);
     }
 
     // Read whole file through NiBinaryStream; no std::filesystem, works for BA2.
@@ -135,7 +139,8 @@ inline SwapPreflightReport PreflightValidateBGSMTextures(const RE::BGSMaterialSw
 
         // 1) Can we open the BGSM/BGEM at all?
         std::vector<std::uint8_t> bytes;
-        if (!ReadWholeFile(matPath, bytes)) {
+        // be lenient: "materials" prefix may or may not be present.
+        if (!ReadWholeFile(matPath, bytes) && !ReadWholeFile(std::format("materials/{}", matPath).c_str(), bytes)) {
             report.missingMaterials.emplace_back(matPath);
             continue;
         }
@@ -150,7 +155,8 @@ inline SwapPreflightReport PreflightValidateBGSMTextures(const RE::BGSMaterialSw
 
         // 3) Probe each .dds via resource loader
         for (auto& tex : ddsPaths) {
-            if (ResourceExists(tex.c_str())) {
+            // be lenient: "textures" prefix may or may not be present.
+            if (ResourceExists(tex.c_str()) || ResourceExists(std::format("textures/{}", tex).c_str())) {
                 report.okTextures.emplace_back(tex);
             }
             else {
