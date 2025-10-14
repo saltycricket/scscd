@@ -285,14 +285,15 @@ std::vector<RE::TESObjectARMO*> ArmorIndex::sample(RE::Actor* a, SamplerConfig& 
 	uint32_t mostRecentTupleID = 0xFFFFFFFF; // no choice to start
 	std::iota(std::begin(slots), std::end(slots), 0);
 	std::shuffle(std::begin(slots), std::end(slots), std::default_random_engine{});
+	const uint8_t * const & fillSlotChance = (sex == MALE ? config.fillSlotChanceM : config.fillSlotChanceF);
 	for (int slot : slots) {
 		logger::trace(std::format("evaluating slot {}", slot));
 		if (!(takenSlots & (uint32_t)(1 << slot))) {
 			logger::trace(std::format("slot is available"));
-			uint8_t skipSlot = (uint8_t)(rand() % 100);
-			if (skipSlot < config.skipSlotChance[slot]) {
+			uint8_t fillSlot = (uint8_t)(rand() % 100);
+			if (fillSlot >= fillSlotChance[slot]) {
 				// we won't fill in this slot.
-				logger::trace(std::format("slot {} skipped - random chance {} < {}", slot, skipSlot, config.skipSlotChance[slot]));
+				logger::trace(std::format("slot {} skipped - random chance {} >= {}", slot, fillSlot, fillSlotChance[slot]));
 				continue;
 			}
 
@@ -401,12 +402,6 @@ static inline RE::BGSMaterialSwap* AsMSWP(RE::TESForm* f) {
 	return f ? f->As<RE::BGSMaterialSwap>() : nullptr;
 }
 
-// Utility: lookup by raw FormID when you only have an ID (e.g., TYPE::kPair -> FormValuePair.formID)
-template <class T = RE::TESForm>
-static inline T* LookupByID(RE::TESFormID id) {
-	return id ? RE::TESForm::GetFormByID(id)->As<T>() : nullptr;
-}
-
 static bool validateMSWP(RE::BGSMaterialSwap *swap) {
 	bool valid = true;
 	logger::trace(std::format("  validating mswp: {:#010x}", swap->GetFormID()));
@@ -429,15 +424,6 @@ static bool validateMSWP(RE::BGSMaterialSwap *swap) {
 	}
 	return valid;
 }
-
-// Minimal stand-in for the buffer header that BGSMod::Container (BSTDataBuffer<2>) uses.
-// If your CommonLib already defines BSTDataBuffer, prefer that instead.
-struct RawDataBuffer
-{
-	void* data;      // -> points to BGSMod::Container::Data
-	std::uint32_t size;      // bytes used
-	std::uint32_t capacity;  // bytes allocated
-};
 
 static std::span<const RE::BGSMod::Property::Mod>
 TryGetPropertySpan(const RE::BGSMod::Container* cont)

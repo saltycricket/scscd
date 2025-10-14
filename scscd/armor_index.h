@@ -153,7 +153,8 @@ public:
 		 * This is mainly intended to influence accessories like hats,
 		 * necklaces, etc.
 		 */
-		uint8_t skipSlotChance[32]{ 0 };
+		uint8_t fillSlotChanceM[32]{ 0 };
+		uint8_t fillSlotChanceF[32]{ 0 };
 
 		/*
 		 * Should NSFW items be considered?
