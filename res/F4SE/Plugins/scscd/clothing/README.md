@@ -95,8 +95,8 @@ If you have any difficulty, please:
 CSV files are laid out like so:
 
 ```
-Sex Bitmap , Occupation Bitmap , ID; ID; ...     , MinLevel , OMODs , NSFW
-11         , 101000001000      , 123ABC ; ABC123 , 10       ,       , true
+Sex Bitmap , Occupation Bitmap , ID; ID; ...     , MinLevel , OMODs , NSFW , Clothing Type
+11         , 101000001000      , 123ABC ; ABC123 , 10       ,       , true , Bra
 ```
 
 Sex Bitmap - Defines which sexes can wear the item. Must be exactly two
@@ -177,6 +177,18 @@ NSFW - Flags whether the clothing in question should be considered NSFW. If
          flapping in the breeze if she chooses it, and thus it becomes NSFW.
        * This way people only get NPCs walking around half-naked if they opted
          into that.
+
+Clothing Type - Optionally, specifies a clothing type which appears in ANY
+                CSV in the the `taxonomy` directory. Should NOT specify more
+                than one. If specified, the Clothing Type will be used to
+                OVERRIDE the mod author's original slot bindings. This should
+                greatly improve compatibility with other clothing mods
+                supported by SCSCD, but at the risk of violating the mod
+                author's original intention (e.g. creating incompatibilities
+                where the mod author intended items to fit together). In
+                general, it is good practice to specify a Clothing Type. If
+                you do not, expect clipping as the equip (ARMO) or suppression
+                (ARMA) slots may not be compatible.
 
 * What about race? - Racial compatibility is defined pretty well within the
   mod plugin .ESP file itself, so SCSCD is able to look that up dynamically
