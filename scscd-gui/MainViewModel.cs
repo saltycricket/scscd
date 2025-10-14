@@ -787,7 +787,7 @@ namespace scscd_gui.wpf
                         tags.minLevel.ToString(),
                         omodsList,
                         tags.Get("nsfw") ? "1" : "0",
-                        tags.clothingType == null ? "" : tags.clothingType
+                        tags.clothingType?.Contains(',') == true ? $"\"{tags.clothingType}\"" : tags.clothingType ?? ""
                     };
 
                     sw.WriteLine(string.Join(",", row));
