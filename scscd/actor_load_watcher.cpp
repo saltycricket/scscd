@@ -238,7 +238,7 @@ void ActorLoadWatcher::OnActorLoaded(RE::Actor* actor)
                 );
             }
             if (itemMissing) {
-                logger::warn(std::format("armor item {:#010x} was missing, assuming the player does not want us to equip this actor", armors[i].armor->GetFormID()));
+                logger::warn(std::format("armor item {:#010x} was missing, assuming the player does not want us to equip actor {:#010x} (npc={:#010x})", armors[i].armor->GetFormID(), actor->GetFormID(), npc->GetFormID()));
                 return;
             }
         }
