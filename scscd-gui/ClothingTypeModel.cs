@@ -101,7 +101,8 @@ public readonly record struct Slot(int slotIndex, string name);
 public static class SlotCatalog {
     public static Slot[] All = {
         new(/* BODY */      33, "Boots (vanilla BODY)"),
-        new(/* Hair Top  */ 30, "Head"),
+        new(/* Scalp     */ 52, "Scalp"),
+        new(/* Hair Top  */ 30, "Hair (Top)"),
         new(/* Hair Long */ 31, "Hair (Long)"),
         new(/* Headband  */ 46, "Facegear"),
         new(/* Eyes      */ 47, "Eyes"),
@@ -124,7 +125,6 @@ public static class SlotCatalog {
         new(/* [U] R Leg */ 40, "R Leg Underwear"),
         new(/* [A] R Leg */ 45, "R Leg Outerwear"),
         new(/* Beard     */ 48, "Backpack/Rig"),
-        //new(/* Scalp     */ 52, "Cloak/Cape/Poncho"),
         new(/* Mouth     */ 49, "Hip/Drop-Leg Rig"),
         new(/* Unnamed   */ 58, "Body Jewelry"),
     };
