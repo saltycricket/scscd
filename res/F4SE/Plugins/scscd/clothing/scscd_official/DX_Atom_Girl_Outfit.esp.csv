@@ -6,9 +6,9 @@ Sex,Occupation,EditorID,MinLevel,Compatible OMODs,Is NSFW?,Clothing Type
 10,10000010000110001010,DX_Gloves,0,,0,Gloves
 10,10000010000110001000,DX_HuntingRifle,0,,0,Cloak/Cape
 10,10000010000110001000,DX_Nukabear,0,,0,Backpack
-10,10000010000110001010,DX_Outfit,0,,0,Boots, Miniskirt & Bra w/Backpack
-10,10000010000110001010,DX_Outfit,0,,0,Boots, Miniskirt & Bra w/Backpack
-10,10000010000110001010,DX_OutfitTorn,0,,0,Boots, Miniskirt & Bra w/Backpack
+10,10000010000110001010,DX_Outfit,0,,0,"Boots, Miniskirt & Bra w/Backpack"
+10,10000010000110001010,DX_Outfit,0,,0,"Boots, Miniskirt & Bra w/Backpack"
+10,10000010000110001010,DX_OutfitTorn,0,,0,"Boots, Miniskirt & Bra w/Backpack"
 10,10000010000110001010,DX_Panty,0,,0,Panties/Briefs
 10,10000010000110001010,DX_Skirt,0,,0,Miniskirt
 10,10000010000110001010,DX_SkirtTorn,0,,0,Hotpants

@@ -1,7 +1,7 @@
 Sex,Occupation,EditorID,MinLevel,Compatible OMODs,Is NSFW?,Clothing Type
-01,00010000000000000000,Femshepping_ArmorBrawlerDrifter,0,,0,Full Boots, Top, Arms & Leggings
-01,10000010011011100000,Femshepping_ArmorBrotherhoodDrifter,0,,0,Full Boots, Top, Arms & Leggings
-01,10000010011011100000,Femshepping_ArmorCourierDrifter,0,,0,Full Boots, Top, Arms & Leggings
-01,10000010011011100000,Femshepping_ArmorDustyDrifter,0,,0,Full Boots, Top, Arms & Leggings
-01,10000010011011100000,Femshepping_ArmorFixerDrifter,0,,0,Full Boots, Top, Arms & Leggings
-01,00000001100000000000,Femshepping_ArmorInstituteDrifter,0,,0,Full Boots, Top, Arms & Leggings
+01,00010000000000000000,Femshepping_ArmorBrawlerDrifter,0,,0,"Full Boots, Top, Arms & Leggings"
+01,10000010011011100000,Femshepping_ArmorBrotherhoodDrifter,0,,0,"Full Boots, Top, Arms & Leggings"
+01,10000010011011100000,Femshepping_ArmorCourierDrifter,0,,0,"Full Boots, Top, Arms & Leggings"
+01,10000010011011100000,Femshepping_ArmorDustyDrifter,0,,0,"Full Boots, Top, Arms & Leggings"
+01,10000010011011100000,Femshepping_ArmorFixerDrifter,0,,0,"Full Boots, Top, Arms & Leggings"
+01,00000001100000000000,Femshepping_ArmorInstituteDrifter,0,,0,"Full Boots, Top, Arms & Leggings"
