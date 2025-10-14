@@ -1,4 +1,3 @@
-
 {
   "modName": "SC_Smart_Clothing_Distributor",
   "displayName": "Wasteland Outfitter",
@@ -12,7 +11,7 @@
     },
     {
       "type": "spacer",
-      "numLines": 3
+      "numLines": 2
     },
     {
       "text": "<p align='center'><font size='24'>aka</p></font>",
@@ -21,7 +20,7 @@
     },
     {
       "type": "spacer",
-      "numLines": 3
+      "numLines": 2
     },
     {
       "text": "<p align='center'><font size='48'><b>SC Smart Clothing Distributor (SCSCD)</b></p></font>",
@@ -32,6 +31,10 @@
       "text": "<p align='center'><font size='24'>Version 1.0</p></font>",
       "type": "text",
       "html": true
+    },
+    {
+      "type": "spacer",
+      "numLines": 1
     },
     {
       "text": "Debug Log Enabled",
@@ -73,15 +76,10 @@
         }, {
           "type": "text",
           "text": "Note that even with a value of 100 if a viable outfit can't be produced based on other rules or not enough clothings, NPCs can still end up with an unaltered outfit."
-        }, {
-          "type": "text",
-          "text": "Default is 75%, meaning approximately 3 out of every 4 NPCs will have their outfits modified."
         }, { 
           "type": "spacer",
           "numLines": 1
-        },
-
-        {
+        }, {
           "text": "Proximity Bias",
           "type": "slider",
           "help": "Lower means outfits will be more random. Higher means more similarity between items.",
@@ -89,25 +87,12 @@
           "id": "fProximityBias:Settings"
         }, {
           "type": "text",
-          "text": "Amount by which to bias searches towards matching armor pieces. If zero, items will be chosen completely at random. Other values:"
-        }, {
-          "type": "text",
-          "text": "0.0-0.5: Very gentle bias. Almost uniform, small nudge toward better matches."
-        }, {
-          "type": "text",
-          "text": "2.0 (default): Stronger clustering. 'Set' pieces will dominate, but not to the exclusion of variety."
-        }, {
-          "type": "text",
-          "text": "3.0-5.0: Very strong bias. The algorithm behaves almost like 'pick' the best match every time with a little noise left."
-        }, {
-          "type": "text",
-          "text": "5.0: Practically deterministic. Unless two items tie in similarity, the same partner will be picked every time."
+          "html": true,
+          "text": "<p>Amount by which to bias searches towards matching armor pieces. If zero, items will be chosen completely at random. Other values:</p><ul><li>0.0-0.5: Very gentle bias. Almost uniform, small nudge toward better matches.</li><li>2.0 (default): Stronger clustering. 'Set' pieces will dominate, but not to the exclusion of variety.</li><li>3.0-5.0: Very strong bias. The algorithm attempts to choose the best match every time with a little noise left.</li><li>5.0: Practically deterministic. Unless two items tie in similarity, the same partner will be picked every time.</li></ul>"
         }, { 
           "type": "spacer",
           "numLines": 1
-        },
-
-        {
+        }, {
           "text": "Allow NSFW?",
           "type": "switcher",
           "help": "Should explicitly NSFW items be equipped by NPCs?",
@@ -115,311 +100,621 @@
           "valueOptions": { "sourceType": "ModSettingBool" }
         }, {
           "type": "text",
-          "text": "Slots 36 and 39 are usually used as underwear slots. Some mods provide 'clothing' in these slots that intentionally expose the character (that is -- mods that are Actually NSFW). Thus, allowing those items to be equipped could produce rather 'immodest' characters."
+          "text": "Slots 36 and 55 are usually used as underwear slots. Some mods provide 'clothing' in these slots that intentionally expose the character (that is -- mods that are Actually NSFW). Thus, allowing those items to be equipped could produce rather 'immodest' characters."
         }, {
           "type": "text",
           "text": "If you'd like to use Actually NSFW clothing mods, then set this to true. Otherwise leave it at false which will not include those kinds of items in the generated outfits."
         }, { 
           "type": "spacer",
           "numLines": 1
-        },
-
-        {
+        }, {
           "text": "Allow 'Nudity'?",
           "type": "switcher",
-          "help": "Should an outfit be rejected if slots 36 and 39 cannot be filled?",
+          "help": "Should an outfit be rejected if slots 36 and 55 cannot be filled?",
           "id": "bAllowNudity:Settings",
           "valueOptions": { "sourceType": "ModSettingBool" }
         }, {
           "type": "text",
-          "text": "If true, it is possible to retrieve a wardrobe with slots 36 (on women) and 39 (on men and women) not filled. Recommendation: leave true if you have no underwear items, otherwise nothing will ever be chosen. If you do have items to fill those slots, it's down to preference. Allowing 'nudity' MAY reduce clipping artifacts since those slots won't be filled."
+          "text": "If true, it is possible to retrieve a wardrobe with slots 36 (on women) and 55 (on men and women) not filled. Recommendation: leave true if you have no underwear items, otherwise nothing will ever be chosen. If you do have items to fill those slots, it's down to preference. Allowing 'nudity' MAY reduce clipping artifacts since those slots won't be filled."
         }, {
           "type": "text",
-          "text": "Note that 'nudity' here means 'slots 36 and 39 might not be filled'. It does NOT necessarily mean 'the bits are showing' - that will depend on what is chosen for all other slots combined."
+          "text": "Note that 'nudity' here means 'slots 36 and 55 might not be filled'. It does NOT necessarily mean 'the bits are showing' - that will depend on what is chosen for all other slots combined."
         }
       ]
     },
 
     {
-      "pageDisplayName": "Body/Engine %",
+      "pageDisplayName": "Head/Neck % (MALE)",
       "content": [
         {
-          "text": "Equip Chances - Body Part and Engine Slots",
+          "text": "Equip Chances - Head & Neck Slots (MALE)",
           "align": "center",
           "type": "section"
         }, {
           "type": "text",
-          "text": "The following options control the chance that any given clothing slot will be ignored (not used)."
+          "text": "The following options control the chance that any given clothing slot will be filled on MALE characters."
         }, {
           "type": "text",
           "text": "(Note: another item on a different slot, which happens to fill more than one slot, may still be chosen and therefore fill the ignored slot.)"
-        }, {
-          "type": "text",
-          "text": "This is mainly intended to influence accessories like hats, necklaces, etc. Of course not all mods follow the same convention, so keep that in mind as you adjust these values."
         }, { 
           "type": "spacer",
           "numLines": 1
         }, {
-          "text": "30 - Hair Top",
+          "text": "52 - Scalp",
           "type": "slider",
-          "help": "Vanilla hair, rarely used by clothing mods",
+          "help": "Usually used by hats that support hair.",
           "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iSlotSkipChance30:Settings"
+          "id": "iMaleFillSlotChance52:Settings"
         }, {
-          "text": "31 - Hair Long",
+          "text": "30 - Hair (Top)",
           "type": "slider",
-          "help": "Vanilla hair, rarely used by clothing mods",
+          "help": "Short hair covering just the scalp area",
           "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iSlotSkipChance31:Settings"
+          "id": "iMaleFillSlotChance30:Settings"
+        }, {
+          "text": "31 - Hair (Long)",
+          "type": "slider",
+          "help": "Long hair, usually covered by helmets, hoods, etc",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iMaleFillSlotChance31:Settings"
+        }, {
+          "text": "46 - Facegear",
+          "type": "slider",
+          "help": "Masks and other items covering portions of the face",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iMaleFillSlotChance46:Settings"
+        }, {
+          "text": "47 - Eyes",
+          "type": "slider",
+          "help": "Glasses, goggles and other equipment that covers the eyes",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iMaleFillSlotChance47:Settings"
+        }, {
+          "text": "50 - Neck",
+          "type": "slider",
+          "help": "Necklaces, chokers, and other neck equipment",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iMaleFillSlotChance50:Settings"
+        }
+      ]
+    },
+
+    {
+      "pageDisplayName": "Head/Neck % (FEMALE)",
+      "content": [
+        {
+          "text": "Equip Chances - Head & Neck Slots (FEMALE)",
+          "align": "center",
+          "type": "section"
+        }, {
+          "type": "text",
+          "text": "The following options control the chance that any given clothing slot will be filled on FEMALE characters."
+        }, {
+          "type": "text",
+          "text": "(Note: another item on a different slot, which happens to fill more than one slot, may still be chosen and therefore fill the ignored slot.)"
+        }, { 
+          "type": "spacer",
+          "numLines": 1
+        }, {
+          "text": "52 - Scalp",
+          "type": "slider",
+          "help": "Usually used by hats that support hair.",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iFemaleFillSlotChance52:Settings"
+        }, {
+          "text": "30 - Hair (Top)",
+          "type": "slider",
+          "help": "Short hair covering just the scalp area",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iFemaleFillSlotChance30:Settings"
+        }, {
+          "text": "31 - Hair (Long)",
+          "type": "slider",
+          "help": "Long hair, usually covered by helmets, hoods, etc",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iFemaleFillSlotChance31:Settings"
+        }, {
+          "text": "46 - Facegear",
+          "type": "slider",
+          "help": "Masks and other items covering portions of the face",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iFemaleFillSlotChance46:Settings"
+        }, {
+          "text": "47 - Eyes",
+          "type": "slider",
+          "help": "Glasses, goggles and other equipment that covers the eyes",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iFemaleFillSlotChance47:Settings"
+        }, {
+          "text": "50 - Neck",
+          "type": "slider",
+          "help": "Necklaces, chokers, and other neck equipment",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iFemaleFillSlotChance50:Settings"
+        }
+      ]
+    },
+
+    {
+      "pageDisplayName": "Torso % (MALE)",
+      "content": [
+        {
+          "text": "Equip Chances - Torso Slots (MALE)",
+          "align": "center",
+          "type": "section"
+        }, {
+          "type": "text",
+          "text": "The following options control the chance that any given clothing slot will be filled on MALE characters."
+        }, {
+          "type": "text",
+          "text": "(Note: another item on a different slot, which happens to fill more than one slot, may still be chosen and therefore fill the ignored slot.)"
+        }, { 
+          "type": "spacer",
+          "numLines": 1
+        }, {
+          "text": "36 - Chest Underwear",
+          "type": "slider",
+          "help": "Mostly undershirts.",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iMaleFillSlotChance36:Settings"
+        }, {
+          "text": "41 - Chest Outerwear",
+          "type": "slider",
+          "help": "Outerwear covering the chest such as T-shirts or body armor",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iMaleFillSlotChance41:Settings"
+        }, {
+          "text": "56 - Abdomen Underwear",
+          "type": "slider",
+          "help": "Undergarments covering the belly/lower back such as waist wraps and some body jewelry",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iMaleFillSlotChance56:Settings"
+        }, {
+          "text": "57 - Abdomen Outerwear",
+          "type": "slider",
+          "help": "Outerwear covering the belly/lower back such as tactical vests",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iMaleFillSlotChance57:Settings"
+        }, {
+          "text": "55 - Pelvis Underwear",
+          "type": "slider",
+          "help": "Undergarments covering the pelvis area, such as briefs. Must be non-zero if 'nudity' is disabled.",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iMaleFillSlotChance55:Settings"
+        }, {
+          "text": "54 - Pelvis Outerwear",
+          "type": "slider",
+          "help": "Outerwear covering the pelvis, such as shorts or pants",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iMaleFillSlotChance54:Settings"
+        }, {
+          "text": "51 - Overwear",
+          "type": "slider",
+          "help": "Outermost layer of clothing such as cloak, cape, poncho, or jacket.",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iMaleFillSlotChance51:Settings"
+        }
+      ]
+    },
+
+    {
+      "pageDisplayName": "Torso % (FEMALE)",
+      "content": [
+        {
+          "text": "Equip Chances - Torso Slots (FEMALE)",
+          "align": "center",
+          "type": "section"
+        }, {
+          "type": "text",
+          "text": "The following options control the chance that any given clothing slot will be filled on FEMALE characters."
+        }, {
+          "type": "text",
+          "text": "(Note: another item on a different slot, which happens to fill more than one slot, may still be chosen and therefore fill the ignored slot.)"
+        }, { 
+          "type": "spacer",
+          "numLines": 1
+        }, {
+          "text": "36 - Chest Underwear",
+          "type": "slider",
+          "help": "Such as bras, swimsuit tops and tight fitting undershirts. Must be non-zero if 'nudity' is disabled.",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iFemaleFillSlotChance36:Settings"
+        }, {
+          "text": "41 - Chest Outerwear",
+          "type": "slider",
+          "help": "Outerwear covering the chest such as T-shirts or body armor",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iFemaleFillSlotChance41:Settings"
+        }, {
+          "text": "56 - Abdomen Underwear",
+          "type": "slider",
+          "help": "Undergarments covering the belly/lower back such as waist wraps and some body jewelry",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iFemaleFillSlotChance56:Settings"
+        }, {
+          "text": "57 - Abdomen Outerwear",
+          "type": "slider",
+          "help": "Outerwear covering the belly/lower back such as longer shirts or tactical vests",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iFemaleFillSlotChance57:Settings"
+        }, {
+          "text": "55 - Pelvis Underwear",
+          "type": "slider",
+          "help": "Such as panties or swimsuit bottoms. Must be non-zero if 'nudity' is disabled.",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iFemaleFillSlotChance55:Settings"
+        }, {
+          "text": "54 - Pelvis Outerwear",
+          "type": "slider",
+          "help": "Outerwear covering the pelvis, such as shorts, pants or skirts",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iFemaleFillSlotChance54:Settings"
+        }, {
+          "text": "51 - Overwear",
+          "type": "slider",
+          "help": "Outermost layer of clothing such as cloak, cape, poncho, or jacket.",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iFemaleFillSlotChance51:Settings"
+        }
+      ]
+    },
+
+    {
+      "pageDisplayName": "Arms & Hands % (MALE)",
+      "content": [
+        {
+          "text": "Equip Chances - Arm & Hand Slots (MALE)",
+          "align": "center",
+          "type": "section"
+        }, {
+          "type": "text",
+          "text": "The following options control the chance that any given clothing slot will be filled on MALE characters."
+        }, {
+          "type": "text",
+          "text": "(Note: another item on a different slot, which happens to fill more than one slot, may still be chosen and therefore fill the ignored slot.)"
+        }, { 
+          "type": "spacer",
+          "numLines": 1
+        }, {
+          "text": "37 - Left Arm & Shoulder Underwear",
+          "type": "slider",
+          "help": "Such as arm bands and forearm wraps, covering the left arm",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iMaleFillSlotChance37:Settings"
+        }, {
+          "text": "42 - Left Arm & Shoulder Outerwear",
+          "type": "slider",
+          "help": "Such as shoulder or elbow pads, covering the left arm",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iMaleFillSlotChance42:Settings"
+        }, {
+          "text": "38 - Right Arm & Shoulder Underwear",
+          "type": "slider",
+          "help": "Such as arm bands and forearm wraps, covering the right arm",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iMaleFillSlotChance38:Settings"
+        }, {
+          "text": "43 - Right Arm & Shoulder Outerwear",
+          "type": "slider",
+          "help": "Such as shoulder or elbow pads, covering the right arm",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iMaleFillSlotChance43:Settings"
+        }, {
+          "text": "34 - L Hand",
+          "type": "slider",
+          "help": "Gloves, nails, etc for the left hand",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iMaleFillSlotChance34:Settings"
+        }, {
+          "text": "35 - R Hand",
+          "type": "slider",
+          "help": "Gloves, nails, etc for the right hand",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iMaleFillSlotChance35:Settings"
+        }
+      ]
+    },
+
+    {
+      "pageDisplayName": "Arms & Hands % (FEMALE)",
+      "content": [
+        {
+          "text": "Equip Chances - Arm & Hand Slots (FEMALE)",
+          "align": "center",
+          "type": "section"
+        }, {
+          "type": "text",
+          "text": "The following options control the chance that any given clothing slot will be filled on FEMALE characters."
+        }, {
+          "type": "text",
+          "text": "(Note: another item on a different slot, which happens to fill more than one slot, may still be chosen and therefore fill the ignored slot.)"
+        }, { 
+          "type": "spacer",
+          "numLines": 1
+        }, {
+          "text": "37 - Left Arm & Shoulder Underwear",
+          "type": "slider",
+          "help": "Such as arm bands and forearm wraps, covering the left arm",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iFemaleFillSlotChance37:Settings"
+        }, {
+          "text": "42 - Left Arm & Shoulder Outerwear",
+          "type": "slider",
+          "help": "Such as shoulder or elbow pads, covering the left arm",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iFemaleFillSlotChance42:Settings"
+        }, {
+          "text": "38 - Right Arm & Shoulder Underwear",
+          "type": "slider",
+          "help": "Such as arm bands and forearm wraps, covering the right arm",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iFemaleFillSlotChance38:Settings"
+        }, {
+          "text": "43 - Right Arm & Shoulder Outerwear",
+          "type": "slider",
+          "help": "Such as shoulder or elbow pads, covering the right arm",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iFemaleFillSlotChance43:Settings"
+        }, {
+          "text": "34 - L Hand",
+          "type": "slider",
+          "help": "Gloves, nails, etc for the left hand",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iFemaleFillSlotChance34:Settings"
+        }, {
+          "text": "35 - R Hand",
+          "type": "slider",
+          "help": "Gloves, nails, etc for the right hand",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iFemaleFillSlotChance35:Settings"
+        }
+      ]
+    },
+
+    {
+      "pageDisplayName": "Legs % (MALE)",
+      "content": [
+        {
+          "text": "Equip Chances - Leg Slots (MALE)",
+          "align": "center",
+          "type": "section"
+        }, {
+          "type": "text",
+          "text": "The following options control the chance that any given clothing slot will be filled on MALE characters."
+        }, {
+          "type": "text",
+          "text": "(Note: another item on a different slot, which happens to fill more than one slot, may still be chosen and therefore fill the ignored slot.)"
+        }, { 
+          "type": "spacer",
+          "numLines": 1
+        }, {
+          "text": "39 - Left Leg Underwear",
+          "type": "slider",
+          "help": "Undergarments which cover the left leg, such as boxer shorts.",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iMaleFillSlotChance39:Settings"
+        }, {
+          "text": "44 - Left Leg Outerwear",
+          "type": "slider",
+          "help": "Such as long pants or leg armor, covering the left leg",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iMaleFillSlotChance44:Settings"
+        }, {
+          "text": "40 - Right Leg Underwear",
+          "type": "slider",
+          "help": "Undergarments which cover the right leg, such as boxer shorts.",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iMaleFillSlotChance40:Settings"
+        }, {
+          "text": "45 - Right Leg Outerwear",
+          "type": "slider",
+          "help": "Such as long pants or leg armor, covering the right leg",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iMaleFillSlotChance45:Settings"
+        }, {
+          "text": "49 - Hip/Drop-Leg Rig",
+          "type": "slider",
+          "help": "Overwear such as a holster or straps covering either leg.",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iMaleFillSlotChance49:Settings"
+        }
+      ]
+    },
+
+    {
+      "pageDisplayName": "Legs % (FEMALE)",
+      "content": [
+        {
+          "text": "Equip Chances - Leg Slots (FEMALE)",
+          "align": "center",
+          "type": "section"
+        }, {
+          "type": "text",
+          "text": "The following options control the chance that any given clothing slot will be filled on FEMALE characters."
+        }, {
+          "type": "text",
+          "text": "(Note: another item on a different slot, which happens to fill more than one slot, may still be chosen and therefore fill the ignored slot.)"
+        }, { 
+          "type": "spacer",
+          "numLines": 1
+        }, {
+          "text": "39 - Left Leg Underwear",
+          "type": "slider",
+          "help": "Undergarments which cover the left leg, such as boxer shorts.",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iFemaleFillSlotChance39:Settings"
+        }, {
+          "text": "44 - Left Leg Outerwear",
+          "type": "slider",
+          "help": "Such as long pants or leg armor, covering the left leg",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iFemaleFillSlotChance44:Settings"
+        }, {
+          "text": "40 - Right Leg Underwear",
+          "type": "slider",
+          "help": "Undergarments which cover the right leg, such as boxer shorts.",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iFemaleFillSlotChance40:Settings"
+        }, {
+          "text": "45 - Right Leg Outerwear",
+          "type": "slider",
+          "help": "Such as long pants or leg armor, covering the right leg",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iFemaleFillSlotChance45:Settings"
+        }, {
+          "text": "49 - Hip/Drop-Leg Rig",
+          "type": "slider",
+          "help": "Overwear such as a holster or straps covering either leg.",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iFemaleFillSlotChance49:Settings"
+        }
+      ]
+    },
+
+    {
+      "pageDisplayName": "Other % (MALE)",
+      "content": [
+        {
+          "text": "Equip Chances - Other Slots (MALE)",
+          "align": "center",
+          "type": "section"
+        }, {
+          "type": "text",
+          "text": "The following options control the chance that any given clothing slot will be filled on MALE characters."
+        }, {
+          "type": "text",
+          "text": "(Note: another item on a different slot, which happens to fill more than one slot, may still be chosen and therefore fill the ignored slot.)"
+        }, { 
+          "type": "spacer",
+          "numLines": 1
+        }, {
+          "text": "33 - Shoes+Body",
+          "type": "slider",
+          "help": "Garments which occupy the whole body, or the body itself, or shoes + naked skin by convention.",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iMaleFillSlotChance33:Settings"
+        }, {
+          "text": "48 - Backpack / Rig",
+          "type": "slider",
+          "help": "Used for backpacks/rucksacks, harnesses, and overwear that doesn't fit anywhere else.",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iMaleFillSlotChance48:Settings"
+        }, {
+          "text": "58 - Body Jewelry",
+          "type": "slider",
+          "help": "Used for jewelry anywhere but the face. (Current limitation: only one item at a time.)",
+          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
+          "id": "iMaleFillSlotChance58:Settings"
+        }, { 
+          "type": "spacer",
+          "numLines": 1
+        }, {
+          "type": "text",
+          "text": "The following slots are included only for compatibility with mods that use them. They have special meanings to the game engine, and their use is generally discouraged."
         }, {
           "text": "32 - FaceGen Head",
           "type": "slider",
-          "help": "Avoid: engine reserved",
+          "help": "Used for face morphs, but typically hidden by full-face opaque helmets.",
           "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iSlotSkipChance32:Settings"
-        }, {
-          "text": "33 - Body",
-          "type": "slider",
-          "help": "Full outfits, vanilla default; avoid for layering",
-          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iSlotSkipChance33:Settings"
+          "id": "iMaleFillSlotChance32:Settings"
         }, {
           "text": "53 - Decapitation",
           "type": "slider",
-          "help": "Avoid: engine reserved, kill FX",
+          "help": "Used for decapitation effects.",
           "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iSlotSkipChance53:Settings"
+          "id": "iMaleFillSlotChance53:Settings"
         }, {
-          "text": "59 - Shield (Grenade)",
+          "text": "59 - Shield / Grenade",
           "type": "slider",
-          "help": "Avoid: buggy / conflicts with grenades",
+          "help": "Interferes with grenades if used.",
           "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iSlotSkipChance59:Settings"
+          "id": "iMaleFillSlotChance59:Settings"
         }, {
-          "text": "60 - Pip-Boy",
+          "text": "60 - Pipboy",
           "type": "slider",
-          "help": "Reserved by engine, Pip-Boy only",
+          "help": "Since pipboy is required to play the game, most mods avoid this slot.",
           "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iSlotSkipChance60:Settings"
+          "id": "iMaleFillSlotChance60:Settings"
         }, {
           "text": "61 - FX",
           "type": "slider",
-          "help": "Misc FX; sometimes safe for special equipables",
+          "help": "Used for various visual effects. Should be avoided.",
           "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iSlotSkipChance61:Settings"
+          "id": "iMaleFillSlotChance61:Settings"
         }
       ]
     },
 
     {
-      "pageDisplayName": "Underwear %",
+      "pageDisplayName": "Other % (FEMALE)",
       "content": [
         {
-          "text": "Equip Chances - Underwear Slots",
+          "text": "Equip Chances - Other Slots (FEMALE)",
           "align": "center",
           "type": "section"
         }, {
           "type": "text",
-          "text": "The following options control the chance that any given clothing slot will be ignored (not used)."
+          "text": "The following options control the chance that any given clothing slot will be filled on FEMALE characters."
         }, {
           "type": "text",
           "text": "(Note: another item on a different slot, which happens to fill more than one slot, may still be chosen and therefore fill the ignored slot.)"
-        }, {
-          "type": "text",
-          "text": "This is mainly intended to influence accessories like hats, necklaces, etc. Of course not all mods follow the same convention, so keep that in mind as you adjust these values."
         }, { 
           "type": "spacer",
           "numLines": 1
         }, {
-          "text": "36 - Underwear top / bra / undershirt",
+          "text": "33 - Shoes+Body",
           "type": "slider",
-          "help": "'[U] Torso' according to engine",
+          "help": "Garments which occupy the whole body, or the body itself, or shoes + naked skin by convention.",
           "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iSlotSkipChance36:Settings"
+          "id": "iFemaleFillSlotChance33:Settings"
         }, {
-          "text": "37 - Underwear sleeve (left)",
+          "text": "48 - Backpack / Rig",
           "type": "slider",
-          "help": "'[U] L Arm' according to engine",
+          "help": "Used for backpacks/rucksacks, harnesses, and overwear that doesn't fit anywhere else.",
           "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iSlotSkipChance37:Settings"
+          "id": "iFemaleFillSlotChance48:Settings"
         }, {
-          "text": "38 - Underwear sleeve (right)",
+          "text": "58 - Body Jewelry",
           "type": "slider",
-          "help": "'[U] R Arm' according to engine",
+          "help": "Used for jewelry anywhere but the face. (Current limitation: only one item at a time.)",
           "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iSlotSkipChance38:Settings"
-        }, {
-          "text": "39 - Underwear bottom / panties",
-          "type": "slider",
-          "help": "'[U] L Leg' according to engine",
-          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iSlotSkipChance39:Settings"
-        }, {
-          "text": "40 - Underwear leggings",
-          "type": "slider",
-          "help": "'[U] R Leg' according to engine",
-          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iSlotSkipChance40:Settings"
-        }
-      ]
-    },
-
-    {
-      "pageDisplayName": "Armor/Outerwear %",
-      "content": [
-        {
-          "text": "Equip Chances - Armor / Outerwear Slots",
-          "align": "center",
-          "type": "section"
-        }, {
-          "type": "text",
-          "text": "The following options control the chance that any given clothing slot will be ignored (not used)."
-        }, {
-          "type": "text",
-          "text": "(Note: another item on a different slot, which happens to fill more than one slot, may still be chosen and therefore fill the ignored slot.)"
-        }, {
-          "type": "text",
-          "text": "This is mainly intended to influence accessories like hats, necklaces, etc. Of course not all mods follow the same convention, so keep that in mind as you adjust these values."
+          "id": "iFemaleFillSlotChance58:Settings"
         }, { 
           "type": "spacer",
           "numLines": 1
         }, {
-          "text": "41 - Armor chestplate / top layer over torso",
-          "type": "slider",
-          "help": "'[A] Torso' according to engine",
-          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iSlotSkipChance41:Settings"
-        }, {
-          "text": "42 - Armor overlay, left arm",
-          "type": "slider",
-          "help": "'[A] L Arm' according to engine",
-          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iSlotSkipChance42:Settings"
-        }, {
-          "text": "43 - Armor overlay, right arm",
-          "type": "slider",
-          "help": "'[A] R Arm' according to engine",
-          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iSlotSkipChance43:Settings"
-        }, {
-          "text": "44 - Armor overlay, left leg",
-          "type": "slider",
-          "help": "'[A] L Leg' according to engine",
-          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iSlotSkipChance44:Settings"
-        }, {
-          "text": "45 - Armor overlay, right leg",
-          "type": "slider",
-          "help": "'[A] R Leg' according to engine",
-          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iSlotSkipChance45:Settings"
-        }
-      ]
-    },
-
-    {
-      "pageDisplayName": "Accessories %",
-      "content": [
-        {
-          "text": "Equip Chances - Accessory Slots",
-          "align": "center",
-          "type": "section"
-        }, {
           "type": "text",
-          "text": "The following options control the chance that any given clothing slot will be ignored (not used)."
+          "text": "The following slots are included only for compatibility with mods that use them. They have special meanings to the game engine, and their use is generally discouraged."
         }, {
-          "type": "text",
-          "text": "(Note: another item on a different slot, which happens to fill more than one slot, may still be chosen and therefore fill the ignored slot.)"
-        }, {
-          "type": "text",
-          "text": "This is mainly intended to influence accessories like hats, necklaces, etc. Of course not all mods follow the same convention, so keep that in mind as you adjust these values."
-        }, { 
-          "type": "spacer",
-          "numLines": 1
-        }, {
-          "text": "34 - gloves (left)",
+          "text": "32 - FaceGen Head",
           "type": "slider",
-          "help": "'L Hand' according to engine",
+          "help": "Used for face morphs, but typically hidden by full-face opaque helmets.",
           "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iSlotSkipChance34:Settings"
+          "id": "iFemaleFillSlotChance32:Settings"
         }, {
-          "text": "35 - gloves (right)",
+          "text": "53 - Decapitation",
           "type": "slider",
-          "help": "'R Hand' according to engine",
+          "help": "Used for decapitation effects.",
           "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iSlotSkipChance45:Settings"
+          "id": "iFemaleFillSlotChance53:Settings"
         }, {
-          "text": "46 - headbands, helmets, hats, circlets",
+          "text": "59 - Shield / Grenade",
           "type": "slider",
-          "help": "'Headband' according to engine",
+          "help": "Interferes with grenades if used.",
           "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iSlotSkipChance46:Settings"
+          "id": "iFemaleFillSlotChance59:Settings"
         }, {
-          "text": "47 - eyewear, goggles, glasses",
+          "text": "60 - Pipboy",
           "type": "slider",
-          "help": "'Eyes' according to engine",
+          "help": "Since pipboy is required to play the game, most mods avoid this slot.",
           "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iSlotSkipChance47:Settings"
+          "id": "iFemaleFillSlotChance60:Settings"
         }, {
-          "text": "48 - masks, lower-face coverings",
+          "text": "61 - FX",
           "type": "slider",
-          "help": "'Beard' according to engine",
+          "help": "Used for various visual effects. Should be avoided.",
           "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iSlotSkipChance48:Settings"
-        }, {
-          "text": "49 - scarves, bandanas, rebreathers",
-          "type": "slider",
-          "help": "'Mouth' according to engine",
-          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iSlotSkipChance49:Settings"
-        }, {
-          "text": "50 - neckwear, scarves, chokers",
-          "type": "slider",
-          "help": "'Neck' according to engine",
-          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iSlotSkipChance50:Settings"
-        }, {
-          "text": "51 - rings (primary)",
-          "type": "slider",
-          "help": "'Ring' according to engine",
-          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iSlotSkipChance51:Settings"
-        }, {
-          "text": "52 - secondary hair/helmet accessories, seldom used",
-          "type": "slider",
-          "help": "'Scalp' according to engine",
-          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iSlotSkipChance52:Settings"
-        }, {
-          "text": "54 - backpack, capes, cloaks, satchels",
-          "type": "slider",
-          "help": "'Unnamed' according to engine",
-          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iSlotSkipChance54:Settings"
-        }, {
-          "text": "55 - bandoliers, belts, ammo pouches",
-          "type": "slider",
-          "help": "'Unnamed' according to engine",
-          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iSlotSkipChance55:Settings"
-        }, {
-          "text": "56 - harnesses, tactical gear, skirts alt",
-          "type": "slider",
-          "help": "'Unnamed' according to engine",
-          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iSlotSkipChance56:Settings"
-        }, {
-          "text": "57 - skirts, kilts, robes, cloaks alt",
-          "type": "slider",
-          "help": "'Unnamed' according to engine",
-          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iSlotSkipChance57:Settings"
-        }, {
-          "text": "58 - body jewelry, “on-back” gear, holsters",
-          "type": "slider",
-          "help": "'Unnamed' according to engine",
-          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iSlotSkipChance58:Settings"
+          "id": "iFemaleFillSlotChance61:Settings"
         }
       ]
     }
