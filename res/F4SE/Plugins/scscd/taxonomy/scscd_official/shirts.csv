@@ -1,11 +1,10 @@
 Name,ARMO Slots,ARMA Slots
-Tank Top,41;56,41
-Corset,41;57,41
+Tank Top,41;56,
+Corset,41;57,
 Waist Wrap,56,
-Blouse,41;42;43;57,41;42;43;57
-Crop Top (Sleeves),41;42;43,41;42
+Blouse,41;42;43;57,36;56
+Crop Top (Sleeves),41;42;43,
 Crop Top (No Sleeves),41,
-T-Shirt,41;57,41
-T-Shirt (Long),41;54;57,41;54
-Tube Top,41;57,41
-Sleeves (Outer/Armor),42;43,42
+T-Shirt,41;57,
+T-Shirt (Long),41;54;57,
+Tube Top,41;57,

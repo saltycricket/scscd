@@ -1,7 +1,7 @@
 Name,ARMO Slots,ARMA Slots
-Miniskirt,44;45;54,44;45
+Miniskirt,44;45;54,
 Hotpants,54,
-Leggings,39;40,39
-Long Pants (Underwear Visible),44;45;54,44;45
-Long Pants (Underwear Hidden),44;45;54,44;45
-Shoes w/Leggings,33;39;40,33;39
+Leggings,39;40,
+Long Pants (Underwear Visible),44;45;54,
+Long Pants (Underwear Hidden),44;45;54,39;40;55
+Shoes w/Leggings,33;39;40,

@@ -217,8 +217,8 @@ public class ItemTypeManagerVM : INotifyPropertyChanged
             if (string.IsNullOrWhiteSpace(line)) continue;
             if (line.TrimStart().StartsWith("#")) continue; // allow comments
 
-            // split into at most 3 columns: name, armoList, armaList
-            var parts = SplitCsvLine(line, 3);
+            // split into name, armoList, armaList
+            var parts = SplitCsvLine(line);
             if (parts.Count == 0) continue;
 
             var name = parts[0].Trim();
@@ -252,7 +252,7 @@ public class ItemTypeManagerVM : INotifyPropertyChanged
     }
 
     // very small CSV helper: split by commas, allowing commas in quotes
-    static List<string> SplitCsvLine(string line, int maxColumns)
+    static List<string> SplitCsvLine(string line)
     {
         var result = new List<string>();
         bool inQuotes = false;
@@ -264,11 +264,6 @@ public class ItemTypeManagerVM : INotifyPropertyChanged
             {
                 result.Add(sb.ToString());
                 sb.Clear();
-                if (result.Count == maxColumns - 1) // last column: take the rest as-is
-                {
-                    sb.Append(line.AsSpan(line.IndexOf(',') + 1));
-                    break;
-                }
                 continue;
             }
             sb.Append(ch);

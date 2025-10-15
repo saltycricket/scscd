@@ -1,31 +1,31 @@
 Name,ARMO Slots,ARMA Slots
-Gloves,34;35,34
+Gloves,34;35,
 Backpack,48,
 Cloak/Cape,51,
 Arm Band L,42,
 Arm Band R,43,
 Leg Holster/Straps L,44,
 Leg Holster/Straps R,45,
-Leg Holster/Straps LR + Wrist Strap R,43;44;45,43;44;45
+Leg Holster/Straps LR + Wrist Strap R,43;44;45,
 Belt,54,
 Hat (Hair),52,
 Hat (No Hair),52,
-Hat w/Full Mask (Hair),46;47;52,46;47
-Hat w/Full Mask (No Hair),30;31;46;47;52,30;31;46;47
-Hat w/Eyewear (Hair),47;52,47
-Hat w/Eyewear (No Hair),47;52,47
-Sleeves,37;38,37
-Arm Band LR,42;43,42
+Hat w/Full Mask (Hair),46;47;52,
+Hat w/Full Mask (No Hair),30;31;46;47;52,
+Hat w/Eyewear (Hair),47;52,
+Hat w/Eyewear (No Hair),47;52,
+Sleeves,37;38,
+Arm Band LR,42;43,
 Body Jewelry,58,
-Leg Holster/Straps LR,44;45,44
+Leg Holster/Straps LR,44;45,
 Kneecaps,57,
 Earrings,46,
-Shoulders,42;43,42
+Shoulders,42;43,
 Harness,48,
 Bracer R,43,
-Armored Right Hand & Arm plus L Hand,34;35;43,34;35;43
-"Gloves (Long, Underwear)",34;35;37;38,35;37
-Elbow Pads,42;43,42
+Armored Right Hand & Arm plus L Hand,34;35;43,
+"Gloves (Long, Underwear)",34;35;37;38,
+Elbow Pads,42;43,
 Shoes & Body,33,
 Bracers LR,42;43,
-Kidney Belt,57,
+Shoes (No Body),58,
