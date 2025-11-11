@@ -1,0 +1,7 @@
+Sex,Occupation,EditorID,MinLevel,Compatible OMODs,Is NSFW?,Clothing Type
+10,00001000000000000000,DXM_PredatorArmor,50,DXM_PredatorBallisticWeaveMK3_OM;DXM_PredatorBallisticWeaveMK1_OM;DXM_PredatorArmorChameleonON_OM;DXM_PredatorBallisticWeaveMK2_OM;DXM_PredatorArmorChameleonOFF_OM;DXM_PredatorBallisticWeaveMK4_OM;DXM_PredatorBallisticWeaveOFF_OM;DXM_PredatorBallisticWeaveMK5_OM,0,"Full Body Armor (Torso, Limbs, Hands, Boots + BODY)"
+10,00001000000000000000,DXM_PredatorArmorBoot,50,DXM_PredatorBallisticWeaveMK3_OM;DXM_PredatorBallisticWeaveMK1_OM;DXM_PredatorArmorChameleonON_OM;DXM_PredatorBallisticWeaveMK2_OM;DXM_PredatorArmorChameleonOFF_OM;DXM_PredatorBallisticWeaveMK4_OM;DXM_PredatorBallisticWeaveOFF_OM;DXM_PredatorBallisticWeaveMK5_OM,0,"Full Body Armor (Torso, Limbs, Hands, Boots + BODY)"
+10,00001000000000000000,DXM_PredatorBlades,50,,0,Bracer R
+10,00001000000000000000,DXM_PredatorCannon,50,,0,Shoulder Mount L
+10,00001000000000000000,DXM_PredatorHelmet,50,DXM_PredatorFX_Vision_OM;DXM_PredatorFX_VisionOFF_OM,0,Hat w/Full Mask (No Hair)
+10,00001000000000000000,DXM_PredatorHelmetHalf,50,DXM_PredatorFX_Vision_OM;DXM_PredatorFX_VisionOFF_OM,0,Hat w/Full Mask (No Hair)
