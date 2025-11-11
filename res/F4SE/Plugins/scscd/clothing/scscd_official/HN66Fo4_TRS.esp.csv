@@ -1,0 +1,95 @@
+Sex,Occupation,EditorID,MinLevel,Compatible OMODs,Is NSFW?,Clothing Type
+11,10000010001001000100,30_TRS_BaseballCap,0,,0,Hat (Hair)
+11,10000010001001000100,30_TRS_BaseballCap_Rose,0,,0,Hat (Hair)
+11,10000010001001000100,31_TRS_BaseballCap,0,,0,Hat (No Hair)
+11,10000010001001000100,31_TRS_BaseballCap_Rose,0,,0,Hat (No Hair)
+11,11111111111111111111,33_TRS_Bare_TipToes,0,,0,Shoes & Body
+11,11111111111111111111,33_TRS_BB_Boots,0,,0,Shoes & Body
+11,11111111111111111111,33_TRS_BuckleBoots,0,,0,Shoes & Body
+11,11111111111111111111,33_TRS_CorsairBootlets,0,,0,Shoes & Body
+11,11111111111111111111,33_TRS_GladiatorSandals_Black,0,,0,Shoes & Body
+11,11111111111111111111,33_TRS_GladiatorSandals_Leo,0,,0,Shoes & Body
+11,11111111111111111111,33_TRS_GladiatorSandals_RoseKork,0,,0,Shoes & Body
+11,11111111111111111111,33_TRS_GladiatorSandals_White,0,,0,Shoes & Body
+11,11111111111111111111,33_TRS_GoGoHeels_Black,0,,0,Shoes & Body
+11,11111111111111111111,33_TRS_GothicBoots,0,,0,Shoes & Body
+11,11111111111111111111,33_TRS_HeelBootlets_Wood_Brown,0,,0,Shoes & Body
+11,11111111111111111111,33_TRS_HeelMules_Black,0,,0,Shoes & Body
+11,11111111111111111111,33_TRS_HeelMules_Kork,0,,0,Shoes & Body
+11,11111111111111111111,33_TRS_HeelMules_Wood,0,,0,Shoes & Body
+11,11111111111111111111,33_TRS_HeelSandals_GoGo_Orange,0,,0,Shoes & Body
+11,11111111111111111111,33_TRS_HeelSandals_GoGo_White,0,,0,Shoes & Body
+11,11111111111111111111,33_TRS_StilettoBootlets,0,,0,Shoes & Body
+11,11111111111111111111,33_TRS_StilettoBoots_KneeHigh,0,,0,Shoes & Body
+11,11111111111111111111,33_TRS_StripperHeels_Black,0,,0,Shoes & Body
+11,11111111111111111111,33_TRS_StripperHeels_Red,0,,0,Shoes & Body
+11,11111111111111111111,33_TRS_StripperHeels_White,0,,0,Shoes & Body
+11,00001010010110001000,37_TRS_Corsage_BlackXazLeather,0,,0,Waist Wrap
+11,00000010010110001000,37_TRS_Corsage_LeatherRed,0,,0,Waist Wrap
+11,00000010010110001000,37_TRS_Corsage_Rose,0,,0,Waist Wrap
+11,00000010010110001000,37_TRS_Corsage_White,0,,0,Waist Wrap
+11,00100010001011000010,38_TRS_Blouse_Open_Brown,0,,0,Crop Top (No Sleeves)
+11,00100010001011000010,38_TRS_Blouse_Open_Brown_Long,0,,0,Tank Top
+11,00100010001011000010,38_TRS_Blouse_RosePlaid,0,,0,Crop Top (No Sleeves)
+11,00001010000100001000,38_TRS_Body_BlackLeather,0,,0,Swimsuit (One-piece)
+11,00001010000100001000,38_TRS_Body_WhiteBlossom,0,,1,Swimsuit (One-piece)
+11,10000010001011000010,38_TRS_Bustier_Flag,0,,0,Bra
+11,10011010001011010011,38_TRS_Bustier_WhiteSheer,0,,0,Bra
+11,00100101100000000010,38_TRS_CropTop_BOS_Green,0,,0,Crop Top (No Sleeves)
+11,10001010011100001010,38_TRS_Dress_HighNeck_BlackBlossom,0,,0,Minidress
+11,10001010011100001010,38_TRS_Dress_HighNeck_CoralBlossom,0,,0,Minidress
+11,10001010011100001010,38_TRS_Dress_HighNeck_WhiteBlossom,0,,0,Minidress
+11,10001010011100001010,38_TRS_Dress_Shift_LeatherBlack,0,,0,Minidress
+11,10001010011100001010,38_TRS_Dress_Shift_LeatherWhite,0,,0,Minidress
+11,10001010011100001010,38_TRS_Dress_Shift_Rose_Sheer,0,,0,Minidress
+11,11000010011011000000,38_TRS_Shirt_MintPlaid_Sleeveless,0,,0,Shirt (Baggy)
+11,11000010011011000000,38_TRS_Shirt_RusticPlaid,0,,0,Shirt (Baggy)
+11,00000010000100000010,38_TRS_SwimSuit_Orange,0,,0,Swimsuit (One-piece)
+11,01100101100000001000,38_TRS_TankTop_Army,0,,0,Tank Top
+11,01001010001011101000,38_TRS_TankTop_BlackXazLeather,0,,0,Tank Top
+11,00000010001011000000,38_TRS_TankTop_Flag,0,,0,Tank Top
+11,00000010001011000000,38_TRS_TankTop_Red,0,,0,Tank Top
+11,00000000000000000100,38_TRS_VaultSuit,0,,0,Bodysuit (No Arms)
+10,11000010001100000010,39_TRS_Stockings_Net_Black,0,,0,Leggings
+10,00000000000000010011,39_TRS_Stockings_Net_White,0,,0,Leggings
+10,00001010000100001010,39_TRS_ThighHighs_BlackXazLeather,0,,0,Leggings
+10,11000010001100000010,39_TRS_ThighHighs_RoseSheer,0,,0,Leggings
+10,00000000000000010011,39_TRS_ThighHighs_WhiteBlossom_Ankle,0,,0,Leggings
+11,11100010011011000000,40_TRS_Jeans_Bermudas_Mint,0,,0,Long Pants (Underwear Visible)
+11,11100010011011000000,40_TRS_Jeans_High_Ripped_Blue,0,,0,Long Pants (Underwear Visible)
+11,11100010011011000000,40_TRS_Jeans_High_Ripped_Blue_Boot,0,,0,Long Pants (Underwear Visible)
+11,11100010011011000000,40_TRS_Jeans_High_Ripped_LightBrown,0,,0,Long Pants (Underwear Visible)
+11,11100010011011000000,40_TRS_Jeans_High_Ripped_LightBrown_Boot,0,,0,Long Pants (Underwear Visible)
+11,11100010011011000000,40_TRS_Jeans_HotPants,0,,0,Hotpants
+11,11100010011011000000,40_TRS_Jeans_Low_Ripped_Blue,0,,0,Long Pants (Underwear Visible)
+11,11100010011011000000,40_TRS_Jeans_Low_Ripped_LightBrown,0,,0,Long Pants (Underwear Visible)
+11,00100101100000001000,40_TRS_Pants_BOS_Green,0,,0,Long Pants (Underwear Hidden)
+11,11100010011011000000,40_TRS_Pants_StripedBlacknWhite,0,,0,Long Pants (Underwear Visible)
+11,11100010011011000000,40_TRS_Pants_StripedBrown,0,,0,Long Pants (Underwear Visible)
+11,11100010011011000000,40_TRS_RoadLeather_Bermudas,0,,0,Long Pants (Underwear Visible)
+11,11100010011011000000,40_TRS_RoadLeather_Pants,0,,0,Long Pants (Underwear Visible)
+11,11100010011011000000,40_TRS_RoadLeather_Pants_Bootcut,0,,0,Long Pants (Underwear Visible)
+11,01100010000010000000,41_TRS_Hancock_Red,0,,0,Crop Top (Sleeves)
+11,01100010000010000000,41_TRS_Kellogs_Bolero,0,,0,Crop Top (Sleeves)
+11,01100010000010000000,41_TRS_Pipers_Bolero,0,,0,Crop Top (Sleeves)
+11,01100010000010000000,41_TRS_RoadLeather_Vest,0,,0,Crop Top (No Sleeves)
+11,01100110000010001000,41_TRS_WesternJacket_Open,0,,0,Jacket
+10,10000010010000010001,43_TRS_BodyJewelry_Gold_Set1,0,,0,Body Jewelry
+11,00001010000100001010,45_TRS_BikiniThong_BlackXazLeather,0,,0,Panties/Briefs
+11,10000010011111000010,45_TRS_BikiniThong_Orange,0,,0,Panties/Briefs
+11,10000010011111000010,45_TRS_BikiniThong_White_Sheer,0,,0,Panties/Briefs
+11,10000010011111000010,45_TRS_Thong_RoseSheer,0,,0,Panties/Briefs
+11,11101110011000111001,47_TRS_Glasses_Pilot_Blue,0,,0,Eyewear
+11,10000010011000010001,47_TRS_Glasses_Round_Blue,0,,0,Eyewear
+11,10000010011000010001,47_TRS_Glasses_Round_Tortoise,0,,0,Eyewear
+11,10000010011000010001,47_TRS_Glasses_StudentGirl_Black,0,,0,Eyewear
+11,10000010011000010001,47_TRS_Glasses_StudentGirl_Gold,0,,0,Eyewear
+11,10000010011000010001,47_TRS_Glasses_StudentGirl_Tortoise,0,,0,Eyewear
+11,00001010000100001010,48_TRS_BikiniTop_BlackXazLeather,0,,0,Bra
+11,10000010011111000010,48_TRS_BikiniTop_Orange,0,,0,Bra
+11,10000010011111000010,48_TRS_BikiniTop_Rose_Sheer,0,,0,Bra
+11,10000010011111000010,48_TRS_BikiniTop_White_Sheer,0,,0,Bra
+11,10000010000010000010,50_TRS_Collar_LeatherPlain,0,,0,Necklace
+11,10000010000010000010,50_TRS_Collar_LeatherSLT,0,,0,Necklace
+11,01111111100010101000,55_TRS_LeatherBelt,0,,0,Belt
+11,01100111100010101000,56_TRS_RoadLeather_Gloves,0,,0,Bracers LR
