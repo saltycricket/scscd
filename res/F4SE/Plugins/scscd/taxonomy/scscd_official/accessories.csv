@@ -1,7 +1,7 @@
 Name,ARMO Slots,ARMA Slots
 Gloves,34;35,
 Backpack,48,
-Cloak/Cape,51,
+Cloak/Cape,58,
 Arm Band L,42,
 Arm Band R,43,
 Leg Holster/Straps L,44,
@@ -29,3 +29,4 @@ Elbow Pads,42;43,
 Shoes & Body,33,
 Bracers LR,42;43,
 Shoes (No Body),58,
+"Gloves (Long, Outerwear)",34;35;42;43,

@@ -1,6 +1,6 @@
 Name,ARMO Slots,ARMA Slots
-Jacket (Long),51,
-Jacket (No Arms),51,
+Jacket (Long),40,
+Jacket (No Arms),40,
 Hoodie (Up),41;42;43;52;54;57,30;31;52
 Hoodie (Down),41;42;43;54;57,
-Shirt (Baggy),42;43;51;57,36
+Shirt (Baggy),41;42;43;57;58,36
