@@ -74,16 +74,25 @@ bool ArmorIndex::SamplerConfig::load(std::filesystem::path &path, bool noisy) {
         spdlog::set_level(spdlog::level::info);
         spdlog::flush_on(spdlog::level::warn);
     }
-    changeOutfitChanceM = LoadFromIni(ini, "iOutfitChangeChanceM", 75, noisy); // touch 3 out of every 4 NPCs
-    changeOutfitChanceF = LoadFromIni(ini, "iOutfitChangeChanceF", 75, noisy); // touch 3 out of every 4 NPCs
-    proximityBias = LoadFromIni(ini, "fProximityBias", 2.0f, noisy);
-    allowNSFWChoices = LoadFromIni(ini, "bAllowNSFW", false, noisy);
-    allowNudity = LoadFromIni(ini, "bAllowNudity", false, noisy);
-    replaceArmor = LoadFromIni(ini, "bReplaceArmor", false, noisy);
+
+    // note: if noisy == true, we are loading the core/default config. This means
+    // if we should fail to find a field, we use a hard coded default (e.g. 75) as
+    // there is no other value to fall back on.
+    // But if noisy == false, and a field is missing, then that is a field omitted
+    // from an MCM config file, which is expected (MCM only saves changed fields).
+    // In that case, the default should be the current value (that is, no change
+    // from the core config).
+    // Hence the ternary pattern: noisy ? [default] : [current]
+    changeOutfitChanceM = LoadFromIni(ini, "iOutfitChangeChanceM", noisy ? 75    : changeOutfitChanceM, noisy);
+    changeOutfitChanceF = LoadFromIni(ini, "iOutfitChangeChanceF", noisy ? 75    : changeOutfitChanceF, noisy);
+    proximityBias       = LoadFromIni(ini, "fProximityBias",       noisy ? 2.0f  : proximityBias,       noisy);
+    allowNSFWChoices    = LoadFromIni(ini, "bAllowNSFW",           noisy ? false : allowNSFWChoices,    noisy);
+    allowNudity         = LoadFromIni(ini, "bAllowNudity",         noisy ? false : allowNudity,         noisy);
+    replaceArmor        = LoadFromIni(ini, "bReplaceArmor",        noisy ? false : replaceArmor,        noisy);
     for (uint32_t slot = 30; slot < 62; slot++) {
         // by default, all slots have zero chance to be filled. This way, no configuration == no mod behavior.
-        fillSlotChanceM[slot2bit(slot)] = LoadFromIni(ini, std::format("iMaleFillSlotChance{}", slot), 0, noisy);
-        fillSlotChanceF[slot2bit(slot)] = LoadFromIni(ini, std::format("iFemaleFillSlotChance{}", slot), 0, noisy);
+        fillSlotChanceM[slot2bit(slot)] = LoadFromIni(ini, std::format("iMaleFillSlotChance{}",   slot), noisy ? 0 : fillSlotChanceM[slot2bit(slot)], noisy);
+        fillSlotChanceF[slot2bit(slot)] = LoadFromIni(ini, std::format("iFemaleFillSlotChance{}", slot), noisy ? 0 : fillSlotChanceF[slot2bit(slot)], noisy);
     }
     iniModTime = ini_mtime(path); // track modification time so we can see if it's changed
     logger::info(std::format("Loaded config from {}", path.string()));
