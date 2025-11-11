@@ -12,3 +12,7 @@ Fully Clothed (Pants & Sleeves),33;41;42;43;44;45;50;54;57,36;37;38;39;40;55;56
 Jumpsuit (No Arms),36;39;55;56,
 Jumpsuit (Arms),36;37;38;39;55;56,
 Dress (Covers Bra),33;41;42;43;44;45;54;57,36
+"Full Outfit (Bra, Tank Top, Hotpants, Leggings, Shoes + BODY)",33;36;39;41;54;56;57,55
+"Full Outfit (Shirt, Corset, Panties, Boots + BODY)",33;36;55;56;57,
+"Full Body Armor (Torso, Limbs, Hands, Boots + BODY)",33;34;35;36;37;38;39;41;44;45;50;54;55;56;57,
+"Full Outfit (Bra, Blouse, Corset, Armbands, Leggings, Boots, Belt + BODY)",33;36;37;38;39;41;42;43;54;55;56;57,
