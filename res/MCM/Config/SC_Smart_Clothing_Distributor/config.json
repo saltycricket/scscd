@@ -288,11 +288,11 @@
           "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
           "id": "iMaleFillSlotChance54:Settings"
         }, {
-          "text": "51 - Overwear",
+          "text": "40 - Torso Overwear (Jacket/Cloak/Cape)",
           "type": "slider",
           "help": "Outermost layer of clothing such as cloak, cape, poncho, or jacket.",
           "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iMaleFillSlotChance51:Settings"
+          "id": "iMaleFillSlotChance40:Settings"
         }
       ]
     },
@@ -350,11 +350,11 @@
           "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
           "id": "iFemaleFillSlotChance54:Settings"
         }, {
-          "text": "51 - Overwear",
+          "text": "40 - Torso Overwear (Jacket/Cloak/Cape)",
           "type": "slider",
           "help": "Outermost layer of clothing such as cloak, cape, poncho, or jacket.",
           "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iFemaleFillSlotChance51:Settings"
+          "id": "iFemaleFillSlotChance40:Settings"
         }
       ]
     },
@@ -488,9 +488,9 @@
           "type": "spacer",
           "numLines": 1
         }, {
-          "text": "39 - Left Leg Underwear",
+          "text": "39 - Legs Underwear",
           "type": "slider",
-          "help": "Undergarments which cover the left leg, such as boxer shorts.",
+          "help": "Undergarments which cover one or both legs, such as boxer shorts.",
           "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
           "id": "iMaleFillSlotChance39:Settings"
         }, {
@@ -499,12 +499,6 @@
           "help": "Such as long pants or leg armor, covering the left leg",
           "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
           "id": "iMaleFillSlotChance44:Settings"
-        }, {
-          "text": "40 - Right Leg Underwear",
-          "type": "slider",
-          "help": "Undergarments which cover the right leg, such as boxer shorts.",
-          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iMaleFillSlotChance40:Settings"
         }, {
           "text": "45 - Right Leg Outerwear",
           "type": "slider",
@@ -538,9 +532,9 @@
           "type": "spacer",
           "numLines": 1
         }, {
-          "text": "39 - Left Leg Underwear",
+          "text": "39 - Leg Underwear",
           "type": "slider",
-          "help": "Undergarments which cover the left leg, such as boxer shorts.",
+          "help": "Undergarments which cover one or both legs, such as boxer shorts.",
           "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
           "id": "iFemaleFillSlotChance39:Settings"
         }, {
@@ -549,12 +543,6 @@
           "help": "Such as long pants or leg armor, covering the left leg",
           "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
           "id": "iFemaleFillSlotChance44:Settings"
-        }, {
-          "text": "40 - Right Leg Underwear",
-          "type": "slider",
-          "help": "Undergarments which cover the right leg, such as boxer shorts.",
-          "valueOptions": { "min": 0, "max": 100, "step": 1, "sourceType": "ModSettingInt" },
-          "id": "iFemaleFillSlotChance40:Settings"
         }, {
           "text": "45 - Right Leg Outerwear",
           "type": "slider",
