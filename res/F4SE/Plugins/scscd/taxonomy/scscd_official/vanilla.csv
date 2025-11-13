@@ -1,14 +1,9 @@
 Name,ARMO Slots,ARMA Slots
 Vanilla Bodysuit,33;36;37;38;39,
 Vanilla Armored Suit w/Gloves,33;34;35;41;42;43;44;45,33
-"Jewelry, Lips",46;58,
-"Jewelry, Ears",58,
-"Jewelry, Nose",58,
-"Jewelry, Chest",58,
-"Jewelry, Abdomen",58,
-"Jewelry, Pelvis",58,
 Armored Left Hand & Arm plus R Hand,34;35;42,
 Armored Hands & Arms,34;35;37;38;42;43,
 Sleeves (Outer/Armor),42;43,
 Kidney Belt,57,
 Shoes & Body w/Pants,33;44;45;54,39;40
+"Bodysuit (No Arms, No BODY)",41;44;45;50;54;57,36;39;55;56
